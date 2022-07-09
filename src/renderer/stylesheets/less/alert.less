@@ -1,0 +1,45 @@
+//main:../application.less
+.alerts {
+    display: flex;
+    flex-direction: column;
+    grid-gap: 10px;
+    position: fixed;
+    bottom: 69px;
+    right: 0;
+    height: fit-content;
+    width: fit-content;
+}
+.alert {
+    padding: 20px 50px 20px 10px;
+    font-size: 14px;
+    pointer-events: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    transform: translateX(100%);
+    animation: alert 2s linear both;
+    &-row {
+        display: flex;
+        align-items: center;
+    }
+    &-icon {
+        margin-right: 10px;
+    }
+    &-info {
+        background-color: #1a1e24;
+        color: var(--text);
+        border-left: 4px solid var(--text);
+    }
+}
+@keyframes alert {
+    0% {
+        transform: translateX(100%);
+    }
+    10% {
+        transform: translateX(0%);
+    }
+    90% {
+        transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}

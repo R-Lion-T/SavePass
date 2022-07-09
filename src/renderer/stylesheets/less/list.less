@@ -1,0 +1,101 @@
+//main:../application.less
+.list {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    flex-wrap: wrap;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: inherit;
+    grid-gap: var(--padding);
+    margin-bottom: var(--padding);
+    p {
+        white-space: nowrap;
+        text-overflow: clip;
+    }
+    &_item {
+        flex-shrink: 0;
+        background: var(--container);
+        border-radius: 10px;
+        padding: 20px;
+        height: max-content;
+        overflow: hidden;
+        & > *:first-child {
+            margin-bottom: 10px;
+        }
+        &_title {
+            font-size: 26px;
+            font-weight: 600;
+        }
+        &_text {
+            overflow: hidden;
+            text-overflow: clip;
+        }
+        &_row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        &_btns {
+            display: flex;
+            align-items: center;
+            &_item {
+                margin-left: 10px;
+                svg {
+                    width: 20px;
+                    height: 20px;
+                    path {
+                        fill: var(--btn-primary);
+                    }
+                }
+                &:not(:disabled):hover {
+                    svg {
+                        path {
+                            fill: var(--btn-primary-hover);
+                        }
+                    }
+                }
+                &:disabled {
+                    opacity: 0.25;
+                    cursor: default;
+                }
+            }
+        }
+    }
+    @media screen and (max-width: 1500px) {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    @media screen and (max-width: 1210px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    @media screen and (max-width: 916px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    @media screen and (max-width: 620px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.hide-password {
+    -webkit-text-security: disc;
+}
+.panel {
+    display: flex;
+    margin-bottom: var(--padding);
+    & > *:not(:last-child) {
+        margin-right: var(--padding);
+    }
+}
+@media screen and (max-width: 500px) {
+    .panel {
+        .btn {
+            flex-shrink: 10;
+            &-text {
+                display: none;
+            }
+            &-icon {
+                margin: 0;
+            }
+        }
+    }
+}
