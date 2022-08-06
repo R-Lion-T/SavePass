@@ -163,11 +163,28 @@ export default class MainApp {
             buttonLabel: "Создать",
         });
         if (url) {
-            this.path = url[0];
-            return true;
+            console.log(this.checkFileExistsSync(path.join(url[0],"database.svps")))
+            if(!this.checkFileExistsSync(path.join(url[0],"database.svps"))){
+                console.log("Файла нет")
+                this.path = url[0];
+                return true;
+            }else{
+                this.showErrorMessage(`Файл уже существует в этой директории ${url[0]}`)
+            }
         }
         this.path = null;
         return false;
+    }
+    // 
+    checkFileExistsSync(filepath){
+        if(!filepath) return null
+        let flag = true;
+        try{
+          fs.accessSync(filepath, fs.constants.F_OK);
+        }catch(e){
+          flag = false;
+        }
+        return flag;
     }
     // создать файл
     createFile(password) {
