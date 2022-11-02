@@ -4,6 +4,9 @@
   box-sizing: border-box;
   user-select: none;
 }
+*:focus {
+  outline: none;
+}
 button {
   background: none;
   border: none;
@@ -35,8 +38,7 @@ a {
   overflow-y: auto;
   overflow-x: hidden;
   max-height: inherit;
-  grid-gap: var(--padding);
-  margin-bottom: var(--padding);
+  grid-gap: var(--gap);
 }
 .list p {
   white-space: nowrap;
@@ -82,6 +84,7 @@ a {
   fill: var(--btn-primary);
 }
 .list_item_btns_item:not(:disabled):hover svg path {
+  box-shadow: 0 0 5px #fff;
   fill: var(--btn-primary-hover);
 }
 .list_item_btns_item:disabled {
@@ -113,7 +116,6 @@ a {
 }
 .panel {
   display: flex;
-  margin-bottom: var(--padding);
 }
 .panel > *:not(:last-child) {
   margin-right: var(--padding);
@@ -134,7 +136,6 @@ a {
   border-radius: 10px;
   display: flex;
   align-items: center;
-  margin-bottom: var(--padding);
 }
 .header_logo {
   display: flex;
@@ -319,6 +320,7 @@ a {
   --average: #c89816;
   --high: #31bb38;
   --padding: 10px;
+  --gap: 10px;
 }
 html,
 body {
@@ -351,11 +353,12 @@ body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  gap: var(--gap);
 }
 .btn {
   max-width: 200px;
   width: 100%;
-  border-radius: 5px;
+  border-radius: 10px;
   padding: 10px;
   font-size: 16px;
   font-weight: 700;
@@ -434,11 +437,12 @@ input {
   text-align: center;
   font-size: 42px;
   font-weight: 600;
-  margin-bottom: 30px;
+  margin: 30px 0;
 }
 @media screen and (max-width: 360px) {
   .form_title {
     font-size: 33px;
+    margin: 20px 0;
   }
 }
 .form_row {
@@ -481,7 +485,7 @@ input {
   bottom: 0;
 }
 .status {
-  margin-top: 5px;
+  margin-top: 8px;
   height: 5px;
   width: 100%;
   display: grid;
@@ -542,7 +546,7 @@ input {
   text-align: center;
   font-size: 38px;
   font-weight: 600;
-  line-height: 100%;
+  line-height: 130%;
 }
 .start_boxs {
   font-size: 25px;
@@ -587,7 +591,7 @@ input {
   height: 100px;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  grid-gap: 20px;
+  grid-gap: var(--gap);
 }
 .rowPassord_item {
   background-color: var(--container);
@@ -597,6 +601,7 @@ input {
   justify-content: center;
   font-size: 48px;
   opacity: 0.2;
+  border-radius: 6px;
 }
 .rowPassord_item.focus {
   opacity: 1;

@@ -14,8 +14,8 @@ import { Loading } from "./components/Alert";
 
 export const App = () => {
     const navigate = useNavigate();
-    const {auth,is_load}= useSelector(state=>state.data)
-    
+    const {auth,list, is_load}= useSelector(state=>state.data)
+    console.log(list)
     React.useEffect(() => {
         if(!auth){
             navigate("/")
