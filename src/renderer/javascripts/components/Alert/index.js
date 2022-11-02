@@ -1,7 +1,8 @@
 import React from "react";
-import { AiFillInfoCircle } from "react-icons/ai";
+import { AiFillInfoCircle, AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useSelector } from "react-redux";
-const Alert = React.memo(function Alert() {
+
+export const Alert = React.memo(function Alert() {
     const ALERT = useSelector((state) => state.alert);
     return (
         <div className="alerts">
@@ -24,4 +25,14 @@ const AlertInfo = React.memo(function AlertInfo({ text }) {
     );
 });
 
-export default Alert;
+
+export const Loading = React.memo(
+    function Loading(){
+        return (
+            <div className="loading">
+                <AiOutlineLoading3Quarters/>
+            </div>
+        )
+    }
+)
+

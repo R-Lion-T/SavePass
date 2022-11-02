@@ -1,79 +1,8 @@
 const initialState = {
     auth: false,
+    is_load:false,
     list: [],
 };
-// [
-//     {
-//         id: 1,
-//         title: "Вконтакте",
-//         href: "",
-//         login: "Ivanow@mail.ru",
-//         password: "2867849",
-//     },
-//     {
-//         id: 2,
-//         title: "Вконтакте",
-//         href: "http://vk.com/",
-//         login: "Ivanow@mail.ru",
-//         password: "123456789",
-//     },
-//     {
-//         id: 3,
-//         title: "Вконтакте",
-//         href: "https://vk.com/",
-//         login: "Ivanow@mail.ru",
-//         password: "123456789",
-//     },
-//     {
-//         id: 4,
-//         title: "Вконтакте",
-//         href: "https://vk.com/",
-//         login: "Ivanow@mail.ru",
-//         password: "123456789",
-//     },
-//     {
-//         id: 5,
-//         title: "Вконтакте",
-//         href: "https://vk.com/",
-//         login: "Ivanow@mail.ru",
-//         password: "123456789",
-//     },
-//     {
-//         id: 6,
-//         title: "Вконтакте",
-//         href: "https://vk.com/",
-//         login: "Ivanow@mail.ru",
-//         password: "123456789",
-//     },
-//     {
-//         id: 7,
-//         title: "Вконтакте",
-//         href: "https://vk.com/",
-//         login: "Ivanow@mail.ru",
-//         password: "123456789",
-//     },
-//     {
-//         id: 8,
-//         title: "Вконтакте2",
-//         href: "https://vk.com/",
-//         login: "Ivanow@mail.ru",
-//         password: "123456789",
-//     },
-//     {
-//         id: 9,
-//         title: "Вконтакте",
-//         href: "https://vk.com/",
-//         login: "Ivanow@mail.ru",
-//         password: "123456789",
-//     },
-//     {
-//         id: 10,
-//         title: "Вконтакте",
-//         href: "https://vk.com/",
-//         login: "Ivanow@mail.ru",
-//         password: "123456789",
-//     },
-// ]
 export const dis_data = (state = initialState, action) => {
     switch (action.type) {
         case "LOAD_DATA": {
@@ -113,6 +42,18 @@ export const dis_data = (state = initialState, action) => {
                 ...state,
                 auth: false,
                 list: [],
+            };
+        }
+        case "SHOW_LOAD": {
+            return {
+                ...state,
+                is_load:true
+            };
+        }
+        case "HIDE_LOAD": {
+            return {
+                ...state,
+                is_load:false
             };
         }
         default: {

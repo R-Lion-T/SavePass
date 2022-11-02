@@ -95,12 +95,21 @@ ipcRenderer.on("GO_OVER_PAGE", (_, data) => {
     );
 });
 ipcRenderer.on("OPEN_PAGE_CHECKED_PASSWORD", (_, data) => {
-    window.dispatchEvent(new CustomEvent("openPageCheckedPassword"));
+    window.dispatchEvent(new CustomEvent("openPageCheckedPassword",
+    {
+        detail: data,
+    }));
 });
 
-ipcRenderer.on("APP_RESIZE_WINDOW_ACCESS", (_, data) => {
+ipcRenderer.on("APP_RESIZE_WINDOW_ACCESS", () => {
     window.dispatchEvent(
-        new CustomEvent("MAIN_RESIZE", {
+        new CustomEvent("MAIN_RESIZE")
+    );
+});
+
+ipcRenderer.on("console.log", (_, data) => {
+    window.dispatchEvent(
+        new CustomEvent("console.log", {
             detail: data,
         })
     );

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain, screen } from "electron";
+import { app, BrowserWindow, dialog, ipcMain, screen,shell  } from "electron";
 import fs from "fs";
 import path from "path";
 import CryptoJS from "crypto-js";
@@ -55,7 +55,7 @@ export default class MainApp {
 
         this.win.webContents.on("did-finish-load", () => {
             const file = process.argv[1];
-            if (file && isDev == false) {
+            if (file && this.checkFileExistsSync(file) && isDev == false ) {
                 this.file = file;
                 this.win.webContents.send("OPEN_PAGE_CHECKED_PASSWORD");
             }
@@ -116,9 +116,7 @@ export default class MainApp {
         ipcMain.handle("CHECKED_PASSWORD_FILE", (_, password) => {
             return this.checkedPasswordFile(password);
         });
-        ipcMain.handle("LOGOUT", (_, password) => {
-            return this.closeFile();
-        });
+        ipcMain.handle("LOGOUT", () => this.closeFile());
     }
 
     subscribeForAppEvents() {
@@ -163,7 +161,6 @@ export default class MainApp {
             buttonLabel: "Создать",
         });
         if (url) {
-            console.log(this.checkFileExistsSync(path.join(url[0],"database.svps")))
             if(!this.checkFileExistsSync(path.join(url[0],"database.svps"))){
                 console.log("Файла нет")
                 this.path = url[0];
@@ -175,7 +172,7 @@ export default class MainApp {
         this.path = null;
         return false;
     }
-    // 
+    //
     checkFileExistsSync(filepath){
         if(!filepath) return null
         let flag = true;
@@ -247,7 +244,7 @@ export default class MainApp {
             return false;
         }
     }
-    // добавить данные в файл
+    // обновить данные в файл
     updateDataFile(item) {
         try {
             const obj = this.getFileData();
@@ -273,12 +270,12 @@ export default class MainApp {
                 `Действительно удалить запись ${obj.title} ?`
             );
             if (result) {
-                const obj = this.getFileData();
-                const newDataArray = obj.result.filter((data) => {
+                const fileData = this.getFileData();
+                const newDataArray = fileData.result.filter((data) => {
                     if (Number(data.id) === Number(obj.id)) {
-                        return true;
+                        return false;
                     }
-                    return false;
+                    return true;
                 });
                 this.updateFile(newDataArray);
                 return true;

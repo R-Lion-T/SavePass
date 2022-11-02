@@ -4,6 +4,7 @@ import { BiShow, BiHide } from "react-icons/bi";
 import { isValidUrl, passwordCheck, uniquePassword } from "./../../function";
 import { useSelector, useDispatch } from "react-redux";
 import { ac_add_data } from "../../redux/actions/ac_state";
+import { ac_hide_load, ac_show_load } from './../../redux/actions/ac_alert';
 
 export const Add = React.memo(function Add() {
     const dispatch = useDispatch();
@@ -61,9 +62,11 @@ export const Add = React.memo(function Add() {
             href: isValidUrl(href),
             password,
         };
+        dispatch(ac_show_load())
         window.app.addDataFile(body).then((res) => {
             if (res) {
                 dispatch(ac_add_data(body));
+                dispatch(ac_hide_load())
                 navigate("/list");
             }
         });

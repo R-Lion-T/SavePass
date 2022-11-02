@@ -9,16 +9,25 @@ import CreatePassword from "./components/CreatePassword/index";
 import CheckedPassword from "./components/CheckedPassword/index";
 import { useNavigate } from "react-router-dom";
 import Footer from "./components/Footer/index";
+import { useSelector } from 'react-redux';
+import { Loading } from "./components/Alert";
 
 export const App = () => {
     const navigate = useNavigate();
+    const {auth,is_load}= useSelector(state=>state.data)
+    
     React.useEffect(() => {
+        if(!auth){
+            navigate("/")
+        }
         window.addEventListener("goOverPage", (event) => {
             navigate(event.detail.page);
         });
-
         window.addEventListener("openPageCheckedPassword", () => {
             navigate("/checkedPassword");
+        });
+        window.addEventListener("console.log", (event) => {
+            console.log(event.detail)
         });
     }, []);
     return (
@@ -33,6 +42,7 @@ export const App = () => {
                 <Route path="/edit/:id" element={<Edit />} />
             </Routes>
             <Footer />
+            {is_load && <Loading/>}
         </>
     );
 };

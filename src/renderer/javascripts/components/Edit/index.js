@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { uniquePassword } from "./../../function";
 import { ac_delete_data, ac_update_data } from "./../../redux/actions/ac_state";
+import { ac_hide_load, ac_show_load } from './../../redux/actions/ac_alert';
 
 export const Edit = React.memo(function Edit() {
     let { id } = useParams();
@@ -75,17 +76,20 @@ export const Edit = React.memo(function Edit() {
     };
     const onDelete = (event) => {
         event.preventDefault();
-        window.app
-            .deleteDataFile({
+        dispatch(ac_show_load())
+        
+        window.app.deleteDataFile({
                 id,
                 title,
             })
-            .then((res) => {
+            .finally(()=>{
+                dispatch(ac_hide_load())
+            }).then((res) => {
                 if (res) {
                     dispatch(ac_delete_data(id));
                     navigate("/list");
                 }
-            });
+            })
     };
     const onSave = (event) => {
         event.preventDefault();
@@ -96,9 +100,11 @@ export const Edit = React.memo(function Edit() {
             href: isValidUrl(href),
             password,
         };
+        dispatch(ac_show_load())
         window.app.updateDataFile(body).then((res) => {
             if (res) {
                 dispatch(ac_update_data(body));
+                dispatch(ac_hide_load())
                 navigate("/list");
             }
         });
