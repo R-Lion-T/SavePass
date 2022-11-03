@@ -301,6 +301,94 @@ a {
 .settings button {
   color: inherit;
 }
+.generate {
+  padding: var(--padding);
+}
+.generate_window {
+  padding: 15px;
+  height: 125px;
+  background: #1F1E1E;
+  border-radius: 10px;
+  border: 1px solid #333435;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+.generate_window_text {
+  font-size: 18px;
+  font-weight: 900;
+  word-break: break-all;
+  line-height: 120%;
+  display: flex;
+  align-items: center;
+}
+.generate_window_foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+.generate_window_foot_text {
+  display: flex;
+  align-items: center;
+}
+.generate_window_foot_text svg {
+  margin-right: 5px;
+  font-size: 1.3em;
+}
+.generate_window_foot_btns {
+  display: flex;
+  grid-gap: 10px;
+}
+.generate_window_foot_btns .btn_input {
+  width: 20px;
+  color: var(--text);
+}
+.generate_row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+}
+.generate_row:not(:last-child) {
+  margin-bottom: 15px;
+}
+.generate_btns {
+  margin-top: 25px;
+  display: flex;
+  gap: 10px;
+}
+.generate_btns .btn {
+  max-width: 100%;
+  flex-grow: 1;
+}
+.input_range {
+  display: flex;
+  align-items: center;
+  max-width: 250px;
+  width: 100%;
+}
+.input_range input {
+  -webkit-appearance: none !important;
+  background: var(--text);
+  height: 4px;
+  border-radius: 4px;
+  width: 100%;
+}
+.input_range input::-webkit-slider-thumb {
+  cursor: pointer;
+  -webkit-appearance: none !important;
+  background: var(--text);
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+}
+.input_range_value {
+  font-size: 14px;
+  width: 27px;
+  margin-left: 5px;
+}
 :root {
   --bg: #232931;
   --bg-loading: #23293181;
@@ -321,6 +409,10 @@ a {
   --high: #31bb38;
   --padding: 10px;
   --gap: 10px;
+  --color-main: #dff5f2;
+  --color-access: #73d626;
+  --color-warning: #ffc107;
+  --color-danger: #dc3545;
 }
 html,
 body {
@@ -401,6 +493,50 @@ body {
   font-size: inherit;
   margin-left: 5px;
 }
+.btn-apple {
+  width: 44px;
+  height: 24px;
+  border-radius: 28px;
+  background: var(--container);
+  padding: 2px;
+  transition: background 0.2s linear;
+  position: relative;
+}
+.btn-apple span {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  bottom: 2px;
+  width: 20px;
+  height: 20px;
+  background: var(--text);
+  border-radius: 50%;
+  transition: transform 0.2s linear, background 0.2s linear;
+}
+.btn-apple.active {
+  background: var(--text);
+}
+.btn-apple.active span {
+  background: #1F1E1E;
+  transform: translateX(100%);
+}
+.btn_input {
+  display: flex;
+  align-items: center;
+  width: 25px;
+  height: 100%;
+  opacity: 0.5;
+}
+.btn_input:active:hover {
+  opacity: 1;
+}
+.btn_input:not(:active):hover {
+  opacity: 0.7;
+}
+.btn_input svg {
+  width: 100%;
+  height: 100%;
+}
 .btn.disabled,
 .btn:disabled {
   opacity: 0.2;
@@ -479,18 +615,27 @@ input {
 .input_item .btns {
   display: flex;
   align-items: center;
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
+  margin-left: 5px;
+  gap: 5px;
+}
+.input_item .btn {
+  border: 1px solid var(--input-color);
+  border-radius: 5px;
+}
+.input_item .btn:hover {
+  border-color: var(--input-color-hover);
+}
+.input_item .btns ~ input {
+  border-right: none;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
 }
 .status {
   margin-top: 8px;
   height: 5px;
   width: 100%;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 2px;
+  display: flex;
+  gap: 2px;
 }
 .status span {
   flex-grow: 1;
@@ -510,7 +655,7 @@ input {
   background-color: var(--warning) !important;
 }
 .warning {
-  margin-top: 3px;
+  margin-top: 9px;
   font-size: 12px;
   color: var(--average);
   line-height: 110%;
@@ -626,6 +771,15 @@ input {
 .footer_rigth {
   margin-left: auto;
   opacity: 0.5;
+}
+.color-access {
+  color: var(--color-access);
+}
+.color-warning {
+  color: var(--color-warning);
+}
+.color-danger {
+  color: var(--color-danger);
 }
 @media screen and (max-width: 360px) {
   .start_logo {

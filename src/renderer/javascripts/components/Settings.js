@@ -1,9 +1,13 @@
 import React from "react";
-import { AiFillSetting } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { ac_logout } from "./../../redux/actions/ac_state";
+
+import { ac_logout } from "../redux/actions/ac_state";
+
+import { AiFillSetting } from "react-icons/ai";
 import { RiLogoutBoxFill } from "react-icons/ri";
+import { BsFillKeyFill } from 'react-icons/bs';
+
 const Settings = React.memo(function Settings() {
     const dispath = useDispatch();
     const navigate = useNavigate();
@@ -23,14 +27,14 @@ const Settings = React.memo(function Settings() {
         });
     };
     const list = [
-        // {
-        //     id: 1,
-        //     type: "SELECT",
-        //     onClick: () => {},
-        //     label: "Темы",
-        //     icon: null,
-        //     disabled: false,
-        // },
+        {
+            id: 1,
+            type: "BUTTON",
+            onClick: window.app.openGenerate,
+            label: "Генератор",
+            icon: <BsFillKeyFill/>,
+            disabled: false,
+        },
         {
             id: 2,
             type: "BUTTON",

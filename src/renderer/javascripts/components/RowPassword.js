@@ -1,6 +1,6 @@
 import React from "react";
 
-const RowPassord = React.memo(function RowPassord({ password, setPassword }) {
+const RowPassword = React.memo(function RowPassword({ password, setPassword }) {
     React.useEffect(() => {
         function keydown(event) {
             const key = event.keyCode;
@@ -56,4 +56,4 @@ const RowPassord = React.memo(function RowPassord({ password, setPassword }) {
     );
 });
 
-export default RowPassord;
+export default RowPassword;

@@ -1,6 +1,7 @@
 import MainApp from './main';
 import { checkForUpdates } from './updater';
 import { app } from 'electron';
+
 const lock = app.requestSingleInstanceLock();
 
 if (!lock) {

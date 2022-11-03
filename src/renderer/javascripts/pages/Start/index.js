@@ -1,7 +1,10 @@
 import React from "react";
-import { AiFillFile, AiFillFileAdd } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
+
+import { AiFillFile, AiFillFileAdd } from "react-icons/ai";
+
 import logo from "../../../images/logo.png";
+
 const Start = React.memo(function Start() {
     const navigate = useNavigate();
     function openFile() {

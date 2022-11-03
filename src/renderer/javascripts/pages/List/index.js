@@ -1,12 +1,16 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+
 import { AiFillEdit, AiFillCopy, AiFillPlayCircle } from "react-icons/ai";
 import { GrAdd } from "react-icons/gr";
 import { BiShow, BiHide } from "react-icons/bi";
-import { Link } from "react-router-dom";
-import { Alert} from "./../Alert/index";
+
+import { Alert} from "../../components/Alert";
+import Search from "./Search";
+
 import { dis_add_alert } from "../../redux/reducer/alert";
-import { Search } from "./Search";
+
 
 const simbol = {
     ru: {

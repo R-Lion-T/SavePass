@@ -1,0 +1,92 @@
+//main:../application.less
+
+.generate {
+    padding: var(--padding);
+    &_window {
+        padding: 15px;
+        height: 125px;
+        background: #1F1E1E;
+        border-radius: 10px;
+        border: 1px solid #333435;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin-bottom: 30px;
+
+        &_text {
+            font-size: 18px;
+            font-weight: 900;
+            word-break: break-all;
+            line-height: 120%;
+            display: flex;
+            align-items: center;
+        }
+        &_foot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            &_text {
+                display: flex;
+                align-items: center;
+                svg {
+                    margin-right: 5px;
+                    font-size: 1.3em;
+                }
+            }
+            &_btns {
+                display: flex;
+                grid-gap: 10px;
+                .btn_input {
+                    width: 20px;
+                    color: var(--text);
+                }
+            }
+        }
+    }
+    &_row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 16px;
+        &:not(:last-child) {
+            margin-bottom: 15px;
+        }
+    }
+    &_btns {
+        margin-top: 25px;
+        display: flex;
+        gap: 10px;
+        .btn{
+            max-width: 100%;
+            flex-grow: 1;
+        }
+    }
+}
+
+.input_range {
+    display: flex;
+    align-items: center;
+    max-width: 250px;
+    width: 100%;
+    input {
+        -webkit-appearance: none !important;
+        background: var(--text);
+        height: 4px;
+        border-radius: 4px;
+        width: 100%;
+        &::-webkit-slider-thumb {
+            cursor: pointer;
+            -webkit-appearance: none !important;
+            background: var(--text);
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+        }
+    }
+    &_value {
+        font-size: 14px;
+        width: 27px;
+        margin-left: 5px;
+    }
+}

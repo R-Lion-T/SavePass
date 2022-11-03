@@ -1,9 +1,8 @@
 import React from "react";
+
 import { AiOutlineSearch } from "react-icons/ai";
 
-
-
-export const Search = React.memo(
+const Search = React.memo(
     function Search ({value,setSearch}){
         return (
             <p className="search">
@@ -17,3 +16,5 @@ export const Search = React.memo(
         )
     }
 )
+
+export default Search

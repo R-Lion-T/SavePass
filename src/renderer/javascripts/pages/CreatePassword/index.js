@@ -1,8 +1,10 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+
+import RowPassword from '../../components/RowPassword';
+
 import { ac_load_data } from "./../../redux/actions/ac_state";
-import RowPassord from "./../RowPassord/index";
 
 const CreatePassword = React.memo(function CreatePassword() {
     const dispatch = useDispatch();
@@ -72,7 +74,7 @@ const StepOne = React.memo(function StepOne({ password, setPassword, onNext }) {
     return (
         <>
             <p className="start_title">Придумайте код</p>
-            <RowPassord password={password} setPassword={setPassword} />
+            <RowPassword password={password} setPassword={setPassword} />
             <div className="start_btns">
                 <Link className="btn btn_default" to="/">
                     Отмена
@@ -98,7 +100,7 @@ const StepTwo = React.memo(function StepTwo({
     return (
         <>
             <p className="start_title">Повторите код</p>
-            <RowPassord password={password} setPassword={setPassword} />
+            <RowPassword password={password} setPassword={setPassword} />
             <div className="start_btns">
                 <button className="btn btn_default" onClick={onPrev}>
                     Назад

@@ -25,7 +25,6 @@ const AlertInfo = React.memo(function AlertInfo({ text }) {
     );
 });
 
-
 export const Loading = React.memo(
     function Loading(){
         return (

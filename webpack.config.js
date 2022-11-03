@@ -1,6 +1,12 @@
 module.exports = {
     renderer: {
-        entry: "./src/renderer/javascripts/index.js",
+        entry: {
+            index: "./src/renderer/javascripts/index.js",
+            generate: "./src/renderer/generate/index.js",
+        },
+        output: {
+            filename: "[name].js",
+        },
         module: {
             rules: [
                 {
@@ -16,10 +22,6 @@ module.exports = {
                 {
                     test: /\.(?:|gif|png|jpg|svg)$/,
                     type: "asset/resource",
-                    // loader: 'file-loader',
-                    // options: {
-                    //   name: '[path][name].[hash].[ext]',
-                    // },
                 },
                 {
                     test: /\.(ttf)$/,

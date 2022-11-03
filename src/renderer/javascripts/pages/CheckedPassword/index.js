@@ -1,8 +1,11 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import RowPassord from "./../RowPassord/index";
+
+import RowPassword from "../../components/RowPassword";
+
 import { ac_load_data } from "./../../redux/actions/ac_state";
+
 
 const CheckedPassword = React.memo(function CheckedPassword() {
     const dispatch = useDispatch();
@@ -30,7 +33,7 @@ const CheckedPassword = React.memo(function CheckedPassword() {
         <div className="start">
             <div className="start_container">
                 <p className="start_title">Введите код</p>
-                <RowPassord password={password} setPassword={setPassword} />
+                <RowPassword password={password} setPassword={setPassword} />
                 <div className="start_btns">
                     <Link className="btn btn_default" to="/">
                         Отмена

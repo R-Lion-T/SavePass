@@ -1,9 +1,13 @@
 import React from "react";
+
+import Settings from "./Settings";
+
 import { BiWindow, BiWindows } from "react-icons/bi";
 import { GrClose } from "react-icons/gr";
 import { FaRegWindowMinimize } from "react-icons/fa";
-import logo from "../../../images/logo.png";
-import Settings from "./../Settings";
+
+import logo from "../../images/logo.png";
+
 const Header = React.memo(function Header() {
     const [winIsminimize, setWinIsminimize] = React.useState(true);
     React.useEffect(() => {

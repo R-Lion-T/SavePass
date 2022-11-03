@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain, screen,shell  } from "electron";
+import { app, BrowserWindow, dialog, ipcMain, screen,Tray,Menu } from "electron";
 import fs from "fs";
 import path from "path";
 import CryptoJS from "crypto-js";
@@ -10,6 +10,8 @@ export default class MainApp {
         this.path = null;
         this.password = null;
         this.file = null;
+        this.tray = null;
+        this.isGenerate = false;
         this.subscribeForAppEvents();
     }
 
@@ -117,10 +119,58 @@ export default class MainApp {
             return this.checkedPasswordFile(password);
         });
         ipcMain.handle("LOGOUT", () => this.closeFile());
+        // generate
+        ipcMain.on("CLOSE_GENERATE", () => {
+            if(this.isGenerate){
+                this.isGenerate.close();
+                this.isGenerate = false;
+
+            }
+        })
+        ipcMain.on("OPEN_GENERATE", () => {
+            if(this.isGenerate){
+                this.isGenerate.focus()
+            }else{
+                this.isGenerate = this.openModalGenerate()
+            }
+        });
+    }
+
+    // create tray
+    createTray(){
+        const menu = [
+            {
+                label: 'Генератор',
+                type: 'normal',
+                click:()=>{
+                    if(this.isGenerate){
+                        if(this.isGenerate.isFocused()){
+                            this.isGenerate.close();
+                            this.isGenerate = false;
+                        }else{
+                            this.isGenerate.focus()
+                        }
+                    }else{
+                        this.isGenerate = this.openModalGenerate();
+                    }
+                }
+            },
+            {
+                label: 'Выход',
+                type: 'normal',
+                role:"quit",
+            },
+        ]
+        this.tray = new Tray('resources/icon.ico');
+        this.tray.setToolTip(CONFIG.title);
+        this.tray.setContextMenu(Menu.buildFromTemplate(menu))
     }
 
     subscribeForAppEvents() {
-        app.whenReady().then(() => this.createWindow());
+        app.whenReady().then(() => {
+            this.createWindow();
+            this.createTray();
+        });
 
         app.on("window-all-closed", () => {
             if (process.platform !== "darwin") {
@@ -133,6 +183,9 @@ export default class MainApp {
                 this.createWindow();
             }
         });
+
+
+
     }
     // Показать ошибку
     showErrorMessage(message = "Возникла непредвиденная ошибка") {
@@ -291,6 +344,7 @@ export default class MainApp {
     // указать путь к файлу
     openDataFile(defaultPath) {
         var url = dialog.showOpenDialogSync(this.win, {
+
             title: "Выберите файл",
             defaultPath: defaultPath || app.getPath("desktop"),
             properties: ["openFile"],
@@ -333,5 +387,36 @@ export default class MainApp {
         } catch (e) {
             return false;
         }
+    }
+
+    openModalGenerate(){
+        let winGenerate = new BrowserWindow({
+            width: 400,
+            height: 436,
+            type: "toolbar",
+            devTools: CONFIG.devTools,
+            titleBarStyle: "hidden",
+            show: false,
+            center: true,
+            resizable: false,
+            // alwaysOnTop:true,
+            webPreferences: {
+                devTools: CONFIG.devTools,
+                worldSafeExecuteJavaScript: true,
+                preload: path.join(app.getAppPath(), "preload", "index.js"),
+            },
+        });
+
+        winGenerate.removeMenu();
+        winGenerate.loadFile("renderer/generate.html");
+        winGenerate.webContents.openDevTools({
+            mode: "detach",
+        });
+
+        winGenerate.webContents.on("did-finish-load", ()=>{
+            winGenerate.show()
+        });
+
+        return winGenerate
     }
 }

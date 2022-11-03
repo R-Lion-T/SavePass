@@ -1,21 +1,23 @@
 import React from "react";
-import { List } from "./components/List";
-import Header from "./components/Header/index";
-import { Add } from "./components/Add/index";
-import { Routes, Route } from "react-router";
-import { Edit } from "./components/Edit/index";
-import Start from "./components/Start";
-import CreatePassword from "./components/CreatePassword/index";
-import CheckedPassword from "./components/CheckedPassword/index";
-import { useNavigate } from "react-router-dom";
-import Footer from "./components/Footer/index";
 import { useSelector } from 'react-redux';
+import { Routes, Route } from "react-router";
+import { useNavigate } from "react-router-dom";
+
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+
+import Start from "./pages/Start";
+import { List } from "./pages/List";
+import { Edit } from "./pages/Edit";
+import { Add } from './pages/Add';
+import CreatePassword from "./pages/CreatePassword";
+import CheckedPassword from "./pages/CheckedPassword";
 import { Loading } from "./components/Alert";
 
 export const App = () => {
     const navigate = useNavigate();
-    const {auth,list, is_load}= useSelector(state=>state.data)
-    console.log(list)
+    const {auth, is_load}= useSelector(state=>state.data)
+
     React.useEffect(() => {
         if(!auth){
             navigate("/")
