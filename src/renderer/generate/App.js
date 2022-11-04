@@ -3,9 +3,7 @@ import { AiFillCopy, AiOutlineReload } from "react-icons/ai";
 import { BsFillShieldSlashFill, BsShieldFillCheck } from "react-icons/bs";
 
 function App() {
-    const [value, setValue] = React.useState(
-        "QWERTYUIOPASDFGHJKLZXCVBNM1234567890@$&_#!%*=-~^?"
-    );
+    const [value, setValue] = React.useState("");
     const [status, setStatus] = React.useState(null);
     const [length, setLength] = React.useState(10);
     const [number, setNumber] = React.useState(true);
@@ -73,8 +71,6 @@ function App() {
             symbol,
         });
         if (value) {
-            let getSatus = window.password.passwordCheck(value);
-            setStatus(getSatus);
             setValue(value);
         }
     };
@@ -88,9 +84,21 @@ function App() {
         window.app.closeGenerate();
     }
 
-    React.useEffect(onGenerate, [length, number, upper, symbol, lower]);
+    React.useEffect(()=>{
+        onGenerate()
+    }, [length, number, upper, symbol, lower]);
+
+    React.useEffect(()=>{
+        let getSatus = window.password.passwordCheck(value);
+        setStatus(getSatus);
+    }, [value]);
 
     let statusText = "";
+    const hendelonLength = (val)=>{
+        if(length != val){
+            setLength(val)
+        }
+    }
     switch (status) {
         case 0: {
             statusText = (
@@ -129,6 +137,15 @@ function App() {
             );
             break;
         }
+        case 4: {
+            statusText = (
+                <p className="generate_window_foot_text color-access">
+                    <BsShieldFillCheck />
+                    Супер пароль
+                </p>
+            );
+            break;
+        }
         default: {
             break;
         }
@@ -155,7 +172,7 @@ function App() {
 
             <div className="generate_row">
                 <p className="generate_row_text">Длина</p>
-                <InputRange value={length} onInput={setLength} />
+                <InputRange value={length} onInput={hendelonLength} />
             </div>
 
             <div className="generate_row">

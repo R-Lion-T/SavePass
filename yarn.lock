@@ -6800,3 +6800,8 @@
     "archiver-utils" "^2.1.0"
     "compress-commons" "^4.1.0"
     "readable-stream" "^3.6.0"
+
+"zxcvbn@^4.4.2":
+  "integrity" "sha512-Bq0B+ixT/DMyG8kgX2xWcI5jUvCwqrMxSFam7m0lAf78nf04hv6lNCsyLYdyYTrCVMqNDY/206K7eExYCeSyUQ=="
+  "resolved" "https://registry.npmjs.org/zxcvbn/-/zxcvbn-4.4.2.tgz"
+  "version" "4.4.2"

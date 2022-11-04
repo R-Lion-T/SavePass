@@ -24,7 +24,8 @@
     --input-color: #93a4a1;
     --input-color-hover: #c9ddda;
     --weak: #992020;
-    --average: #c89816;
+    --average: #c87216;
+    --normal: #c2c816;
     --high: #31bb38;
     --padding: 10px;
     --gap:10px;
@@ -241,20 +242,18 @@ input {
         .btns {
             display: flex;
             align-items: center;
-            margin-left: 5px;
-            gap: 5px;
         }
-        .btn{
+      
+        &_btns{
             border: 1px solid var(--input-color);
             border-radius: 5px;
-            &:hover{
+            &:focus{
                 border-color: var(--input-color-hover);
             }
-        }
-        .btns ~ input{
-            border-right: none;
-            border-top-right-radius: 0px;
-            border-bottom-right-radius: 0px;
+            input{
+                border: none;
+                border-radius: 0px;
+            }
         }
     }
 }
@@ -269,21 +268,30 @@ input {
         background-color: var(--container);
         border-radius: 5px;
     }
-    &.weak {
-        span:first-child {
-            background-color: var(--warning);
+    &.level{
+        &_0,
+        &_1{
+            span:first-child {
+                background: var(--warning);
+            }
+        }
+        &_2{
+            span:nth-child(-n + 2) {
+                background: var(--average);
+            }
+        }
+        &_3{
+            span:nth-child(-n + 3) {
+                background: var(--normal);
+            }
+        }
+        &_4{
+            span{
+                background: var(--high);
+            }
         }
     }
-    &.average {
-        span:nth-child(-n + 2) {
-            background-color: var(--average);
-        }
-    }
-    &.high {
-        span {
-            background-color: var(--high);
-        }
-    }
+
     &.error {
         span {
             background-color: var(--warning) !important;

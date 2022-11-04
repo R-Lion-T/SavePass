@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 
 import { BiHide, BiShow } from "react-icons/bi";
 import { BsFillKeyFill } from "react-icons/bs";
+import { IoIosWarning } from "react-icons/io";
 
 import { uniquePassword } from "../function";
 
@@ -19,36 +20,8 @@ export const InputPassword = ({
 
     React.useEffect(() => {
         const level = window.password.passwordCheck(password);
-        let status = "";
-        switch (level) {
-            case 0: {
-                setUnique(`Ваш пароль входит в топ 200 НЕБЕЗОПАСНЫХ паролей`);
-                return;
-            }
-            case 1: {
-                status = "weak";
-
-                break;
-            }
-            case 2: {
-                status = "average";
-                break;
-            }
-            case 3: {
-                status = "high";
-                break;
-            }
-        }
-        if (level) {
-            setUnique(false);
-        }
-        setStatus(status);
-        if (uniquePassword(password, list, id)) {
-            setUnique(`Этот пароль был замечен в других учетых записях это не
-                безопасно! \n Ваши данные могут быть под угрозой!`);
-        } else {
-            setUnique(false);
-        }
+        setStatus(level);
+        setUnique(uniquePassword(password, list, id));
     }, [id, password]);
 
     const onShow = () => {
@@ -71,7 +44,7 @@ export const InputPassword = ({
     return (
         <div className="form_row input">
             <label>Пароль*</label>
-            <div className="input_item">
+            <div className="input_item input_item_btns">
                 <input
                     type={show ? "text" : "password"}
                     value={password}
@@ -97,12 +70,18 @@ export const InputPassword = ({
                     </button>
                 </p>
             </div>
-            <p className={`status ${unique ? "error" : status}`}>
+            <p className={`status ${unique ? "error" : "level_" + status}`}>
+                <span></span>
                 <span></span>
                 <span></span>
                 <span></span>
             </p>
-            {unique ? <p className="warning">{unique}</p> : null}
+            {unique ? (
+                <p className="warning">
+                    <IoIosWarning /> Не рекомендуем использовать одинаковые
+                    пароли
+                </p>
+            ) : null}
         </div>
     );
 };

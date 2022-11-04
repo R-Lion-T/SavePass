@@ -1,4 +1,12 @@
-import { app, BrowserWindow, dialog, ipcMain, screen,Tray,Menu } from "electron";
+import {
+    app,
+    BrowserWindow,
+    dialog,
+    ipcMain,
+    screen,
+    Tray,
+    Menu,
+} from "electron";
 import fs from "fs";
 import path from "path";
 import CryptoJS from "crypto-js";
@@ -50,14 +58,21 @@ export default class MainApp {
         this.win.webContents.openDevTools({
             mode: "detach",
         });
-
+        this.win.on("close", (event) => {
+            const count = BrowserWindow.getAllWindows().length - 1;
+            console.log(count)
+            if (count) {
+                event.preventDefault();
+                this.win.hide();
+            }
+        });
         this.win.on("closed", () => {
             this.win = null;
         });
 
         this.win.webContents.on("did-finish-load", () => {
             const file = process.argv[1];
-            if (file && this.checkFileExistsSync(file) && isDev == false ) {
+            if (file && this.checkFileExistsSync(file) && isDev == false) {
                 this.file = file;
                 this.win.webContents.send("OPEN_PAGE_CHECKED_PASSWORD");
             }
@@ -66,7 +81,7 @@ export default class MainApp {
 
         ipcMain.on("APP_HIDE", () => this.win.minimize());
 
-        ipcMain.on("APP_EXIT", () => app.exit());
+        ipcMain.on("APP_EXIT", () => this.win.close());
 
         ipcMain.on("APP_RESIZE_WINDOW", () => {
             if (this.win.isMaximized()) this.win.unmaximize();
@@ -84,6 +99,7 @@ export default class MainApp {
                 resize: this.win.isMaximized(),
             });
         });
+
         ipcMain.handle("GET_VERSION_APP", () => {
             return app.getVersion();
         });
@@ -121,49 +137,56 @@ export default class MainApp {
         ipcMain.handle("LOGOUT", () => this.closeFile());
         // generate
         ipcMain.on("CLOSE_GENERATE", () => {
-            if(this.isGenerate){
+            if (this.isGenerate) {
                 this.isGenerate.close();
                 this.isGenerate = false;
-
             }
-        })
+        });
         ipcMain.on("OPEN_GENERATE", () => {
-            if(this.isGenerate){
-                this.isGenerate.focus()
-            }else{
-                this.isGenerate = this.openModalGenerate()
+            if (this.isGenerate) {
+                this.isGenerate.focus();
+            } else {
+                this.openModalGenerate();
             }
         });
     }
 
     // create tray
-    createTray(){
+    createTray() {
         const menu = [
             {
-                label: 'Генератор',
-                type: 'normal',
-                click:()=>{
-                    if(this.isGenerate){
-                        if(this.isGenerate.isFocused()){
-                            this.isGenerate.close();
-                            this.isGenerate = false;
-                        }else{
-                            this.isGenerate.focus()
-                        }
-                    }else{
-                        this.isGenerate = this.openModalGenerate();
+                label: "Генератор",
+                type: "normal",
+                click: () => {
+                    if (!this.isGenerate) {
+                        this.openModalGenerate();
                     }
+                },
+            },
+            { type: 'separator' },
+            {
+                label: "Закрыть",
+                type: "normal",
+                click: ()=>{
+                    app.exit()
                 }
             },
-            {
-                label: 'Выход',
-                type: 'normal',
-                role:"quit",
-            },
-        ]
-        this.tray = new Tray('resources/icon.ico');
+        ];
+        this.tray = new Tray("resources/icon.ico");
         this.tray.setToolTip(CONFIG.title);
-        this.tray.setContextMenu(Menu.buildFromTemplate(menu))
+        this.tray.on("click",()=>{
+            if(!this.win.isVisible()){
+                this.win.show()
+            }
+            else if(this.win.isMinimized()){
+                this.win.show()
+            }
+            else if(this.win.isVisible()){
+                this.win.minimize()
+            }
+        })
+        this.tray.setContextMenu(Menu.buildFromTemplate(menu));
+
     }
 
     subscribeForAppEvents() {
@@ -183,9 +206,6 @@ export default class MainApp {
                 this.createWindow();
             }
         });
-
-
-
     }
     // Показать ошибку
     showErrorMessage(message = "Возникла непредвиденная ошибка") {
@@ -214,25 +234,27 @@ export default class MainApp {
             buttonLabel: "Создать",
         });
         if (url) {
-            if(!this.checkFileExistsSync(path.join(url[0],"database.svps"))){
-                console.log("Файла нет")
+            if (!this.checkFileExistsSync(path.join(url[0], "database.svps"))) {
+                console.log("Файла нет");
                 this.path = url[0];
                 return true;
-            }else{
-                this.showErrorMessage(`Файл уже существует в этой директории ${url[0]}`)
+            } else {
+                this.showErrorMessage(
+                    `Файл уже существует в этой директории ${url[0]}`
+                );
             }
         }
         this.path = null;
         return false;
     }
     //
-    checkFileExistsSync(filepath){
-        if(!filepath) return null
+    checkFileExistsSync(filepath) {
+        if (!filepath) return null;
         let flag = true;
-        try{
-          fs.accessSync(filepath, fs.constants.F_OK);
-        }catch(e){
-          flag = false;
+        try {
+            fs.accessSync(filepath, fs.constants.F_OK);
+        } catch (e) {
+            flag = false;
         }
         return flag;
     }
@@ -344,7 +366,6 @@ export default class MainApp {
     // указать путь к файлу
     openDataFile(defaultPath) {
         var url = dialog.showOpenDialogSync(this.win, {
-
             title: "Выберите файл",
             defaultPath: defaultPath || app.getPath("desktop"),
             properties: ["openFile"],
@@ -389,12 +410,20 @@ export default class MainApp {
         }
     }
 
-    openModalGenerate(){
-        let winGenerate = new BrowserWindow({
+    openModalGenerate() {
+        this.isGenerate = new WinGenerate();
+    }
+}
+
+class WinGenerate {
+    constructor() {
+        this.win = null;
+        this.subscribeForAppEvents();
+    }
+    createWindow() {
+        this.win  = new BrowserWindow({
             width: 400,
             height: 436,
-            type: "toolbar",
-            devTools: CONFIG.devTools,
             titleBarStyle: "hidden",
             show: false,
             center: true,
@@ -407,16 +436,28 @@ export default class MainApp {
             },
         });
 
-        winGenerate.removeMenu();
-        winGenerate.loadFile("renderer/generate.html");
-        winGenerate.webContents.openDevTools({
+        this.win.removeMenu();
+        this.win.loadFile("renderer/generate.html");
+        this.win.webContents.openDevTools({
             mode: "detach",
         });
 
-        winGenerate.webContents.on("did-finish-load", ()=>{
-            winGenerate.show()
+        this.win.webContents.on("did-finish-load", () => {
+            this.win.show();
         });
-
-        return winGenerate
+        this.win.on("closed", () => {
+            this.win = null;
+        });
+    }
+    subscribeForAppEvents() {
+        this.createWindow();
+    }
+    close(){
+        this.win.close()
+    }
+    focus(){
+        if(!this.win.isFocused()){
+            this.win.focus()
+        }
     }
 }

@@ -1,4 +1,5 @@
 import { clipboard, contextBridge, ipcRenderer, shell } from "electron";
+import zxcvbn from "zxcvbn";
 const pass = [
     "123456",
     "123456789",
@@ -353,48 +354,8 @@ contextBridge.exposeInMainWorld("password", {
     },
     passwordCheck: (password) => {
         if (!password.length) return "";
-        let s_letters = "qwertyuiopasdfghjklzxcvbnm", //буквы нижнего регистра
-            b_letters = "QWERTYUIOPASDFGHJKLZXCVBNM", //буквы нижнего регистра
-            digits = "1234567890", //цифры
-            specials = "!@#$%^&*()_-+=|/.,:;[]{}", // Специальные символы
-            i_sl = false, //Логическая переменная, наличие в пароле букв нижнего регистра
-            i_bl = false, //Наличие в пароле букв верхнего регистра
-            i_d = false, //Наличие в пароле цифр
-            i_sp = false; //Наличие в пароле специальных символов
-
-        for (let i = 0; i < password.length; i++) {
-            //Цикл, в котором последовательно проверяется каждый символ в пароле, в результате которого определяется, присутствуют ли в пароле определенные символы.
-            if (!i_sl && s_letters.indexOf(password[i]) != -1) i_sl = true;
-            else if (!i_bl && b_letters.indexOf(password[i]) != -1) i_bl = true;
-            else if (!i_d && digits.indexOf(password[i]) != -1) i_d = true;
-            else if (!i_sp && specials.indexOf(password[i]) != -1) i_sp = true;
-        }
-        let rating = 0,
-            status = "";
-
-        if (i_sl) rating++; // Если в пароле есть буквы нижнего регистра, его параметр сложности увеличивается
-        if (i_bl) rating++; // Если в пароле есть буквы верхнего регистра, его параметр сложности увеличивается
-        if (i_d) rating++; // Если в пароле есть цифры, его параметр сложности увеличивается
-        if (i_sp) rating++; // Если в пароле есть специальные символы, его параметр сложности увеличивается
-
-        // Затем происходит анализ длины пароля и вычисленного ранее параметра сложности, на основании которых пользователь получает текстовую оценку сложности пароля
-
-        if (password.length < 6 && rating < 3) status = 1;
-        else if (password.length < 6 && rating >= 3) status = 2;
-        else if (password.length >= 8 && rating < 3) status = 2;
-        else if (password.length >= 8 && rating >= 3) status = 3;
-        else if (password.length >= 6 && rating == 1) status = 1;
-        else if (password.length >= 6 && rating > 1 && rating < 4) status = 2;
-        else if (password.length >= 6 && rating == 4) status = 3;
-        if (pass.findIndex((item) => item === password) > -1) {
-            status = 0;
-        } else {
-            if (status < 3 && password.length >= 14) {
-                status = 3;
-            }
-        }
-
-        return status;
+        const result = zxcvbn(password,pass);
+        return result.score;
     },
     setItem: (obj) => {
         return new Promise((resolve, reject) => {
