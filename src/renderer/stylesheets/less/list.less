@@ -18,6 +18,11 @@
         padding: 20px;
         height: max-content;
         overflow: hidden;
+        transition:background 0.2s linear, color 0.2s linear;
+        &:hover{
+            background: var(--text);
+            color: var(--bg);
+        }
         & > *:first-child {
             margin-bottom: 10px;
         }
@@ -40,25 +45,19 @@
             align-items: center;
             &_item {
                 margin-left: 10px;
-             
+                color: inherit;
+                opacity: 0.5;
+                transition: opacity 0.1s linear ;
                 svg {
                     width: 20px;
                     height: 20px;
-                    path {
-                        fill: var(--btn-primary);
-                    }
                 }
                 &:not(:disabled):hover {
-                    svg {
-                        path {
-                            box-shadow: 0 0 5px #fff;
-                            fill: var(--btn-primary-hover);
-                        }
-                    }
+                    opacity: 1;
                 }
                 &:disabled {
-                    opacity: 0.25;
-                    cursor: default;
+                    opacity: 0;
+                    pointer-events: none;
                 }
             }
         }
@@ -82,20 +81,16 @@
 }
 .panel {
     display: flex;
-    & > *:not(:last-child) {
-        margin-right: var(--padding);
-    }
+    gap: var(--gap);
 }
 @media screen and (max-width: 500px) {
-    .panel {
-        .btn {
-            flex-shrink: 10;
-            &-text {
-                display: none;
-            }
-            &-icon {
-                margin: 0;
-            }
+    .btn.mobile-hide-text{
+        flex-shrink: 10;
+        width: fit-content;
+    }
+    .mobile-hide-text{
+        .btn-text {
+            display: none;
         }
     }
 }

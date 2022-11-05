@@ -17,6 +17,7 @@ export const InputPassword = ({
     const [status, setStatus] = React.useState("");
     const { list } = useSelector((state) => state.data);
     const [unique, setUnique] = React.useState(false);
+    const [focus, setFocus] = React.useState(false);
 
     React.useEffect(() => {
         const level = window.password.passwordCheck(password);
@@ -59,15 +60,18 @@ export const InputPassword = ({
         setPassword(newPassword);
     };
 
+    
     return (
         <div className="form_row input">
             <label>Пароль*</label>
-            <div className="input_item input_item_btns">
+            <div className={`input_item input_item_btns ${focus?"focus":""}`}>
                 <input
-                    type={show ? "text" : "password"}
+                    type={show|| focus ? "text" : "password"}
                     value={password}
                     onInput={onInput}
                     required
+                    onFocus={()=>setFocus(true)}
+                    onBlur={()=>setFocus(false)}
                 />
                 <p className="btns">
                     <button

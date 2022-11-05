@@ -14,15 +14,11 @@ const CreatePassword = React.memo(function CreatePassword() {
     const [password2, setPassword2] = React.useState([]);
 
     const checked = React.useMemo(() => {
-        if (!password.length && !password2) {
+        if (!password.length && !password2.length) {
             return null;
         } else {
             if (password.length === 5 && password2.length === 5) {
-                if (password.join("") === password2.join("")) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return password.join("") === password2.join("")
             } else {
                 return null;
             }

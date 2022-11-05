@@ -1,0 +1,101 @@
+//main:../application.less
+.security {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    &_welcome {
+        max-width: 500px;
+        width: 100%;
+        margin: auto;
+        background-color: var(--container);
+        border-radius: 10px;
+        padding: 30px;
+    }
+    &_title {
+        margin-top: 0;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+    &_desc {
+        text-align: center;
+        margin-top: -20px;
+        margin-bottom: 20px;
+    }
+    &_result{
+        display: flex;
+        gap: 10px;
+        &_item{
+            display: flex;
+            align-items: center; 
+        }
+    }
+    &_access{
+        text-align: center;
+        color: var(--color-access);
+        svg{
+            display: block;
+            margin: 20px auto;
+            font-size: 50px;
+        }
+    }
+    &_access + &_btns{
+        margin-top: 30px;
+    }
+    &_list {
+        display: flex;
+        flex-direction: column;
+        gap: var(--gap);
+        overflow-x: auto;
+
+        &_item {
+            background: var(--container);
+            border-radius: 10px;
+            padding: 20px;
+            &_title {
+                text-transform: capitalize;
+                font-size: 26px;
+                font-weight: 700;
+                margin-bottom: 0.5em;
+            }
+            &_errors {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+            &_error {
+                display: flex;
+                gap: 5px;
+                line-height: 110%;
+                svg{
+                    flex-shrink: 0;
+                }
+            }
+            &_btns{
+                margin-top: 10px;
+                justify-content: flex-start;
+                &>*{
+                    color: inherit;
+                    font-size: 14px;
+                    font-family: inherit;
+                    display: flex;
+                    align-items: center;
+                    gap: 5px;
+                    &:not(:hover){
+                        opacity: 0.5;
+                    }
+                }
+            }
+        }
+    }
+}
+.message{
+    &_error{
+        color: var(--color-danger);
+    }
+    &_warning{
+        color: var(--color-warning);
+    }
+    &_info{
+        color: var(--color-info);
+    }
+}

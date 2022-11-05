@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import { ac_logout } from "../redux/actions/ac_state";
 
-import { AiFillSetting } from "react-icons/ai";
+import { AiFillSetting, AiFillSecurityScan } from "react-icons/ai";
 import { RiLogoutBoxFill } from "react-icons/ri";
 import { BsFillKeyFill } from 'react-icons/bs';
 
@@ -13,7 +13,7 @@ const Settings = React.memo(function Settings() {
     const navigate = useNavigate();
     const { auth } = useSelector((state) => state.data);
     const [show, setShow] = React.useState(false);
-
+    console.log()
     const onToggleSettins = () => {
         setShow(!show);
     };
@@ -37,6 +37,16 @@ const Settings = React.memo(function Settings() {
         },
         {
             id: 2,
+            type: "BUTTON",
+            onClick: ()=>{
+                navigate("/security")
+            },
+            label: "Сканировать",
+            icon: <AiFillSecurityScan/>,
+            disabled: !auth || window.location.hash ==="#/security",
+        },
+        {
+            id: 3,
             type: "BUTTON",
             onClick: onLogout,
             label: "Выход",
@@ -112,8 +122,8 @@ function Button({
     onCloseSetting = () => {},
 }) {
     const onHndelClick = () => {
-        onClick();
         onCloseSetting();
+        onClick();
     };
     return (
         <div className="settings_row">

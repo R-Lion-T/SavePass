@@ -1,6 +1,10 @@
 import React from "react";
 
 const RowPassword = React.memo(function RowPassword({ password, setPassword }) {
+    const max = 5;
+    const min = max - password.length;
+    const array = [];
+
     React.useEffect(() => {
         function keydown(event) {
             const key = event.keyCode;
@@ -13,7 +17,7 @@ const RowPassword = React.memo(function RowPassword({ password, setPassword }) {
                 if (key == 8) {
                     setPassword(password.slice(0, -1));
                     this.removeEventListener("keydown", keydown);
-                } else if (password.length !== 5) {
+                } else if (password.length !== max) {
                     setPassword([...password, event.key]);
                     this.removeEventListener("keydown", keydown);
                 }
@@ -25,9 +29,6 @@ const RowPassword = React.memo(function RowPassword({ password, setPassword }) {
         };
     }, [password]);
 
-    const max = 5;
-    const min = max - password.length;
-    const array = [];
     for (let i = 0; i < password.length; i++) {
         array.push("*");
     }

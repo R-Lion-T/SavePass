@@ -138,7 +138,7 @@ function App() {
             statusText = (
                 <p className="generate_window_foot_text color-danger">
                     <BsFillShieldSlashFill />
-                    Пароль не надежный
+                     Ненадёжный пароль
                 </p>
             );
             break;
@@ -147,7 +147,7 @@ function App() {
             statusText = (
                 <p className="generate_window_foot_text color-warning">
                     <BsShieldFillCheck />
-                    Пароль не очень надежный
+                    Не очень надёжный пароль
                 </p>
             );
             break;
@@ -156,7 +156,7 @@ function App() {
             statusText = (
                 <p className="generate_window_foot_text color-access">
                     <BsShieldFillCheck />
-                    Надежный пароль
+                    Надёжный пароль
                 </p>
             );
             break;
@@ -165,7 +165,7 @@ function App() {
             statusText = (
                 <p className="generate_window_foot_text color-access">
                     <BsShieldFillCheck />
-                    Супер пароль
+                    Хороший пароль
                 </p>
             );
             break;

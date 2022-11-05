@@ -135,15 +135,13 @@ export const List = React.memo(function List() {
             <div className="panel">
                 <Link
                     to="/add"
-                    className={`btn btn_primary ${
+                    className={`btn btn_primary btn-icon mobile-hide-text${
                         list.length ? "" : "animation_scale"
                     }`}
                     draggable="false"
                 >
                     <span className="btn-text">Добавить</span>
-                    <span className="btn-icon">
-                        <GrAdd />
-                    </span>
+                    <GrAdd />
                 </Link>
 
                 <Search value={search} setSearch={setSearch} />

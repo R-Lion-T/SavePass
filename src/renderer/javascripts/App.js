@@ -13,6 +13,7 @@ import { Add } from './pages/Add';
 import CreatePassword from "./pages/CreatePassword";
 import CheckedPassword from "./pages/CheckedPassword";
 import { Loading } from "./components/Alert";
+import Security from './pages/Security/index';
 
 export const App = () => {
     const navigate = useNavigate();
@@ -35,14 +36,17 @@ export const App = () => {
     return (
         <>
             <Header />
-            <Routes>
-                <Route path="/" element={<Start />} />
-                <Route path="/createPassword" element={<CreatePassword />} />
-                <Route path="/checkedPassword" element={<CheckedPassword />} />
-                <Route path="/list" element={<List />} />
-                <Route path="/add" element={<Add />} />
-                <Route path="/edit/:id" element={<Edit />} />
-            </Routes>
+            <div className="content">
+                <Routes>
+                    <Route path="/" element={<Start />} />
+                    <Route path="/createPassword" element={<CreatePassword />} />
+                    <Route path="/checkedPassword" element={<CheckedPassword />} />
+                    <Route path="/security" element={<Security />} />
+                    <Route path="/list" element={<List />} />
+                    <Route path="/add" element={<Add />} />
+                    <Route path="/edit/:id" element={<Edit />} />
+                </Routes>
+            </div>
             <Footer />
             {is_load && <Loading/>}
         </>

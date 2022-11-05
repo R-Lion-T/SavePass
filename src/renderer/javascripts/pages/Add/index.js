@@ -58,7 +58,7 @@ export const Add = React.memo(function Add() {
 
     return (
         <form className="form scroll" onSubmit={onSave}>
-            <p className="form_title">Создать</p>
+            <p className="title">Создать</p>
             <div className="form_row input">
                 <label>Название*</label>
                 <p className="input_item">
@@ -105,7 +105,7 @@ export const Add = React.memo(function Add() {
                 )}
             </div>
 
-            <p className="form_btns">
+            <p className="btns form_btns">
                 <Link to="/list" className="btn btn_default" draggable="false">
                     Отмена
                 </Link>

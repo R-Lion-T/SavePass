@@ -1,5 +1,5 @@
 import React from "react";
-import { Link ,useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import { isValidUrl } from "../../function";
@@ -20,22 +20,26 @@ export const Edit = React.memo(function Edit() {
     const [title, setTitle] = React.useState("");
     const [href, setHref] = React.useState("");
     React.useEffect(() => {
-        const item = list.filter((item) => Number(item.id) === Number(id))[0];
-        if (item) {
-            setLogin(item.login);
-            setTitle(item.title);
-            setPassword(item.password);
-            setHref(item.href);
-            // setStatus(window.password.passwordCheck(item.password));
-            // setUnique(uniquePassword(item.password, list, id));
-            if (item.href.length) setIsHttps(item.href.indexOf("https") == -1);
-        } else {
+        if(id){
+            const item = list.filter((item) => Number(item.id) === Number(id))[0];
+            if (item) {
+                setLogin(item.login);
+                setTitle(item.title);
+                setPassword(item.password);
+                setHref(item.href);
+                // setStatus(window.password.passwordCheck(item.password));
+                // setUnique(uniquePassword(item.password, list, id));
+                if (item.href.length) setIsHttps(item.href.indexOf("https") == -1);
+            }
+        }
+         else {
             // не найден
             window.app.showMessageWindow(
                 "Возникла ошибка: карточка для редактирования не найдена.\nПожалуйста попробуйте еще раз или обратитесь к разработчику"
             );
             history.goBack();
         }
+      
     }, [id]);
 
     const onInputLogin = (event) => {
@@ -87,14 +91,14 @@ export const Edit = React.memo(function Edit() {
             if (res) {
                 dispatch(ac_update_data(body));
                 dispatch(ac_hide_load())
-                navigate("/list");
+                navigate(-1);
             }
         });
     };
 
     return (
         <form className="form scroll" onSubmit={onSave}>
-            <p className="form_title">Редактирование</p>
+            <p className="title">Редактирование</p>
             <div className="form_row input">
                 <label>Название*</label>
                 <p className="input_item">
@@ -143,14 +147,16 @@ export const Edit = React.memo(function Edit() {
                 )}
             </div>
 
-            <p className="form_btns">
-                <Link to="/list" className="btn btn_default" draggable="false">
+            <p className="btns form_btns">
+                <button className="btn btn_default" type="button" onClick={()=>navigate(-1)}>
                     Отмена
-                </Link>
+                </button>
                 <button className="btn btn_delete" onClick={onDelete}>
                     Удалить
                 </button>
-                <button className="btn btn_primary">Сохранить</button>
+                <button className="btn btn_primary">
+                    Сохранить
+                </button>
             </p>
         </form>
     );
