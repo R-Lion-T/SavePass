@@ -1,8 +1,8 @@
 import React from "react";
 import { AiFillCopy, AiOutlineReload } from "react-icons/ai";
 import { BsFillShieldSlashFill, BsShieldFillCheck } from "react-icons/bs";
-
 function App() {
+    const [isInput, setIsInput] = React.useState(false);
     const [value, setValue] = React.useState("");
     const [status, setStatus] = React.useState(null);
     const [length, setLength] = React.useState(10);
@@ -60,29 +60,14 @@ function App() {
             setLower(result);
         }
 
-    }, []);
-
-    const onGenerate = () => {
-        const value = window.password.getRandomPassword({
-            length,
-            lower,
-            upper,
-            number,
-            symbol,
-        });
-        if (value) {
-            setValue(value);
+        function generateSetSettings(event){
+            setIsInput(event.detail?.isInput)
         }
-    };
-
-    const onClose =()=>{
-        window.localStorage.setItem("generate-password-length", length);
-        window.localStorage.setItem("generate-password-number", number);
-        window.localStorage.setItem("generate-password-symbol", symbol);
-        window.localStorage.setItem("generate-password-upper", upper);
-        window.localStorage.setItem("generate-password-lower", lower);
-        window.app.closeGenerate();
-    }
+        window.addEventListener("generateSetSettings",generateSetSettings)
+        return()=>{
+            window.removeEventListener("generateSetSettings",generateSetSettings)
+        }
+    }, []);
 
     React.useEffect(()=>{
         onGenerate()
@@ -98,6 +83,45 @@ function App() {
         if(length != val){
             setLength(val)
         }
+    }
+
+    const onGenerate = () => {
+        const value = window.password.getRandomPassword({
+            length,
+            lower,
+            upper,
+            number,
+            symbol,
+        });
+        if (value) {
+            setValue(value);
+        }
+    };
+
+    const onSaveParapms = ()=>{
+        window.localStorage.setItem("generate-password-length", length);
+        window.localStorage.setItem("generate-password-number", number);
+        window.localStorage.setItem("generate-password-symbol", symbol);
+        window.localStorage.setItem("generate-password-upper", upper);
+        window.localStorage.setItem("generate-password-lower", lower);
+    }
+
+    const onClose =()=>{
+        window.app.closeGenerate();
+    };
+
+    const onSubmit=()=>{
+        window.password.submitPasswordMainProccess({
+            password:value
+        })
+        .then(()=>{
+            onSaveParapms()
+            onClose()
+        })
+        .catch(err=>{
+            console.log("Пароль не был отправлен: ",err)
+        })
+
     }
     switch (status) {
         case 0: {
@@ -150,6 +174,11 @@ function App() {
             break;
         }
     }
+
+    const isChangeBtnApple = React.useMemo(function(){
+        return !Boolean( 1 < [upper, lower, symbol, number].filter(boll => boll).length);
+
+    },[upper, lower, symbol, number]);
     return (
         <div className="generate">
             <div className="generate_window">
@@ -177,27 +206,34 @@ function App() {
 
             <div className="generate_row">
                 <p className="generate_row_text">Строчные буквы (a-z)</p>
-                <BtnApple value={lower} onInput={setLower} />
+                <BtnApple value={lower} onInput={setLower} disabled={isChangeBtnApple}/>
             </div>
             <div className="generate_row">
                 <p className="generate_row_text">Заглавные буквы (A-Z)</p>
-                <BtnApple value={upper} onInput={setUpper} />
+                <BtnApple value={upper} onInput={setUpper} disabled={isChangeBtnApple}/>
             </div>
 
             <div className="generate_row">
                 <p className="generate_row_text">Цифры (0-9)</p>
-                <BtnApple value={number} onInput={setNumber} />
+                <BtnApple value={number} onInput={setNumber} disabled={isChangeBtnApple}/>
             </div>
 
             <div className="generate_row">
                 <p className="generate_row_text">Симфолы (@!$%&*)</p>
-                <BtnApple value={symbol} onInput={setSymbol} />
+                <BtnApple value={symbol} onInput={setSymbol} disabled={isChangeBtnApple}/>
             </div>
 
             <div className="generate_row generate_btns">
                 <button className="btn btn_default" onClick={onClose}>
                     Закрыть
                 </button>
+                {
+                    isInput?
+                    <button className="btn btn_primary" onClick={onSubmit}>
+                        Вставить
+                    </button>
+                    : null
+                }
             </div>
         </div>
     );
@@ -211,6 +247,7 @@ const InputRange = React.memo(function InputRange({
         onInput(event.target.value);
     };
 
+
     return (
         <p className="input_range">
             <input
@@ -218,7 +255,7 @@ const InputRange = React.memo(function InputRange({
                 value={value}
                 min="6"
                 max="60"
-                onInput={onInputRange}
+                onChange={onInputRange}
             />
             <span className="input_range_value">{value}</span>
         </p>
@@ -228,13 +265,21 @@ const InputRange = React.memo(function InputRange({
 export const BtnApple = React.memo(function BtnApple({
     value = false,
     onInput = () => {},
+    disabled = false
 }) {
+
     return (
         <button
             type="button"
             className={`btn-apple ${value && "active"}`}
             onClick={() => {
-                onInput(!value);
+                if(disabled){
+                    if(!value){
+                        onInput(!value);
+                    }
+                }else{
+                    onInput(!value);
+                }
             }}
         >
             <span></span>

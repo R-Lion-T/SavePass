@@ -500,7 +500,6 @@ body {
   border-radius: 28px;
   background: var(--container);
   padding: 2px;
-  transition: background 0.2s linear;
   position: relative;
 }
 .btn-apple span {
@@ -512,6 +511,11 @@ body {
   height: 20px;
   background: var(--text);
   border-radius: 50%;
+}
+.btn-apple:focus {
+  transition: background 0.2s linear;
+}
+.btn-apple:focus span {
   transition: transform 0.2s linear, background 0.2s linear;
 }
 .btn-apple.active {

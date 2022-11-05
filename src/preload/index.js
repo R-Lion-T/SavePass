@@ -254,7 +254,7 @@ class PasswordRandom {
             return this.getPassword();
         }
     }
-};
+}
 contextBridge.exposeInMainWorld("app", {
     getVersionApp: () => {
         return new Promise((resolve) => {
@@ -341,12 +341,12 @@ contextBridge.exposeInMainWorld("app", {
                 });
         });
     },
-    closeGenerate:()=>{
-        ipcRenderer.send("CLOSE_GENERATE")
+    closeGenerate: () => {
+        ipcRenderer.send("CLOSE_GENERATE");
     },
-    openGenerate:()=>{
-        ipcRenderer.send("OPEN_GENERATE")
-    }
+    openGenerate: (isInput = false) => {
+        ipcRenderer.send("OPEN_GENERATE",{isInput});
+    },
 });
 contextBridge.exposeInMainWorld("password", {
     getRandomPassword: (data) => {
@@ -354,7 +354,7 @@ contextBridge.exposeInMainWorld("password", {
     },
     passwordCheck: (password) => {
         if (!password.length) return "";
-        const result = zxcvbn(password,pass);
+        const result = zxcvbn(password, pass);
         return result.score;
     },
     setItem: (obj) => {
@@ -379,6 +379,27 @@ contextBridge.exposeInMainWorld("password", {
             });
         });
     },
+    submitPasswordMainProccess: (obj) => {
+        return new Promise((resolve,reject) => {
+            ipcRenderer
+                .invoke("ACCEPT_THE_PASSWORD", obj)
+                .then(result=>{
+                    if(result){
+                        resolve(result)
+                    }else{
+                        reject(result)
+                    }
+                });
+        });
+    },
+});
+
+ipcRenderer.on("SET_PASSOWORD_INPUT", (_, data) => {
+    window.dispatchEvent(
+        new CustomEvent("setpasswordinput", {
+            detail: data,
+        })
+    );
 });
 
 ipcRenderer.on("GO_OVER_PAGE", (_, data) => {
@@ -389,15 +410,15 @@ ipcRenderer.on("GO_OVER_PAGE", (_, data) => {
     );
 });
 ipcRenderer.on("OPEN_PAGE_CHECKED_PASSWORD", (_, data) => {
-    window.dispatchEvent(new CustomEvent("openPageCheckedPassword",
-        {
+    window.dispatchEvent(
+        new CustomEvent("openPageCheckedPassword", {
             detail: data,
         })
     );
 });
 ipcRenderer.on("APP_RESIZE_WINDOW_ACCESS", (_, data) => {
     window.dispatchEvent(
-        new CustomEvent("MAIN_RESIZE",{
+        new CustomEvent("MAIN_RESIZE", {
             detail: data,
         })
     );
@@ -409,3 +430,12 @@ ipcRenderer.on("console.log", (_, data) => {
         })
     );
 });
+
+ipcRenderer.on("GENERATE_SET_SETTINGS",(_,props)=>{
+    window.dispatchEvent(
+        new CustomEvent("generateSetSettings", {
+            detail: props,
+        })
+    );
+});
+

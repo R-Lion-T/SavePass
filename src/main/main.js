@@ -60,7 +60,6 @@ export default class MainApp {
         });
         this.win.on("close", (event) => {
             const count = BrowserWindow.getAllWindows().length - 1;
-            console.log(count)
             if (count) {
                 event.preventDefault();
                 this.win.hide();
@@ -135,18 +134,18 @@ export default class MainApp {
             return this.checkedPasswordFile(password);
         });
         ipcMain.handle("LOGOUT", () => this.closeFile());
-        // generate
+        // generate 
         ipcMain.on("CLOSE_GENERATE", () => {
             if (this.isGenerate) {
                 this.isGenerate.close();
                 this.isGenerate = false;
             }
         });
-        ipcMain.on("OPEN_GENERATE", () => {
+        ipcMain.on("OPEN_GENERATE", (event,props) => {
             if (this.isGenerate) {
                 this.isGenerate.focus();
             } else {
-                this.openModalGenerate();
+                this.openModalGenerate(event,props);
             }
         });
     }
@@ -410,14 +409,17 @@ export default class MainApp {
         }
     }
 
-    openModalGenerate() {
-        this.isGenerate = new WinGenerate();
+    openModalGenerate(event,props) {
+        this.isGenerate = new WinGenerate(this.win, event, props);
     }
 }
 
 class WinGenerate {
-    constructor() {
+    constructor(main, event, props) {
         this.win = null;
+        this.main = main;
+        this.event = event;
+        this.props = props;
         this.subscribeForAppEvents();
     }
     createWindow() {
@@ -427,8 +429,9 @@ class WinGenerate {
             titleBarStyle: "hidden",
             show: false,
             center: true,
+            parent: this.props?.isInput? this.main : null,
+            modal: this.props?.isInput? true : false,
             resizable: false,
-            // alwaysOnTop:true,
             webPreferences: {
                 devTools: CONFIG.devTools,
                 worldSafeExecuteJavaScript: true,
@@ -443,17 +446,35 @@ class WinGenerate {
         });
 
         this.win.webContents.on("did-finish-load", () => {
+            if(this.props){
+                this.win.webContents.send("GENERATE_SET_SETTINGS", this.props)
+            }
             this.win.show();
         });
+
+
+        ipcMain.handle("ACCEPT_THE_PASSWORD", (_, obj) => {
+            if(this.event){
+                this.event.sender.send("SET_PASSOWORD_INPUT", obj)
+                return true
+            }
+            return false
+        });
+
         this.win.on("closed", () => {
             this.win = null;
+            ipcMain.removeHandler("ACCEPT_THE_PASSWORD")
         });
+
     }
+
+
     subscribeForAppEvents() {
         this.createWindow();
     }
     close(){
         this.win.close()
+
     }
     focus(){
         if(!this.win.isFocused()){

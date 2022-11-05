@@ -24,6 +24,23 @@ export const InputPassword = ({
         setUnique(uniquePassword(password, list, id));
     }, [id, password]);
 
+    React.useEffect(()=>{
+        function funSetPassword(event){
+            const generate_password = event?.detail?.password;
+            if(generate_password){
+                setPassword(generate_password);
+                setShow(true)
+                setTimeout(()=>{
+                    setShow(false)
+                },1800)
+            }
+        }
+        window.addEventListener("setpasswordinput", funSetPassword)
+        return ()=>{
+            window.removeEventListener("setpasswordinput", funSetPassword)
+        }
+    },[])
+
     const onShow = () => {
         setShow(true);
     };
@@ -32,9 +49,10 @@ export const InputPassword = ({
             setShow(false);
         }
     };
+
     const showGenerate = (event) => {
         event.preventDefault();
-        window.app.openGenerate();
+        window.app.openGenerate(true)
     };
     const onInput = (event) => {
         const newPassword = event.target.value.replace(/\s/g, "");
