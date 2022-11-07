@@ -30,6 +30,7 @@
         -webkit-app-region: drag;
     }
 }
+
 .window {
     padding: 10px;
     display: flex;
@@ -50,10 +51,12 @@
                 stroke: var(--text);
             }
         }
+        &:focus,
         &.active,
         &:hover {
             background: var(--bg-window-btn);
         }
+        &_close:focus,
         &_close:hover {
             background: var(--warning);
         }

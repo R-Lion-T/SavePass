@@ -1,5 +1,4 @@
-
-
+@import "less/reset.less";
 // @media (prefers-color-scheme: dark) {
 
 // }
@@ -88,6 +87,7 @@ body {
     &_default {
         background: var(--btn-default);
         color: var(--text);
+        &:focus,
         &:hover {
             background: var(--btn-default-hover);
         }
@@ -95,6 +95,7 @@ body {
     &_primary {
         background: var(--btn-primary);
         color: var(--container);
+        &:focus,
         &:hover {
             background: var(--btn-primary-hover);
         }
@@ -102,6 +103,7 @@ body {
     &_delete {
         background: var(--btn-delete);
         color: var(--text);
+        &:focus,
         &:hover {
             background: var(--btn-delete-hover);
         }
@@ -113,6 +115,7 @@ body {
                 fill: var(--btn-primary);
             }
         }
+        &:focus,
         &:hover {
             svg {
                 path {
@@ -151,7 +154,7 @@ body {
             span {
                 transition: transform 0.2s linear, background 0.2s linear;
             }
-        }
+            }
         &.active {
             background: var(--text);
             span {
@@ -169,6 +172,7 @@ body {
         &:active:hover {
             opacity: 1;
         }
+        &:not(:active):focus,
         &:not(:active):hover {
             opacity: 0.7;
         }
@@ -220,9 +224,6 @@ input {
     max-width: 500px;
     width: 100%;
     overflow-y: auto;
-
-   
-  
     &_row {
         margin-bottom: 25px;
     }
@@ -248,6 +249,9 @@ input {
         border-radius: 5px;
         border: 2px solid var(--input-color-border);
         color: var(--input-color);
+        &:disabled{
+            opacity: 0.5;
+        }
         &:focus {
             color: var(--input-color-hover);
             border-color: var(--input-focus-color-border);
@@ -273,6 +277,7 @@ input {
                 transition: opacity .1s linear ;
                 .btn{
                    opacity: 0.3;
+                   &:focus,
                    &:hover{
                     opacity: 1;
                    }
@@ -381,6 +386,7 @@ input {
             border-radius: 0.4em;
             cursor: pointer;
             transition: box-shadow 0.2s linear;
+            &:focus,
             &:hover {
                 box-shadow: 0px 0px 0.4em rgba(223, 245, 242, 0.34);
             }
@@ -467,7 +473,7 @@ input {
     }
 }
 
-@import "less/reset.less";
+
 @import "less/list.less";
 @import "less/header.less";
 @import "less/alert.less";

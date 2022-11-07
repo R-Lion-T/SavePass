@@ -392,6 +392,11 @@ contextBridge.exposeInMainWorld("password", {
                 });
         });
     },
+    isUnique :({password="", list=[], id=null})=>{
+        return Boolean(list.filter(item=>{
+             return Number(item?.id)!==Number(id) && item?.password===password
+        }).length)
+    }
 });
 
 ipcRenderer.on("SET_PASSOWORD_INPUT", (_, data) => {

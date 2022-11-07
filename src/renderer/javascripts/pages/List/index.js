@@ -183,7 +183,7 @@ const ListItem = React.memo(function ListItem({
 
     return (
         <>
-            <div className="list_item ">
+            <div className="list_item" tabIndex="0">
                 <div className="list_item_row">
                     <div className="list_item_title list_item_text">
                         {title}
@@ -221,7 +221,7 @@ const ListItem = React.memo(function ListItem({
 
                 <div className="list_item_row">
                     <p className="list_item_text">
-                        Пароль:{" "}
+                        Пароль:     
                         <span className={hidePassword ? "hide-password" : ""}>
                             {password}
                         </span>

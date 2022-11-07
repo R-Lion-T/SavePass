@@ -1,3 +1,36 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+*:focus {
+  outline: none;
+}
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+button:focus {
+  outline: none;
+}
+input {
+  background: none;
+  border: none;
+  color: inherit;
+}
+input:focus {
+  outline: none;
+}
+input::placeholder {
+  color: inherit;
+  font-family: inherit;
+  opacity: 0.5;
+}
+a {
+  text-decoration: none;
+}
 :root {
   --bg: #232931;
   --bg-loading: #23293181;
@@ -85,6 +118,7 @@ body {
   background: var(--btn-default);
   color: var(--text);
 }
+.btn_default:focus,
 .btn_default:hover {
   background: var(--btn-default-hover);
 }
@@ -92,6 +126,7 @@ body {
   background: var(--btn-primary);
   color: var(--container);
 }
+.btn_primary:focus,
 .btn_primary:hover {
   background: var(--btn-primary-hover);
 }
@@ -99,6 +134,7 @@ body {
   background: var(--btn-delete);
   color: var(--text);
 }
+.btn_delete:focus,
 .btn_delete:hover {
   background: var(--btn-delete-hover);
 }
@@ -108,6 +144,7 @@ body {
 .btn_svg svg path {
   fill: var(--btn-primary);
 }
+.btn_svg:focus svg path,
 .btn_svg:hover svg path {
   fill: var(--btn-primary-hover);
 }
@@ -159,6 +196,7 @@ body {
 .btn_input:active:hover {
   opacity: 1;
 }
+.btn_input:not(:active):focus,
 .btn_input:not(:active):hover {
   opacity: 0.7;
 }
@@ -235,6 +273,9 @@ input {
   border: 2px solid var(--input-color-border);
   color: var(--input-color);
 }
+.input input:disabled {
+  opacity: 0.5;
+}
 .input input:focus {
   color: var(--input-color-hover);
   border-color: var(--input-focus-color-border);
@@ -263,6 +304,7 @@ input {
 .input_item_btns .btns .btn {
   opacity: 0.3;
 }
+.input_item_btns .btns .btn:focus,
 .input_item_btns .btns .btn:hover {
   opacity: 1;
 }
@@ -355,6 +397,7 @@ input {
   cursor: pointer;
   transition: box-shadow 0.2s linear;
 }
+.start_boxs .box:focus,
 .start_boxs .box:hover {
   box-shadow: 0px 0px 0.4em rgba(223, 245, 242, 0.34);
 }
@@ -433,39 +476,6 @@ input {
 .color-danger {
   color: var(--color-danger);
 }
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  user-select: none;
-}
-*:focus {
-  outline: none;
-}
-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-button:focus {
-  outline: none;
-}
-input {
-  background: none;
-  border: none;
-  color: inherit;
-}
-input:focus {
-  outline: none;
-}
-input::placeholder {
-  color: inherit;
-  font-family: inherit;
-  opacity: 0.5;
-}
-a {
-  text-decoration: none;
-}
 .list {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -488,6 +498,7 @@ a {
   overflow: hidden;
   transition: background 0.2s linear, color 0.2s linear;
 }
+.list_item:focus,
 .list_item:hover {
   background: var(--text);
   color: var(--bg);
@@ -498,6 +509,9 @@ a {
 .list_item_title {
   font-size: 26px;
   font-weight: 600;
+}
+.list_item_title:first-letter {
+  text-transform: uppercase;
 }
 .list_item_text {
   overflow: hidden;
@@ -523,6 +537,7 @@ a {
   width: 20px;
   height: 20px;
 }
+.list_item_btns_item:not(:disabled):focus,
 .list_item_btns_item:not(:disabled):hover {
   opacity: 1;
 }
@@ -619,10 +634,12 @@ a {
   fill: var(--text);
   stroke: var(--text);
 }
+.window_btn:focus,
 .window_btn.active,
 .window_btn:hover {
   background: var(--bg-window-btn);
 }
+.window_btn_close:focus,
 .window_btn_close:hover {
   background: var(--warning);
 }
@@ -726,6 +743,7 @@ a {
   height: inherit;
   line-height: 0;
 }
+.settings_btn:focus:not(:disabled),
 .settings_btn:hover:not(:disabled) {
   background: #222;
   cursor: pointer;
@@ -806,7 +824,7 @@ a {
   width: 100%;
 }
 .input_range input {
-  -webkit-appearance: none !important;
+  appearance: none;
   background: var(--text);
   height: 4px;
   border-radius: 4px;
@@ -814,7 +832,7 @@ a {
 }
 .input_range input::-webkit-slider-thumb {
   cursor: pointer;
-  -webkit-appearance: none !important;
+  appearance: none;
   background: var(--text);
   height: 20px;
   width: 20px;
@@ -909,9 +927,11 @@ a {
   display: flex;
   align-items: center;
   gap: 5px;
-}
-.security_list_item_btns > *:not(:hover) {
   opacity: 0.5;
+}
+.security_list_item_btns > *:focus,
+.security_list_item_btns > *:hover {
+  opacity: 1;
 }
 .message_error {
   color: var(--color-danger);

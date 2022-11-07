@@ -6,8 +6,6 @@ import { BiHide, BiShow } from "react-icons/bi";
 import { BsFillKeyFill } from "react-icons/bs";
 import { IoIosWarning } from "react-icons/io";
 
-import { uniquePassword } from "../function";
-
 export const InputPassword = ({
     password = "",
     setPassword = () => {},
@@ -22,25 +20,25 @@ export const InputPassword = ({
     React.useEffect(() => {
         const level = window.password.passwordCheck(password);
         setStatus(level);
-        setUnique(uniquePassword(password, list, id));
-    }, [id, password]);
+        setUnique(window.password.isUnique({password, list, id}));
+    }, [id, password, list]);
 
-    React.useEffect(()=>{
-        function funSetPassword(event){
+    React.useEffect(() => {
+        function funSetPassword(event) {
             const generate_password = event?.detail?.password;
-            if(generate_password){
+            if (generate_password) {
                 setPassword(generate_password);
-                setShow(true)
-                setTimeout(()=>{
-                    setShow(false)
-                },1800)
+                setShow(true);
+                setTimeout(() => {
+                    setShow(false);
+                }, 1800);
             }
         }
-        window.addEventListener("setpasswordinput", funSetPassword)
-        return ()=>{
-            window.removeEventListener("setpasswordinput", funSetPassword)
-        }
-    },[])
+        window.addEventListener("setpasswordinput", funSetPassword);
+        return () => {
+            window.removeEventListener("setpasswordinput", funSetPassword);
+        };
+    }, []);
 
     const onShow = () => {
         setShow(true);
@@ -53,25 +51,26 @@ export const InputPassword = ({
 
     const showGenerate = (event) => {
         event.preventDefault();
-        window.app.openGenerate(true)
+        window.app.openGenerate(true);
     };
     const onInput = (event) => {
         const newPassword = event.target.value.replace(/\s/g, "");
         setPassword(newPassword);
     };
 
-    
     return (
         <div className="form_row input">
             <label>Пароль*</label>
-            <div className={`input_item input_item_btns ${focus?"focus":""}`}>
+            <div
+                className={`input_item input_item_btns ${focus ? "focus" : ""}`}
+            >
                 <input
-                    type={show|| focus ? "text" : "password"}
+                    type={show || focus ? "text" : "password"}
                     value={password}
                     onInput={onInput}
                     required
-                    onFocus={()=>setFocus(true)}
-                    onBlur={()=>setFocus(false)}
+                    onFocus={() => setFocus(true)}
+                    onBlur={() => setFocus(false)}
                 />
                 <p className="btns">
                     <button
@@ -107,3 +106,73 @@ export const InputPassword = ({
         </div>
     );
 };
+
+export const InputView = React.memo(function InputView({
+    label="",
+    type = "text",
+    name = "",
+    defaultValue="",
+    onInput = () => {},
+    required = true,
+    disabled = false,
+    classNames = "",
+    placeholder ="",
+    children
+}) {
+    const [value, setValue] = React.useState("");
+    const inputEl = React.useRef(null);
+
+    React.useEffect(()=>{
+        if(value!= defaultValue){
+            setValue(defaultValue)
+        }
+    },[defaultValue])
+
+    function handelChange(e){
+        if(!disabled){
+            const searchType = ['url'];
+            const searchName = ['login'];
+            const search = [...searchType, ...searchName];
+
+            let regS = " ";
+
+            if(search.includes(type) || search.includes(name)){
+                regS = "";
+            }
+
+            setValue(e.target.value.replace(/\s+/g, regS));
+        }
+    }
+    function sendValue(){
+        if(!disabled){
+            onInput(value.trim());
+        }
+    }
+    return (
+        <div className={`input ${classNames}`}>
+            {label.length ?
+                <label>
+                    {label}{required?"*":""}
+                </label>
+            :
+                null
+            }
+            <p className="input_item">
+                <input
+                    ref={inputEl}
+                    type={type}
+                    name={name}
+                    value={value}
+                    onInput={handelChange}
+                    onBlur={sendValue}
+                    required={required}
+                    disabled={disabled}
+                    placeholder={placeholder}
+                    spellCheck={false}
+
+                />
+            </p>
+            {children}
+        </div>
+    );
+});

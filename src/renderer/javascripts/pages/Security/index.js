@@ -1,14 +1,14 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { flushSync } from "react-dom";
 
 import { useSelector, useDispatch } from "react-redux";
 import { ac_hide_load, ac_show_load } from "./../../redux/actions/ac_alert";
 
-import { uniquePassword } from "../../function";
-
 import { BsArrowLeft, BsShieldFillCheck } from "react-icons/bs";
 import { BiError } from "react-icons/bi";
 import { AiFillEdit } from 'react-icons/ai';
+
 
 
 const Security = React.memo(function Security() {
@@ -45,7 +45,10 @@ const SecurityWelcome = React.memo(function SecurityWelcome({
     const dispatch = useDispatch();
     const onChecked = () => {
 
-        dispatch(ac_show_load());
+        flushSync(()=>{
+            dispatch(ac_show_load());
+        })
+       
 
         const array = [];
 
@@ -67,7 +70,7 @@ const SecurityWelcome = React.memo(function SecurityWelcome({
                 })
             }
             // Проверка есть ли одинаковые пароли
-            if (uniquePassword(item.password, list, item.id)) {
+            if (window.password.isUnique({password: item.password, list, id: item.id})) {
                 errors.push({
                     type: "error",
                     message: "Пароль встречается в других записях",
@@ -86,9 +89,11 @@ const SecurityWelcome = React.memo(function SecurityWelcome({
         }else{
             setResult(false);
         }
-        dispatch(ac_hide_load());
+        flushSync(()=>{
+            dispatch(ac_hide_load());
+        })
     };
-
+    console.log("SecurityWelcome")
     return (
         <>
             <div className="security_welcome">
