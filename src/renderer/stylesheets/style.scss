@@ -1,0 +1,280 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+*:focus {
+  outline: none;
+}
+
+textarea,
+input,
+button {
+  background: none;
+  border: none;
+  font-family: inherit;
+}
+textarea,
+input{
+  cursor: text;
+}
+textarea:disabled,
+input:disabled{
+  cursor: default;
+}
+button{
+  cursor: pointer;
+}
+textarea:focus,
+button:focus,
+input:focus {
+  outline: none;
+}
+textarea::placeholder,
+input::placeholder {
+  color: inherit;
+  font-family: inherit;
+  opacity: 0.5;
+  font-weight: 400;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  pointer-events: none;
+}
+
+html,
+body {
+  font-family: "Open Sans", sans-serif;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+}
+body {
+  padding: var(--padding);
+}
+
+*::selection {
+  color: var(--container);
+  background: var(--text);
+}
+#root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+.scroll {
+  margin-right: -4px;
+}
+.scroll::-webkit-scrollbar {
+  width: 14px;
+}
+.scroll::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb-bg);
+  border-radius: 20px;
+  border: 4px solid var(--bg);
+}
+
+
+.btns {
+  display: flex;
+  gap: var(--gap);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.btns .btn {
+  flex-grow: 1;
+  flex-basis: fit-content;
+}
+.btn {
+  max-width: 200px;
+  width: 100%;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn_default {
+  background: var(--btn-default-bg);
+  color: var(--btn-default-color);
+}
+.btn_default:focus,
+.btn_default:hover {
+  background: var(--btn-default-bg-hover);
+}
+.btn_primary {
+  color: var(--btn-primary-color);
+  background: var(--btn-primary-bg);
+}
+.btn_primary:focus,
+.btn_primary:hover {
+  background: var(--btn-primary-bg-hover);
+}
+.btn_delete {
+  color: var(--btn-delete-color);
+  background: var(--btn-delete-bg);
+}
+.btn_delete:focus,
+.btn_delete:hover {
+  background: var(--btn-delete-bg-hover);
+}
+
+.btn-icon {
+  gap: var(--gap);
+}
+.btn-icon svg {
+  line-height: 0;
+  font-size: inherit;
+}
+.btn-apple {
+  width: 44px;
+  height: 24px;
+  border-radius: 28px;
+  background: var(--btn-apple-bg);
+  padding: 2px;
+  position: relative;
+}
+.btn-apple span {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  bottom: 2px;
+  width: 20px;
+  height: 20px;
+  background: var(--btn-apple-color);
+  border-radius: 50%;
+}
+.btn-apple:focus {
+  transition: background 0.2s linear;
+}
+.btn-apple:focus span {
+  transition: transform 0.2s linear, background 0.2s linear;
+}
+.btn-apple.active {
+  background: var(--btn-apple-bg-active);
+}
+.btn-apple.active span {
+  background: var(--btn-apple-color-active);
+  transform: translateX(100%);
+}
+.btn_input {
+  display: flex;
+  align-items: center;
+  width: 25px;
+  height: 100%;
+  opacity: 0.5;
+}
+.btn_input:active:hover {
+  opacity: 1;
+}
+.btn_input:not(:active):focus,
+.btn_input:not(:active):hover {
+  opacity: 0.7;
+}
+.btn_input svg {
+  width: 100%;
+  height: 100%;
+}
+.btn.disabled,
+.btn:disabled {
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  background: var(--input-bg);
+  padding-left: 10px;
+  border-radius: 10px;
+  width: 100%;
+}
+.search input {
+  font-size: 16px;
+  padding: 10px;
+  width: 100%;
+  color: var(--input-color);
+}
+.search svg {
+  flex-shrink: 0;
+  font-size: 24px;
+  line-height: 0;
+}
+
+.title {
+  text-align: center;
+  font-size: 42px;
+  font-weight: 600;
+  margin: 30px 0;
+  line-height: 110%;
+}
+@media screen and (max-width: 360px) {
+  .title {
+    font-size: 30px;
+    margin: 20px 0;
+  }
+}
+.form {
+  overflow-y: auto;
+}
+.wrapper{
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+}
+.form_row {
+  margin-bottom: 25px;
+}
+.form_btns .btn {
+  max-width: 100%;
+  border-radius: 5px;
+}
+
+.animation_scale:not(:hover) {
+  animation: identifier 0.5s linear 1s alternate-reverse infinite both;
+}
+@keyframes identifier {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.95);
+  }
+}
+
+.content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  overflow: hidden;
+  position: relative;
+}
+
+.color{
+  &-warning{
+    color:var(--warning)
+  }
+  &-average{
+    color:var(--average)
+  }
+  &-normal{
+    color:var(--normal)
+  }
+  &-high{
+    color:var(--high)
+  }
+}

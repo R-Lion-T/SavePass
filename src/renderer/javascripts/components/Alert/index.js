@@ -2,6 +2,8 @@ import React from "react";
 import { AiFillInfoCircle, AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useSelector } from "react-redux";
 
+import "./style.scss";
+
 export const Alert = React.memo(function Alert() {
     const ALERT = useSelector((state) => state.alert);
     return (

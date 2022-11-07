@@ -1,5 +1,5 @@
 import React from "react"
-
+import "./style.scss"
 const Footer = React.memo(
     function Footer(){
         const [ver,setVer] = React.useState("")

@@ -1,5 +1,6 @@
 import { clipboard, contextBridge, ipcRenderer, shell } from "electron";
 import zxcvbn from "zxcvbn";
+
 const pass = [
     "123456",
     "123456789",
@@ -227,7 +228,7 @@ class PasswordRandom {
         return String.fromCharCode(Math.floor(Math.random() * 10) + 48);
     }
     getRandomSymbol() {
-        const symbol = "!@#$%^&*()_-+=|/.,:;[]{}";
+        const symbol = "!@#$%&*/";
         return symbol[Math.floor(Math.random() * symbol.length)];
     }
     getPassword() {
@@ -249,12 +250,15 @@ class PasswordRandom {
             });
         }
         if (pass.findIndex((item) => item === value) === -1) {
-            return value.slice(0, this.length);
+            value = value.slice(0, this.length);
+            value = value.match(/.{1,3}/g);
+            return value.join("-");
         } else {
             return this.getPassword();
         }
     }
 }
+
 contextBridge.exposeInMainWorld("app", {
     getVersionApp: () => {
         return new Promise((resolve) => {
@@ -263,7 +267,13 @@ contextBridge.exposeInMainWorld("app", {
             });
         });
     },
-    onCopy: clipboard.writeText,
+    onCopy: (text)=>{
+        if(clipboard.readText() != text){
+            clipboard.writeText(text)
+            return true
+        }
+        return false
+    },
     openHref: shell.openExternal,
     hide: () => ipcRenderer.send("APP_HIDE"),
     exit: () => ipcRenderer.send("APP_EXIT"),
@@ -348,6 +358,7 @@ contextBridge.exposeInMainWorld("app", {
         ipcRenderer.send("OPEN_GENERATE",{isInput});
     },
 });
+
 contextBridge.exposeInMainWorld("password", {
     getRandomPassword: (data) => {
         return new PasswordRandom(data).getPassword();
@@ -414,6 +425,7 @@ ipcRenderer.on("GO_OVER_PAGE", (_, data) => {
         })
     );
 });
+
 ipcRenderer.on("OPEN_PAGE_CHECKED_PASSWORD", (_, data) => {
     window.dispatchEvent(
         new CustomEvent("openPageCheckedPassword", {
@@ -421,6 +433,7 @@ ipcRenderer.on("OPEN_PAGE_CHECKED_PASSWORD", (_, data) => {
         })
     );
 });
+
 ipcRenderer.on("APP_RESIZE_WINDOW_ACCESS", (_, data) => {
     window.dispatchEvent(
         new CustomEvent("MAIN_RESIZE", {
@@ -428,6 +441,7 @@ ipcRenderer.on("APP_RESIZE_WINDOW_ACCESS", (_, data) => {
         })
     );
 });
+
 ipcRenderer.on("console.log", (_, data) => {
     window.dispatchEvent(
         new CustomEvent("console.log", {

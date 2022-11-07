@@ -1,0 +1,19 @@
+.footer {
+    flex-shrink: 0;
+    width: 100%;
+    background: var(--footer-bg);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    padding: 10px 20px;
+}
+
+.footer_left {
+    opacity: 0.5;
+}
+
+.footer_rigth {
+    margin-left: auto;
+    opacity: 0.5;
+}

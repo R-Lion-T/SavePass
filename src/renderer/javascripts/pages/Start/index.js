@@ -1,6 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+import  "./style.scss";
+
 import { AiFillFile, AiFillFileAdd } from "react-icons/ai";
 
 import logo from "../../../images/logo.png";

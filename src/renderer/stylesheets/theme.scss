@@ -1,0 +1,57 @@
+:root {
+  --bg: #232931;
+  --text: #dff5f2;
+  --container: #2e353f;
+
+  --warning: #c22828;
+  --average: #c87216;
+  --normal: #c2c816;
+  --high: #31bb38;
+  --info: #356adc;
+
+  --header-bg: var(--container);
+  --footer-bg: var(--container);
+  --security-bg: var(--container);
+
+  --btn-win-color: var(--text);
+  --btn-win-bg-hover: #394350;
+  --bth-win-close-bg-hover: #c22828;
+
+  --btn-default-color: var(--text);
+  --btn-default-bg: #2e353f;
+  --btn-default-bg-hover: #373f4b;
+
+  --btn-primary-color: var(--container);
+  --btn-primary-bg: #c9ddda;
+  --btn-primary-bg-hover: #dff5f2;
+
+  --btn-delete-color: var(--text);
+  --btn-delete-bg: #b12727;
+  --btn-delete-bg-hover: #c22828;
+
+  --btn-apple-bg: var(--container);
+  --btn-apple-color: var(--text);
+  --btn-apple-bg-active: var(--text);
+  --btn-apple-color-active: #1F1E1E;
+
+  --input-color: var(--text);
+  --input-color-hover: #c9ddda;
+  --input-border-color: #333a43;
+  --input-bg: var(--container);
+  --input-border-color-hover: #4a5563;
+
+  --padding: 10px;
+  --gap: 10px;
+
+  --scrollbar-thumb-bg: var(--text);
+
+  --alert-bg: #1a1e24;
+  --alert-color: var(--text);
+  --alert-border-color: var(--text);
+
+  --loading-bg: #23293181;
+  --loading-color: var(--text);
+
+  --menu-shadows: #000000fc;
+
+}

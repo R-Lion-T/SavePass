@@ -2,18 +2,18 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { ac_logout } from "../redux/actions/ac_state";
+import { ac_logout } from "../../redux/actions/ac_state";
 
-import { AiFillSetting, AiFillSecurityScan } from "react-icons/ai";
+import { AiFillSecurityScan } from "react-icons/ai";
 import { RiLogoutBoxFill } from "react-icons/ri";
-import { BsFillKeyFill } from 'react-icons/bs';
+import { MdPassword } from 'react-icons/md';
+import { FiMenu } from 'react-icons/fi';
 
 const Settings = React.memo(function Settings() {
     const dispath = useDispatch();
     const navigate = useNavigate();
     const { auth } = useSelector((state) => state.data);
     const [show, setShow] = React.useState(false);
-    console.log()
     const onToggleSettins = () => {
         setShow(!show);
     };
@@ -32,7 +32,7 @@ const Settings = React.memo(function Settings() {
             type: "BUTTON",
             onClick: window.app.openGenerate,
             label: "Генератор",
-            icon: <BsFillKeyFill/>,
+            icon: <MdPassword/>,
             disabled: false,
         },
         {
@@ -77,7 +77,7 @@ const Settings = React.memo(function Settings() {
                 className={`window_btn ${show ? "active" : ""}`}
                 onClick={onToggleSettins}
             >
-                <AiFillSetting />
+                <FiMenu />
             </button>
             {show && (
                 <ListSetting list={list} onCloseSetting={onHideSettings} />
@@ -85,6 +85,7 @@ const Settings = React.memo(function Settings() {
         </div>
     );
 });
+
 function ListSetting({ list = [], onCloseSetting = () => {} }) {
     return (
         <div className="settings_list">
@@ -109,10 +110,12 @@ function ListSetting({ list = [], onCloseSetting = () => {} }) {
             })}
         </div>
     );
-}
+};
+
 function Select({ id, label, icon }) {
     return <div className="settings_row">{label}</div>;
-}
+};
+
 function Button({
     id,
     label,
@@ -137,5 +140,6 @@ function Button({
             </button>
         </div>
     );
-}
+};
+
 export default Settings;

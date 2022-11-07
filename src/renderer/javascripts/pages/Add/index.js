@@ -1,14 +1,15 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import {useSelector, useDispatch } from "react-redux";
 
 import { isValidUrl } from "../../function";
 
 import { ac_add_data } from "../../redux/actions/ac_state";
 import { ac_hide_load, ac_show_load } from '../../redux/actions/ac_alert';
-import {InputPassword, InputView} from './../../components/Input';
+import {InputPassword, InputView, Textarea} from './../../components/Input';
 
 export const Add = React.memo(function Add() {
+    const {list} = useSelector(state=>state.data);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -17,15 +18,20 @@ export const Add = React.memo(function Add() {
     const [login, setLogin] = React.useState("");
     const [title, setTitle] = React.useState("");
     const [href, setHref] = React.useState("");
+    const [comment, setCommetn] = React.useState("");
 
     const onSave = (event) => {
         event.preventDefault();
+        const id = new Date().getTime();
         const body = {
-            id: new Date().getTime(),
+            id: id,
             title,
             login,
             href: isValidUrl(href),
             password,
+            comment,
+            created:id,
+            lastChange: id,
         };
         dispatch(ac_show_load())
         window.app.addDataFile(body).then((res) => {
@@ -36,46 +42,67 @@ export const Add = React.memo(function Add() {
             }
         });
     };
-
+  
     return (
         <form className="form scroll" onSubmit={onSave}>
             <p className="title">Создать</p>
+            <div className="wrapper">
+                <InputView
+                    classNames="form_row"
+                    label="Название"
+                    name="title"
+                    placeholder="Например: Мой сайт"
+                    defaultValue={title}
+                    onInput={setTitle}
+                    candidate={
+                    {
+                        array:list,
+                    }
+                    }
+                />
 
-            <InputView
-                classNames="form_row"
-                label="Название"
-                name="title"
-                defaultValue={title}
-                onInput={setTitle}
-            />
+                <InputView
+                    classNames="form_row"
+                    placeholder="Например: login@mail.ru"
+                    label="Логин"
+                    name="login"
+                    defaultValue={login}
+                    onInput={setLogin}
+                    candidate={
+                    {
+                        array:list,
+                    }
+                    }
+                />
 
-            <InputView
-                classNames="form_row"
-                label="Логин"
-                name="login"
-                defaultValue={login}
-                onInput={setLogin}
-            />
+                <InputPassword password={password} setPassword={setPassword} placeholder="********" />
 
-            <InputPassword password={password} setPassword={setPassword} />
+                <InputView
+                    classNames="form_row"
+                    type="url"
+                    label="Ссылка"
+                    name="href"
+                    required={false}
+                    defaultValue={href}
+                    onInput={setHref}
+                    placeholder="Например: https://site.ru/"
+                />
 
-            <InputView
-                classNames="form_row"
-                type="url"
-                label="Ссылка"
-                name="href"
-                required={false}
-                defaultValue={href}
-                onInput={setHref}
-                placeholder="https://site.ru/"
-            />
+                <Textarea
+                    onInput={setCommetn}
+                    label="Коментарий"
+                    name="commets"
+                    required={false}
+                    defaultValue={comment}
+                />
 
-            <p className="btns form_btns">
-                <Link to="/list" className="btn btn_default" draggable="false">
-                    Отмена
-                </Link>
-                <button className="btn btn_primary">Сохранить</button>
-            </p>
+                <p className="btns form_btns">
+                    <Link to="/list" className="btn btn_default" draggable="false">
+                        Отмена
+                    </Link>
+                    <button className="btn btn_primary">Сохранить</button>
+                </p>
+            </div>
         </form>
     );
 });

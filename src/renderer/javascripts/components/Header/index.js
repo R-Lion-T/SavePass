@@ -6,7 +6,8 @@ import { BiWindow, BiWindows } from "react-icons/bi";
 import { GrClose } from "react-icons/gr";
 import { FaRegWindowMinimize } from "react-icons/fa";
 
-import logo from "../../images/logo.png";
+import logo from "../../../images/logo.png";
+import "./style.scss";
 
 const Header = React.memo(function Header() {
     const [winIsminimize, setWinIsminimize] = React.useState(true);
@@ -29,17 +30,18 @@ const Header = React.memo(function Header() {
             <div className="header_drag"></div>
             <div className="header_window window">
                 <Settings />
-                <button className="window_btn" onClick={window.app.hide}>
+                <button className="window_btn" onClick={window.app.hide} title="Скрыть окно">
                     <FaRegWindowMinimize />
                 </button>
 
-                <button className="window_btn" onClick={window.app.resize}>
+                <button className="window_btn" onClick={window.app.resize} title="Изменить размер окна">
                     {winIsminimize ? <BiWindows /> : <BiWindow />}
                 </button>
 
                 <button
                     className="window_btn window_btn_close"
                     onClick={window.app.exit}
+                    title="Закрыть приложение"
                 >
                     <GrClose />
                 </button>

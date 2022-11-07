@@ -1,0 +1,121 @@
+.security {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.security_welcome {
+    max-width: 500px;
+    width: 100%;
+    margin: auto;
+    background: var(--security-bg);
+    border-radius: 10px;
+    padding: 30px;
+}
+
+.security_title {
+    margin-top: 0;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.security_desc {
+    text-align: center;
+    margin-top: -20px;
+    margin-bottom: 20px;
+}
+
+.security_result {
+    display: flex;
+    gap: var(--gap);
+}
+
+.security_result_item {
+    display: flex;
+    align-items: center;
+}
+
+.security_access {
+    text-align: center;
+    color: var(--high);
+}
+
+.security_access svg {
+    display: block;
+    margin: 20px auto;
+    font-size: 50px;
+}
+
+.security_access+.security_btns {
+    margin-top: 30px;
+}
+
+.security_list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+    overflow-x: auto;
+}
+
+.security_list_item {
+    background: var(--security-bg);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.security_list_item_title {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 0.5em;
+}
+.security_list_item_title::first-letter{
+    text-transform: uppercase;
+}
+
+.security_list_item_errors {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.security_list_item_error {
+    display: flex;
+    gap: 5px;
+    line-height: 110%;
+}
+
+.security_list_item_error svg {
+    flex-shrink: 0;
+}
+
+.security_list_item_btns {
+    margin-top: 10px;
+    justify-content: flex-start !important;
+}
+
+.security_list_item_btns>* {
+    color: inherit;
+    font-size: 14px;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    opacity: 0.5;
+}
+
+.security_list_item_btns>*:focus,
+.security_list_item_btns>*:hover {
+    opacity: 1;
+}
+
+.message_error {
+    color: var(--warning);
+}
+
+.message_warning {
+    color: var(--average);
+}
+
+.message_info {
+    color: var(--info);
+}

@@ -1,0 +1,142 @@
+.input {
+    display: flex;
+    flex-direction: column;
+}
+
+.input label {
+    font-size: 16px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+.input textarea,
+.input input {
+    font-size: 18px;
+    width: 100%;
+    padding: 10px 15px;
+    background: var(--input-bg);
+    border-radius: 5px;
+    border: 2px solid var(--input-border-color);
+    color: var(--input-color);
+}
+.input textarea{
+    min-width: 100%;
+    min-height: 150px;
+    height: 150px;
+}
+.input textarea:disabled,
+.input input:disabled {
+ 
+    opacity: 0.5;
+}
+.input textarea:focus,
+.input input:focus {
+    color: var(--input-color-hover);
+    border-color: var(--input-border-color-hover);
+}
+
+.input_item {
+    display: flex;
+    position: relative;
+}
+.input_placeholder{
+    position: absolute;
+    top: 50%;
+    left: 2px;
+    transform: translateY(-50%);
+    padding: 10px 15px;
+    pointer-events: none;
+    opacity: 0.5;
+    letter-spacing: normal;
+    font-size: 18px;
+    font-weight: 400;
+}
+.input_item .btns {
+    flex-wrap: nowrap;
+    gap: 0px;
+}
+
+.input_item_btns {
+    border-radius: 5px;
+    overflow: hidden;
+    border: 2px solid var(--input-border-color);
+    background: var(--input-bg);
+}
+
+.input_item_btns.focus {
+    color: var(--input-color-hover);
+    border-color: var(--input-border-color-hover);
+}
+
+.input_item_btns .btns {
+    transition: opacity 0.1s linear;
+}
+
+.input_item_btns .btns .btn {
+    opacity: 0.3;
+}
+
+.input_item_btns .btns .btn:focus,
+.input_item_btns .btns .btn:hover {
+    opacity: 1;
+}
+
+.input_item_btns input {
+    border: none;
+    border-radius: 0px;
+}
+
+.input-warning {
+    margin-top: 9px;
+    font-size: 12px;
+    color: var(--warning);
+    line-height: 110%;
+}
+
+.status {
+    margin-top: 8px;
+    height: 5px;
+    width: 100%;
+    display: flex;
+    gap: 2px;
+}
+
+.status span {
+    flex-grow: 1;
+    background-color: var(--container);
+    border-radius: 5px;
+}
+
+.status.level_0 span:first-child,
+.status.level_1 span:first-child {
+    background: var(--warning);
+}
+
+.status.level_2 span:nth-child(-n + 2) {
+    background: var(--average);
+}
+
+.status.level_3 span:nth-child(-n + 3) {
+    background: var(--normal);
+}
+
+.status.level_4 span {
+    background: var(--high);
+}
+
+.status.error span {
+    background-color: var(--warning) !important;
+}
+
+// нужно переработать
+.btn_svg svg {
+    font-size: 25px;
+}
+
+.btn_svg svg path {
+    fill: var(--btn-primary-bg);
+}
+
+.btn_svg:focus svg path,
+.btn_svg:hover svg path {
+    fill: var(--btn-primary-bg-hover);
+}

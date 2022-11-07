@@ -36,11 +36,11 @@ const RowPassword = React.memo(function RowPassword({ password, setPassword }) {
         array.push(null);
     }
     return (
-        <div className="rowPassord">
+        <div className="rowPassword">
             {array.map((item, index) => {
                 return (
                     <div
-                        className={`rowPassord_item ${
+                        className={`rowPassword_item ${
                             password.length === index
                                 ? "focus"
                                 : item != null

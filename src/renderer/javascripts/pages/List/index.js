@@ -1,16 +1,16 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import { AiFillEdit, AiFillCopy, AiFillPlayCircle } from "react-icons/ai";
-import { GrAdd } from "react-icons/gr";
-import { BiShow, BiHide } from "react-icons/bi";
+import "./style.scss";
 
-import { Alert} from "../../components/Alert";
-import Search from "./Search";
+import { GrAdd } from "react-icons/gr";
 
 import { dis_add_alert } from "../../redux/reducer/alert";
 
+import { Alert } from "../../components/Alert";
+import Search from "./Search";
+import ListItem from "./ListItem";
 
 const simbol = {
     ru: {
@@ -83,8 +83,8 @@ function checked(title, key) {
     if (title.includes(key)) return true;
 
     // проверка количество совадений букв в тексте
-    let assecc =0,
-    bad = 0;
+    let assecc = 0,
+        bad = 0;
 
     for (let i = 0; i < key.length; i++) {
         key[i] == title[i] ? assecc++ : bad++;
@@ -102,7 +102,7 @@ export const List = React.memo(function List() {
         const cyrillic = /[а-я]/i.test(key) ? "ru" : "en";
         const key2 = key
             .split("")
-            .map(s => simbol[cyrillic]?.[s] || s)
+            .map((s) => simbol[cyrillic]?.[s] || s)
             .join("");
 
         return list.filter((item) => {
@@ -112,9 +112,7 @@ export const List = React.memo(function List() {
     }, [search, list]);
 
     const onCopyText = (text, alertText) => {
-        return () => {
-            window.app.onCopy(text);
-            // dispatch(dis_add_alert());
+        if (window.app.onCopy(text)) {
             dispatch(
                 dis_add_alert({
                     id: new Date().getTime(),
@@ -122,7 +120,7 @@ export const List = React.memo(function List() {
                     text: alertText,
                 })
             );
-        };
+        }
     };
     const onHref = (href, login) => {
         return () => {
@@ -157,93 +155,8 @@ export const List = React.memo(function List() {
                     />
                 ))}
             </div>
+            <Outlet context={list} />
             <Alert />
-        </>
-    );
-});
-
-const ListItem = React.memo(function ListItem({
-    id,
-    title,
-    href,
-    login,
-    password,
-    onCopyText,
-    onHref,
-}) {
-    const [hidePassword, setHidePassword] = React.useState(true);
-    const onShowpassord = () => {
-        setHidePassword(false);
-    };
-    const onHidepassord = () => {
-        if (!hidePassword) {
-            setHidePassword(true);
-        }
-    };
-
-    return (
-        <>
-            <div className="list_item" tabIndex="0">
-                <div className="list_item_row">
-                    <div className="list_item_title list_item_text">
-                        {title}
-                    </div>
-                    <div className="list_item_btns">
-                        <Link
-                            to={`/edit/${id}`}
-                            draggable="false"
-                            className="list_item_btns_item"
-                        >
-                            <AiFillEdit />
-                        </Link>
-                    </div>
-                </div>
-
-                <div className="list_item_row">
-                    <p className="list_item_text">Логин: {login}</p>
-                    <div className="list_item_btns">
-                        <button
-                            className="list_item_btns_item"
-                            onClick={onHref(href, login)}
-                            disabled={!href.length}
-                        >
-                            <AiFillPlayCircle />
-                        </button>
-
-                        <button
-                            className="list_item_btns_item"
-                            onClick={onCopyText(login, "Логин скопирован")}
-                        >
-                            <AiFillCopy />
-                        </button>
-                    </div>
-                </div>
-
-                <div className="list_item_row">
-                    <p className="list_item_text">
-                        Пароль:     
-                        <span className={hidePassword ? "hide-password" : ""}>
-                            {password}
-                        </span>
-                    </p>
-                    <div className="list_item_btns">
-                        <button
-                            className="list_item_btns_item"
-                            onMouseDown={onShowpassord}
-                            onMouseLeave={onHidepassord}
-                            onMouseUp={onHidepassord}
-                        >
-                            {hidePassword ? <BiShow /> : <BiHide />}
-                        </button>
-                        <button
-                            className="list_item_btns_item"
-                            onClick={onCopyText(password, "Пароль скопирован")}
-                        >
-                            <AiFillCopy />
-                        </button>
-                    </div>
-                </div>
-            </div>
         </>
     );
 });

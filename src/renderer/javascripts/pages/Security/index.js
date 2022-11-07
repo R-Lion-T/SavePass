@@ -9,7 +9,7 @@ import { BsArrowLeft, BsShieldFillCheck } from "react-icons/bs";
 import { BiError } from "react-icons/bi";
 import { AiFillEdit } from 'react-icons/ai';
 
-
+import "./style.scss";
 
 const Security = React.memo(function Security() {
     const navigate = useNavigate();

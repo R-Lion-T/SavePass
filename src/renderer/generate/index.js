@@ -1,8 +1,11 @@
-import ReactDOM from "react-dom/client";
 import React from "react";
+import ReactDOM from "react-dom/client";
+
+import "./../stylesheets/theme.scss";
+import "./../stylesheets/style.scss";
+
 import App from './App';
 
-require("application.css");
 
 window.onload = () => {
     const root = ReactDOM.createRoot(document.getElementById("root"));

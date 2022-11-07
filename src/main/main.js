@@ -46,6 +46,7 @@ export default class MainApp {
             show: false,
             center: true,
             resizable: false,
+            backgroundColor: "#232931",
             webPreferences: {
                 devTools: CONFIG.devTools,
                 worldSafeExecuteJavaScript: true,
@@ -76,6 +77,10 @@ export default class MainApp {
                 this.win.webContents.send("OPEN_PAGE_CHECKED_PASSWORD");
             }
             this.win.show();
+        });
+
+        this.win.webContents.on("context-menu", (e, params) => {
+            this.createContextMenu(params);
         });
 
         ipcMain.on("APP_HIDE", () => this.win.minimize());
@@ -134,18 +139,18 @@ export default class MainApp {
             return this.checkedPasswordFile(password);
         });
         ipcMain.handle("LOGOUT", () => this.closeFile());
-        // generate 
+        // generate
         ipcMain.on("CLOSE_GENERATE", () => {
             if (this.isGenerate) {
                 this.isGenerate.close();
                 this.isGenerate = false;
             }
         });
-        ipcMain.on("OPEN_GENERATE", (event,props) => {
+        ipcMain.on("OPEN_GENERATE", (event, props) => {
             if (this.isGenerate) {
                 this.isGenerate.focus();
             } else {
-                this.openModalGenerate(event,props);
+                this.openModalGenerate(event, props);
             }
         });
     }
@@ -162,30 +167,54 @@ export default class MainApp {
                     }
                 },
             },
-            { type: 'separator' },
+            { type: "separator" },
             {
                 label: "Закрыть",
                 type: "normal",
-                click: ()=>{
-                    app.exit()
-                }
+                click: () => {
+                    app.exit();
+                },
             },
         ];
         this.tray = new Tray("resources/icon.ico");
         this.tray.setToolTip(CONFIG.title);
-        this.tray.on("click",()=>{
-            if(!this.win.isVisible()){
-                this.win.show()
+        this.tray.on("click", () => {
+            if (!this.win.isVisible()) {
+                this.win.show();
+            } else if (this.win.isMinimized()) {
+                this.win.show();
+            } else if (this.win.isVisible()) {
+                this.win.minimize();
             }
-            else if(this.win.isMinimized()){
-                this.win.show()
-            }
-            else if(this.win.isVisible()){
-                this.win.minimize()
-            }
-        })
+        });
         this.tray.setContextMenu(Menu.buildFromTemplate(menu));
-
+    }
+    // create context menu
+    createContextMenu({ x, y }) {
+        const template = [
+            {
+                label: "Скопировать",
+                role: "copy",
+            },
+            {
+                label: "Вырезать",
+                role: "cut",
+            },
+            {
+                label: "Вставить",
+                role: "paste",
+            },
+            {
+                type:"separator"
+            },
+            {
+                label: "Выход",
+                role: "close"
+            },
+        ];
+        const menu = new Menu.buildFromTemplate(template);
+        Menu.setApplicationMenu(menu);
+        menu.popup(this.win, x, y);
     }
 
     subscribeForAppEvents() {
@@ -409,7 +438,7 @@ export default class MainApp {
         }
     }
 
-    openModalGenerate(event,props) {
+    openModalGenerate(event, props) {
         this.isGenerate = new WinGenerate(this.win, event, props);
     }
 }
@@ -423,14 +452,14 @@ class WinGenerate {
         this.subscribeForAppEvents();
     }
     createWindow() {
-        this.win  = new BrowserWindow({
+        this.win = new BrowserWindow({
             width: 400,
             height: 436,
             titleBarStyle: "hidden",
             show: false,
             center: true,
-            parent: this.props?.isInput? this.main : null,
-            modal: this.props?.isInput? true : false,
+            parent: this.props?.isInput ? this.main : null,
+            modal: this.props?.isInput ? true : false,
             resizable: false,
             webPreferences: {
                 devTools: CONFIG.devTools,
@@ -439,46 +468,65 @@ class WinGenerate {
             },
         });
 
+        // context menu
+        const template = [
+            {
+                label: "Скопировать",
+                role: "copy",
+            },
+            {
+                type:"separator"
+            },
+            {
+                label: "Выход",
+                role: "close"
+            },
+        ];
+        const menu = new Menu.buildFromTemplate(template);
+        Menu.setApplicationMenu(menu);
+        this.win.webContents.on("context-menu",(event,params)=>{
+            menu.popup(this.win, params.x, params.y);
+        });
+
+        // remove menu window
         this.win.removeMenu();
+
         this.win.loadFile("renderer/generate.html");
+
         this.win.webContents.openDevTools({
             mode: "detach",
         });
 
         this.win.webContents.on("did-finish-load", () => {
-            if(this.props){
-                this.win.webContents.send("GENERATE_SET_SETTINGS", this.props)
+            if (this.props) {
+                this.win.webContents.send("GENERATE_SET_SETTINGS", this.props);
             }
             this.win.show();
         });
 
-
         ipcMain.handle("ACCEPT_THE_PASSWORD", (_, obj) => {
-            if(this.event){
-                this.event.sender.send("SET_PASSOWORD_INPUT", obj)
-                return true
+            if (this.event) {
+                this.event.sender.send("SET_PASSOWORD_INPUT", obj);
+                return true;
             }
-            return false
+            return false;
         });
 
         this.win.on("closed", () => {
             this.win = null;
-            ipcMain.removeHandler("ACCEPT_THE_PASSWORD")
+            ipcMain.removeHandler("ACCEPT_THE_PASSWORD");
         });
-
     }
-
 
     subscribeForAppEvents() {
         this.createWindow();
     }
-    close(){
-        this.win.close()
-
+    close() {
+        this.win.close();
     }
-    focus(){
-        if(!this.win.isFocused()){
-            this.win.focus()
+    focus() {
+        if (!this.win.isFocused()) {
+            this.win.focus();
         }
     }
 }

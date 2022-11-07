@@ -14,6 +14,7 @@ import CreatePassword from "./pages/CreatePassword";
 import CheckedPassword from "./pages/CheckedPassword";
 import { Loading } from "./components/Alert";
 import Security from './pages/Security/index';
+import Comment from './pages/List/Comment';
 
 export const App = () => {
     const navigate = useNavigate();
@@ -42,7 +43,9 @@ export const App = () => {
                     <Route path="/createPassword" element={<CreatePassword />} />
                     <Route path="/checkedPassword" element={<CheckedPassword />} />
                     <Route path="/security" element={<Security />} />
-                    <Route path="/list" element={<List />} />
+                    <Route path="/list" element={<List />} >
+                        <Route path="comment/:id" element={<Comment />} />
+                    </Route>
                     <Route path="/add" element={<Add />} />
                     <Route path="/edit/:id" element={<Edit />} />
                 </Routes>

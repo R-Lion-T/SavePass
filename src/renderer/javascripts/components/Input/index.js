@@ -5,11 +5,13 @@ import { useSelector } from "react-redux";
 import { BiHide, BiShow } from "react-icons/bi";
 import { BsFillKeyFill } from "react-icons/bs";
 import { IoIosWarning } from "react-icons/io";
+import "./style.scss";
 
 export const InputPassword = ({
     password = "",
     setPassword = () => {},
     id = null,
+    placeholder="",
 }) => {
     const [show, setShow] = React.useState(false);
     const [status, setStatus] = React.useState("");
@@ -20,7 +22,7 @@ export const InputPassword = ({
     React.useEffect(() => {
         const level = window.password.passwordCheck(password);
         setStatus(level);
-        setUnique(window.password.isUnique({password, list, id}));
+        setUnique(window.password.isUnique({ password, list, id }));
     }, [id, password, list]);
 
     React.useEffect(() => {
@@ -48,7 +50,6 @@ export const InputPassword = ({
             setShow(false);
         }
     };
-
     const showGenerate = (event) => {
         event.preventDefault();
         window.app.openGenerate(true);
@@ -57,25 +58,28 @@ export const InputPassword = ({
         const newPassword = event.target.value.replace(/\s/g, "");
         setPassword(newPassword);
     };
-
+    const inptId = React.useId();
     return (
         <div className="form_row input">
-            <label>Пароль*</label>
+            <label htmlFor={inptId}>Пароль*</label>
             <div
                 className={`input_item input_item_btns ${focus ? "focus" : ""}`}
             >
                 <input
+                    id={inptId}
                     type={show || focus ? "text" : "password"}
                     value={password}
                     onInput={onInput}
                     required
                     onFocus={() => setFocus(true)}
                     onBlur={() => setFocus(false)}
+                    placeholder={placeholder}
                 />
                 <p className="btns">
                     <button
                         type="button"
                         className="btn btn_svg"
+                        title="Сгенерировать пароль"
                         onClick={showGenerate}
                     >
                         <BsFillKeyFill />
@@ -83,6 +87,7 @@ export const InputPassword = ({
                     <button
                         type="button"
                         className="btn btn_svg"
+                        title="Посмотреть пароль"
                         onMouseDown={onShow}
                         onMouseUp={onHide}
                         onMouseLeave={onHide}
@@ -98,7 +103,7 @@ export const InputPassword = ({
                 <span></span>
             </p>
             {unique ? (
-                <p className="warning">
+                <p className="input-warning">
                     <IoIosWarning /> Не рекомендуем использовать одинаковые
                     пароли
                 </p>
@@ -108,57 +113,80 @@ export const InputPassword = ({
 };
 
 export const InputView = React.memo(function InputView({
-    label="",
+    label = "",
     type = "text",
     name = "",
-    defaultValue="",
+    defaultValue = "",
     onInput = () => {},
     required = true,
     disabled = false,
     classNames = "",
-    placeholder ="",
-    children
+    placeholder = "",
+    candidate = null, // кадитанты на автозаполнение {array}
+    children,
 }) {
-    const [value, setValue] = React.useState("");
+    const [value, setValue] = React.useState(defaultValue);
     const inputEl = React.useRef(null);
 
-    React.useEffect(()=>{
-        if(value!= defaultValue){
-            setValue(defaultValue)
+    React.useEffect(() => {
+        if (value != defaultValue) {
+            setValue(defaultValue);
         }
-    },[defaultValue])
+    }, [defaultValue]);
 
-    function handelChange(e){
-        if(!disabled){
-            const searchType = ['url'];
-            const searchName = ['login'];
-            const search = [...searchType, ...searchName];
+    function handelChange(e) {
+        const searchType = ["url"];
+        const searchName = ["login"];
+        const search = [...searchType, ...searchName];
 
-            let regS = " ";
+        let regS = " ";
 
-            if(search.includes(type) || search.includes(name)){
-                regS = "";
-            }
-
-            setValue(e.target.value.replace(/\s+/g, regS));
+        if (search.includes(type) || search.includes(name)) {
+            regS = "";
         }
+
+        setValue(e.target.value.replace(/\s+/g, regS));
     }
-    function sendValue(){
-        if(!disabled){
+    function sendValue() {
+        if (!disabled) {
             onInput(value.trim());
         }
     }
+
+    const inpId = React.useId();
+
+    const option = React.useMemo(() => {
+        if (candidate && candidate?.array.length && value.length) {
+            for (let item of candidate.array) {
+                const text = item[name].substr(0, value.length);
+                if (text.toLowerCase() === value.toLowerCase()) {
+                    return item[name];
+                }
+            }
+            return false;
+        }
+        return false;
+    }, [candidate, value]);
+
+    const keys = ["Tab", "Enter"];
+
+    const onKeyDown = (e) => {
+        if (keys.includes(e.key) && option && value != option) {
+            e.preventDefault();
+            setValue(option);
+        }
+    };
     return (
         <div className={`input ${classNames}`}>
-            {label.length ?
-                <label>
-                    {label}{required?"*":""}
+            {label.length ? (
+                <label htmlFor={inpId}>
+                    {label}
+                    {required ? "*" : ""}
                 </label>
-            :
-                null
-            }
+            ) : null}
             <p className="input_item">
                 <input
+                    id={inpId}
                     ref={inputEl}
                     type={type}
                     name={name}
@@ -169,10 +197,64 @@ export const InputView = React.memo(function InputView({
                     disabled={disabled}
                     placeholder={placeholder}
                     spellCheck={false}
-
+                    onKeyDown={onKeyDown}
                 />
+                {option && option != value ? (
+                    <span className="input_placeholder">{option}</span>
+                ) : null}
             </p>
             {children}
+        </div>
+    );
+});
+
+export const Textarea = React.memo(function Textarea({
+    label = "",
+    name = "",
+    defaultValue = "",
+    onInput = () => {},
+    required = true,
+    disabled = false,
+    placeholder = "",
+}) {
+    const [value, setValue] = React.useState(defaultValue);
+
+    React.useEffect(() => {
+        if (value != defaultValue) {
+            setValue(defaultValue);
+        }
+    }, [defaultValue]);
+
+    function handelChange(e) {
+        setValue(e.target.value);
+    }
+
+    function sendValue() {
+        if (!disabled) {
+            onInput(value.trim());
+        }
+    }
+    const inpId = React.useId();
+    return (
+        <div className="form_row input">
+            {label.length ? (
+                <label htmlFor={inpId}>
+                    {label}
+                    {required ? "*" : ""}
+                </label>
+            ) : null}
+            <p className="input_item">
+                <textarea
+                    name={name}
+                    id={inpId}
+                    spellCheck={false}
+                    placeholder={placeholder}
+                    value={value}
+                    onInput={handelChange}
+                    onBlur={sendValue}
+                    disabled={disabled}
+                />
+            </p>
         </div>
     );
 });

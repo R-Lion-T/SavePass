@@ -1,12 +1,15 @@
-import ReactDOM from "react-dom/client";
 import React from "react";
+import ReactDOM from "react-dom/client";
 import { HashRouter } from "react-router-dom";
 import { Provider } from "react-redux";
+
+import "./../stylesheets/theme.scss";
+import "./../stylesheets/style.scss";
+
 import store from "./redux/store";
 
 import { App } from "./App";
 
-require("application.css");
 
 window.onload = () => {
     const root = ReactDOM.createRoot(document.getElementById("root"));

@@ -6,7 +6,7 @@ import { isValidUrl } from "../../function";
 
 import { ac_delete_data, ac_update_data } from "../../redux/actions/ac_state";
 import { ac_hide_load, ac_show_load } from '../../redux/actions/ac_alert';
-import { InputPassword, InputView } from './../../components/Input';
+import { InputPassword, InputView, Textarea } from './../../components/Input';
 
 
 export const Edit = React.memo(function Edit() {
@@ -20,7 +20,7 @@ export const Edit = React.memo(function Edit() {
     const [password, setPassword] = React.useState("");
     const [title, setTitle] = React.useState("");
     const [href, setHref] = React.useState("");
-
+    const [comment, setCommetn] = React.useState("");
     React.useEffect(() => {
         if(id){
             const item = list.filter((item) => Number(item.id) === Number(id))[0];
@@ -29,6 +29,7 @@ export const Edit = React.memo(function Edit() {
                 setTitle(item.title);
                 setPassword(item.password);
                 setHref(item.href);
+                setCommetn(item.comment)
             }
         }
          else {
@@ -43,7 +44,7 @@ export const Edit = React.memo(function Edit() {
     const onDelete = (event) => {
         event.preventDefault();
         dispatch(ac_show_load())
-        
+
         window.app.deleteDataFile({
                 id,
                 title,
@@ -65,6 +66,8 @@ export const Edit = React.memo(function Edit() {
             login,
             href: isValidUrl(href),
             password,
+            comment,
+            lastChange:new Date().getTime(),
         };
         dispatch(ac_show_load())
         window.app.updateDataFile(body).then((res) => {
@@ -78,48 +81,59 @@ export const Edit = React.memo(function Edit() {
 
     return (
         <form className="form scroll" onSubmit={onSave}>
-            <p className="title">Редактирование</p>
+            <div className="wrapper">
+                <p className="title">Редактирование</p>
 
-            <InputView
-                classNames="form_row"
-                label="Название"
-                name="title"
-                defaultValue={title}
-                onInput={setTitle}
-            />
+                <InputView
+                    classNames="form_row"
+                    label="Название"
+                    name="title"
+                    defaultValue={title}
+                    onInput={setTitle}
+                />
 
-            <InputView
-                classNames="form_row"
-                label="Логин"
-                name="login"
-                defaultValue={login}
-                onInput={setLogin}
-            />
+                <InputView
+                    classNames="form_row"
+                    label="Логин"
+                    name="login"
+                    defaultValue={login}
+                    onInput={setLogin}
+                />
 
-            <InputPassword password={password} setPassword={setPassword} id={id} />
+                <InputPassword password={password} setPassword={setPassword} id={id} />
 
-            <InputView
-                classNames="form_row"
-                type="url"
-                label="Ссылка"
-                name="href"
-                required={false}
-                defaultValue={href}
-                onInput={setHref}
-                placeholder="https://site.ru/"
-            />
+                <InputView
+                    classNames="form_row"
+                    type="url"
+                    label="Ссылка"
+                    name="href"
+                    required={false}
+                    defaultValue={href}
+                    onInput={setHref}
+                    placeholder="https://site.ru/"
+                />
 
-            <p className="btns form_btns">
-                <button className="btn btn_default" type="button" onClick={()=>navigate(-1)}>
-                    Отмена
-                </button>
-                <button className="btn btn_delete" onClick={onDelete}>
-                    Удалить
-                </button>
-                <button className="btn btn_primary">
-                    Сохранить
-                </button>
-            </p>
+                <Textarea
+                    onInput={setCommetn}
+                    label="Коментарий"
+                    name="commets"
+                    required={false}
+                    defaultValue={comment}
+                />
+
+                <p className="btns form_btns">
+                    <button className="btn btn_default" type="button" onClick={()=>navigate(-1)}>
+                        Отмена
+                    </button>
+                    <button className="btn btn_delete" onClick={onDelete}>
+                        Удалить
+                    </button>
+                    <button className="btn btn_primary">
+                        Сохранить
+                    </button>
+                </p>
+            </div>
+
         </form>
     );
 });

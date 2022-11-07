@@ -1,6 +1,7 @@
 import React from "react";
 import { AiFillCopy, AiOutlineReload } from "react-icons/ai";
 import { BsFillShieldSlashFill, BsShieldFillCheck } from "react-icons/bs";
+import "./style.scss";
 function App() {
     const [isInput, setIsInput] = React.useState(false);
     const [length, setLength] = React.useState(10);
@@ -9,8 +10,6 @@ function App() {
     const [lower, setLower] = React.useState(true);
     const [upper, setUpper] = React.useState(true);
     const [update, setUpdate] = React.useState(true);
- 
-    
     React.useEffect(() => {
         const local_length = window.localStorage.getItem(
             "generate-password-length"
@@ -100,7 +99,7 @@ function App() {
     switch (params.getStatus) {
         case 0: {
             statusText = (
-                <p className="generate_window_foot_text color-danger">
+                <p className="generate_window_foot_text color-warning">
                     <BsFillShieldSlashFill />
                     Этот пароль входит топ 200 список самых распространенных у
                     пользователей
@@ -110,7 +109,7 @@ function App() {
         }
         case 1: {
             statusText = (
-                <p className="generate_window_foot_text color-danger">
+                <p className="generate_window_foot_text color-warning">
                     <BsFillShieldSlashFill />
                      Ненадёжный пароль
                 </p>
@@ -119,7 +118,7 @@ function App() {
         }
         case 2: {
             statusText = (
-                <p className="generate_window_foot_text color-warning">
+                <p className="generate_window_foot_text color-average">
                     <BsShieldFillCheck />
                     Не очень надёжный пароль
                 </p>
@@ -128,7 +127,7 @@ function App() {
         }
         case 3: {
             statusText = (
-                <p className="generate_window_foot_text color-access">
+                <p className="generate_window_foot_text color-normal">
                     <BsShieldFillCheck />
                     Надёжный пароль
                 </p>
@@ -137,7 +136,7 @@ function App() {
         }
         case 4: {
             statusText = (
-                <p className="generate_window_foot_text color-access">
+                <p className="generate_window_foot_text color-high">
                     <BsShieldFillCheck />
                     Хороший пароль
                 </p>
@@ -170,10 +169,11 @@ function App() {
                 <div className="generate_window_foot">
                     {params.getStatus && statusText}
                     <p className="generate_window_foot_btns">
-                        <button className="btn_input" onClick={()=>setUpdate(!update)}>
+                        <button className="btn_input" onClick={()=>setUpdate(!update)} title="Обновить">
                             <AiOutlineReload />
                         </button>
                         <button
+                            title="Скопировать"
                             className="btn_input"
                             onClick={() => window.app.onCopy(params.value)}
                         >
