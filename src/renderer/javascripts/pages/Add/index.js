@@ -7,6 +7,10 @@ import { isValidUrl } from "../../function";
 import { ac_add_data } from "../../redux/actions/ac_state";
 import { ac_hide_load, ac_show_load } from '../../redux/actions/ac_alert';
 import {InputPassword, InputView, Textarea} from './../../components/Input';
+import { Buttons,Button } from './../../components/Buttons';
+
+import { AiFillSave } from "react-icons/ai";
+import { BiLeftArrowAlt } from "react-icons/bi";
 
 export const Add = React.memo(function Add() {
     const {list} = useSelector(state=>state.data);
@@ -42,7 +46,7 @@ export const Add = React.memo(function Add() {
             }
         });
     };
-  
+
     return (
         <form className="form scroll" onSubmit={onSave}>
             <p className="title">Создать</p>
@@ -96,12 +100,19 @@ export const Add = React.memo(function Add() {
                     defaultValue={comment}
                 />
 
-                <p className="btns form_btns">
-                    <Link to="/list" className="btn btn_default" draggable="false">
+                <Buttons>
+                    <Button
+                        startIcon={<BiLeftArrowAlt/>}
+                        color="secondary"
+                        onClick={()=>{navigate(-1)}}>
                         Отмена
-                    </Link>
-                    <button className="btn btn_primary">Сохранить</button>
-                </p>
+                    </Button>
+                    <Button
+                        type="submit"
+                        endIcon={<AiFillSave/>}>
+                        Сохранить
+                    </Button>
+                </Buttons>
             </div>
         </form>
     );

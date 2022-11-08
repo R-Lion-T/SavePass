@@ -13,8 +13,9 @@ import { Add } from './pages/Add';
 import CreatePassword from "./pages/CreatePassword";
 import CheckedPassword from "./pages/CheckedPassword";
 import { Loading } from "./components/Alert";
-import Security from './pages/Security/index';
+import Security from './pages/Security';
 import Comment from './pages/List/Comment';
+
 
 export const App = () => {
     const navigate = useNavigate();

@@ -7,6 +7,10 @@ import { isValidUrl } from "../../function";
 import { ac_delete_data, ac_update_data } from "../../redux/actions/ac_state";
 import { ac_hide_load, ac_show_load } from '../../redux/actions/ac_alert';
 import { InputPassword, InputView, Textarea } from './../../components/Input';
+import { Button, Buttons } from './../../components/Buttons';
+
+import { AiFillDelete, AiFillSave } from "react-icons/ai";
+import { BiLeftArrowAlt } from 'react-icons/bi';
 
 
 export const Edit = React.memo(function Edit() {
@@ -41,8 +45,7 @@ export const Edit = React.memo(function Edit() {
         }
     }, [id]);
 
-    const onDelete = (event) => {
-        event.preventDefault();
+    const onDelete = () => {
         dispatch(ac_show_load())
 
         window.app.deleteDataFile({
@@ -54,7 +57,7 @@ export const Edit = React.memo(function Edit() {
             }).then((res) => {
                 if (res) {
                     dispatch(ac_delete_data(id));
-                    navigate("/list");
+                    navigate(-1);
                 }
             })
     };
@@ -121,17 +124,12 @@ export const Edit = React.memo(function Edit() {
                     defaultValue={comment}
                 />
 
-                <p className="btns form_btns">
-                    <button className="btn btn_default" type="button" onClick={()=>navigate(-1)}>
-                        Отмена
-                    </button>
-                    <button className="btn btn_delete" onClick={onDelete}>
-                        Удалить
-                    </button>
-                    <button className="btn btn_primary">
-                        Сохранить
-                    </button>
-                </p>
+
+                <Buttons>
+                    <Button color="secondary" startIcon={<BiLeftArrowAlt/>} onClick={()=>{navigate(-1)}}> Отмена </Button>
+                    <Button color="danger"  startIcon={<AiFillDelete/>} onClick={onDelete}> Удалить </Button>
+                    <Button type="submit" endIcon={<AiFillSave/>}> Сохранить </Button>
+                </Buttons>
             </div>
 
         </form>

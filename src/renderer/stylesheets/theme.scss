@@ -3,6 +3,10 @@
   --text: #dff5f2;
   --container: #2e353f;
 
+  --padding: 10px;
+  --gap: 10px;
+  --radius:10px;
+
   --warning: #c22828;
   --average: #c87216;
   --normal: #c2c816;
@@ -21,9 +25,21 @@
   --btn-default-bg: #2e353f;
   --btn-default-bg-hover: #373f4b;
 
-  --btn-primary-color: var(--container);
-  --btn-primary-bg: #c9ddda;
-  --btn-primary-bg-hover: #dff5f2;
+  --btn-radius: 0.357em;//!
+
+  --btn-primary-color: var(--container);//!
+  --btn-primary-bg: #c9ddda; // !
+  --btn-primary-bg-hover: #dff5f2;//!?
+
+
+  --btn-secondary-color: var(--text);//!
+  --btn-secondary-bg: #2e353f; // !
+  --btn-secondary-bg-hover: #373f4b;//!
+
+
+  --btn-danger-color: var(--text);//!
+  --btn-danger-bg: #b12727; // !
+  --btn-danger-bg-hover: #c22828;//!
 
   --btn-delete-color: var(--text);
   --btn-delete-bg: #b12727;
@@ -40,8 +56,6 @@
   --input-bg: var(--container);
   --input-border-color-hover: #4a5563;
 
-  --padding: 10px;
-  --gap: 10px;
 
   --scrollbar-thumb-bg: var(--text);
 

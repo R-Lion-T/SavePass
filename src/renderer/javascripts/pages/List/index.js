@@ -144,7 +144,6 @@ export const List = React.memo(function List() {
 
                 <Search value={search} setSearch={setSearch} />
             </div>
-
             <div className="list scroll">
                 {filterData.map((item) => (
                     <ListItem

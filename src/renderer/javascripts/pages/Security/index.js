@@ -5,10 +5,12 @@ import { flushSync } from "react-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { ac_hide_load, ac_show_load } from "./../../redux/actions/ac_alert";
 
+
+import { Button } from "../../components/Buttons";
+
 import { BsArrowLeft, BsShieldFillCheck } from "react-icons/bs";
 import { BiError } from "react-icons/bi";
-import { AiFillEdit } from 'react-icons/ai';
-
+import { AiFillEdit,AiFillSecurityScan } from 'react-icons/ai';
 import "./style.scss";
 
 const Security = React.memo(function Security() {
@@ -20,13 +22,9 @@ const Security = React.memo(function Security() {
     }
     return (
         <>
-            <button
-                className="btn btn_default btn-icon mobile-hide-text"
-                onClick={goBack}
-            >
-                <BsArrowLeft />
-                <span className="btn-text">назад</span>
-            </button>
+            <Button color="secondary" startIcon={<BsArrowLeft />} onClick={goBack}>
+                назад
+            </Button>
             {result.length ? (
                 <SecurityResult result={result} />
             ) : (
@@ -93,7 +91,6 @@ const SecurityWelcome = React.memo(function SecurityWelcome({
             dispatch(ac_hide_load());
         })
     };
-    console.log("SecurityWelcome")
     return (
         <>
             <div className="security_welcome">
@@ -104,9 +101,7 @@ const SecurityWelcome = React.memo(function SecurityWelcome({
                 {
                     result?
                     <p className="btns security_btns">
-                        <button className="btn btn_primary" onClick={onChecked}>
-                            Проверить
-                        </button>
+                        <Button endIcon={<AiFillSecurityScan/>} onClick={onChecked}>Проверить</Button>
                     </p>
                     :
                         <>
@@ -115,9 +110,7 @@ const SecurityWelcome = React.memo(function SecurityWelcome({
                             Все записи хорошо защищены
                         </p>
                         <p className="btns security_btns">
-                            <button className="btn btn_primary" onClick={goBack}>
-                                Выход
-                            </button>
+                            <Button startIcon={<BsArrowLeft />} onClick={goBack}>Выход</Button>
                         </p>
                     </>
                 }
