@@ -1,119 +1,104 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import {useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
 import { isValidUrl } from "../../function";
 
 import { ac_add_data } from "../../redux/actions/ac_state";
-import { ac_hide_load, ac_show_load } from '../../redux/actions/ac_alert';
-import {InputPassword, InputView, Textarea} from './../../components/Input';
-import { Buttons,Button } from './../../components/Buttons';
+import { ac_hide_load, ac_show_load } from "../../redux/actions/ac_alert";
+import { InputPassword, InputView, Textarea } from "./../../components/Input";
+import { Buttons, Button } from "./../../components/Buttons";
 
 import { AiFillSave } from "react-icons/ai";
 import { BiLeftArrowAlt } from "react-icons/bi";
+import { Form, FormRow } from "./../../components/Form";
 
 export const Add = React.memo(function Add() {
-    const {list} = useSelector(state=>state.data);
-
+    const { list } = useSelector((state) => state.data);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const [password, setPassword] = React.useState("");
-    const [login, setLogin] = React.useState("");
-    const [title, setTitle] = React.useState("");
-    const [href, setHref] = React.useState("");
-    const [comment, setCommetn] = React.useState("");
-
-    const onSave = (event) => {
-        event.preventDefault();
+    const handelSubmit = (data) => {
         const id = new Date().getTime();
         const body = {
             id: id,
-            title,
-            login,
-            href: isValidUrl(href),
-            password,
-            comment,
-            created:id,
+            ...data,
+            href: isValidUrl(data.href),
+            created: id,
             lastChange: id,
         };
-        dispatch(ac_show_load())
+        dispatch(ac_show_load());
         window.app.addDataFile(body).then((res) => {
             if (res) {
                 dispatch(ac_add_data(body));
-                dispatch(ac_hide_load())
+                dispatch(ac_hide_load());
                 navigate("/list");
             }
         });
     };
 
     return (
-        <form className="form scroll" onSubmit={onSave}>
-            <p className="title">Создать</p>
-            <div className="wrapper">
+        <Form title="Создать" onSubmit={handelSubmit}>
+            <FormRow>
                 <InputView
-                    classNames="form_row"
                     label="Название"
                     name="title"
-                    placeholder="Например: Мой сайт"
-                    defaultValue={title}
-                    onInput={setTitle}
-                    candidate={
-                    {
-                        array:list,
-                    }
-                    }
+                    placeholder="Мой сайт"
+                    datalist={list}
+                    required
                 />
+            </FormRow>
 
+            <FormRow>
                 <InputView
-                    classNames="form_row"
-                    placeholder="Например: login@mail.ru"
                     label="Логин"
                     name="login"
-                    defaultValue={login}
-                    onInput={setLogin}
-                    candidate={
-                    {
-                        array:list,
-                    }
-                    }
+                    placeholder="login@mail.ru"
+                    datalist={list}
+                    required
                 />
+            </FormRow>
 
-                <InputPassword password={password} setPassword={setPassword} placeholder="********" />
+            <FormRow>
+                <InputPassword
+                    name="password"
+                    label="Пароль"
+                    placeholder="********"
+                />
+            </FormRow>
 
+            <FormRow>
                 <InputView
-                    classNames="form_row"
-                    type="url"
                     label="Ссылка"
+                    type="url"
                     name="href"
-                    required={false}
-                    defaultValue={href}
-                    onInput={setHref}
-                    placeholder="Например: https://site.ru/"
+                    placeholder="https://site.ru/"
                 />
+            </FormRow>
 
+            <FormRow>
                 <Textarea
-                    onInput={setCommetn}
-                    label="Коментарий"
-                    name="commets"
-                    required={false}
-                    defaultValue={comment}
+                    label="Заметки"
+                    name="comment"
                 />
+            </FormRow>
 
+            <FormRow>
                 <Buttons>
                     <Button
-                        startIcon={<BiLeftArrowAlt/>}
+                        startIcon={<BiLeftArrowAlt />}
                         color="secondary"
-                        onClick={()=>{navigate(-1)}}>
+                        onClick={() => {
+                            navigate(-1);
+                        }}
+                    >
                         Отмена
                     </Button>
-                    <Button
-                        type="submit"
-                        endIcon={<AiFillSave/>}>
+                    <Button type="submit" endIcon={<AiFillSave />}>
                         Сохранить
                     </Button>
                 </Buttons>
-            </div>
-        </form>
+            </FormRow>
+        </Form>
     );
 });

@@ -19,22 +19,23 @@ import Comment from './pages/List/Comment';
 
 export const App = () => {
     const navigate = useNavigate();
-    const {auth, is_load}= useSelector(state=>state.data)
+    const {auth, is_load}= useSelector(state=>state.data);
+
+    React.useEffect(()=>{
+        const goOverPage=({detail})=>{
+            navigate(detail.page);
+        }
+        const consoleLog = ({detail})=>{
+            console.log(detail)
+        }
+        window.removeEventListener("console.log", consoleLog);
+        window.addEventListener("goOverPage", goOverPage);
+    },[]);
 
     React.useEffect(() => {
-        if(!auth){
-            navigate("/")
-        }
-        window.addEventListener("goOverPage", (event) => {
-            navigate(event.detail.page);
-        });
-        window.addEventListener("openPageCheckedPassword", () => {
-            navigate("/checkedPassword");
-        });
-        window.addEventListener("console.log", (event) => {
-            console.log(event.detail)
-        });
-    }, []);
+        if(!auth) return  navigate("/");
+    }, [auth]);
+
     return (
         <>
             <Header />

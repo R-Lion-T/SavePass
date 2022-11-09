@@ -1,22 +1,20 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { AiFillEdit, AiFillCopy, AiFillPlayCircle } from "react-icons/ai";
 import { BiShow, BiHide, BiCommentDetail } from "react-icons/bi";
-import imgError from "./../../../images/errorImg.ico";
-const ListItem = React.memo(function ListItem({
-    id,
-    title,
-    href,
-    login,
-    password,
-    comment,
-    onCopyText,
-    onHref,
-}) {
+import imgError from "./../../../../images/errorImg.ico";
+
+import style from "./style.module.css";
+
+const ListItem = React.memo(function ListItem(props) {
+    const { id, title, href, login, password, comment, onCopyText, onHref} = props
+
     const params = useParams();
-    const [hidePassword, setHidePassword] = React.useState(true);
     const navigate = useNavigate();
+
+    const [hidePassword, setHidePassword] = React.useState(true);
     const onShowpassord = () => {
         setHidePassword(false);
     };
@@ -40,23 +38,23 @@ const ListItem = React.memo(function ListItem({
     return (
         <>
             <div
-                className={`list_item ${params.id == id ? "active" : ""}`}
+                className={`${style.item} ${params.id == id ? style.active : ""}`}
                 tabIndex="0"
             >
-                <div className="list_item_row">
-                    <div className="list_item_text list_item_head">
+                <div className={style.row}>
+                    <div className={`${style.text} ${style.head}`}>
                         <img
-                            className="list_item_icon"
+                            className={style.icon}
                             src={icon}
                             onError={(e) => {
                                 e.target.src = imgError;
                             }}
                         />
-                        <span className="list_item_title">{title}</span>
+                        <span className={style.title}>{title}</span>
                     </div>
-                    <div className="list_item_btns">
+                    <div className={style.btns}>
                         <button
-                            className="list_item_btns_item"
+                            className={style.btn}
                             disabled={!comment}
                             title="Комментарий"
                             onClick={()=>{navigate("/list/comment/"+id)}}
@@ -67,7 +65,7 @@ const ListItem = React.memo(function ListItem({
                         <Link
                             to={`/edit/${id}`}
                             draggable="false"
-                            className="list_item_btns_item"
+                            className={style.btn}
                             title="Редактировать"
                         >
                             <AiFillEdit />
@@ -75,11 +73,11 @@ const ListItem = React.memo(function ListItem({
                     </div>
                 </div>
 
-                <div className="list_item_row">
-                    <p className="list_item_text">Логин: {login}</p>
-                    <div className="list_item_btns">
+                <div className={style.row}>
+                    <p className={style.text}>Логин: {login}</p>
+                    <div className={style.btns}>
                         <button
-                            className="list_item_btns_item"
+                            className={style.btn}
                             onClick={onHref(href, login)}
                             disabled={!href?.length}
                             title="Открыть ссылку"
@@ -88,7 +86,7 @@ const ListItem = React.memo(function ListItem({
                         </button>
 
                         <button
-                            className="list_item_btns_item"
+                            className={style.btn}
                             onClick={()=>onCopyText(login, "Логин скопирован")}
                             title="Скопировать логин"
                         >
@@ -97,16 +95,16 @@ const ListItem = React.memo(function ListItem({
                     </div>
                 </div>
 
-                <div className="list_item_row">
-                    <p className="list_item_text">
+                <div className={style.row}>
+                    <p className={style.text}>
                         Пароль:{" "}
-                        <span className={hidePassword ? "hide-password" : ""}>
+                        <span className={hidePassword ? style.hidePassword : ""}>
                             {password}
                         </span>
                     </p>
-                    <div className="list_item_btns">
+                    <div className={style.btns}>
                         <button
-                            className="list_item_btns_item"
+                            className={style.btn}
                             onMouseDown={onShowpassord}
                             onMouseLeave={onHidepassord}
                             onMouseUp={onHidepassord}
@@ -115,7 +113,7 @@ const ListItem = React.memo(function ListItem({
                             {hidePassword ? <BiShow /> : <BiHide />}
                         </button>
                         <button
-                            className="list_item_btns_item"
+                            className={style.btn}
                             onClick={()=>onCopyText(password, "Пароль скопирован")}
                             title="Скопировать пароль"
                         >
@@ -127,5 +125,24 @@ const ListItem = React.memo(function ListItem({
         </>
     );
 });
+
+//  значение по умолчанию
+// ListItem.defaultProps = {
+
+// }
+//  типизация
+ListItem.propTypes = {
+    id:PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.string
+    ]).isRequired,
+    title:PropTypes.string.isRequired,
+    href:PropTypes.string.isRequired,
+    login:PropTypes.string.isRequired,
+    password:PropTypes.string.isRequired,
+    comment:PropTypes.string,
+    onCopyText:PropTypes.func.isRequired,
+    onHref:PropTypes.func.isRequired
+}
 
 export default ListItem;

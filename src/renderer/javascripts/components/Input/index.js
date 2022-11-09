@@ -1,35 +1,40 @@
 import React from "react";
-
+import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 
 import { BiHide, BiShow } from "react-icons/bi";
 import { BsFillKeyFill } from "react-icons/bs";
 import { IoIosWarning } from "react-icons/io";
-import "./style.scss";
 
-export const InputPassword = ({
-    password = "",
-    setPassword = () => {},
-    id = null,
-    placeholder="",
-}) => {
+import "./style.scss";
+import style from "./input.module.css";
+
+
+export const InputPassword = (props) => {
+    const { label,  id, name, defaultValue, placeholder, disabled,  onChange} = props;
+
+    const inptId = React.useId();
+    const refInt = React.useRef();
+
+    const [value, setValue] = React.useState(defaultValue);
     const [show, setShow] = React.useState(false);
     const [status, setStatus] = React.useState("");
     const { list } = useSelector((state) => state.data);
     const [unique, setUnique] = React.useState(false);
-    const [focus, setFocus] = React.useState(false);
+    const [isFocus, setIsFocus] = React.useState(false);
 
     React.useEffect(() => {
-        const level = window.password.passwordCheck(password);
+        const level = window.password.passwordCheck(value);
         setStatus(level);
-        setUnique(window.password.isUnique({ password, list, id }));
-    }, [id, password, list]);
+        setUnique(window.password.isUnique({ password: value, list, id }));
+    }, [id, value, list]);
 
     React.useEffect(() => {
         function funSetPassword(event) {
             const generate_password = event?.detail?.password;
             if (generate_password) {
-                setPassword(generate_password);
+                onChange(generate_password);
+                setValue(generate_password);
                 setShow(true);
                 setTimeout(() => {
                     setShow(false);
@@ -42,43 +47,74 @@ export const InputPassword = ({
         };
     }, []);
 
-    const onShow = () => {
+    React.useEffect(() => {
+        if (defaultValue != value) {
+            setValue(defaultValue);
+        }
+    }, [defaultValue]);
+
+    function onShow() {
         setShow(true);
-    };
-    const onHide = () => {
+    }
+    function onHide() {
         if (show) {
             setShow(false);
         }
-    };
-    const showGenerate = (event) => {
+    }
+
+    function showGenerate(event) {
         event.preventDefault();
         window.app.openGenerate(true);
-    };
-    const onInput = (event) => {
+    }
+
+    function onInput(event) {
         const newPassword = event.target.value.replace(/\s/g, "");
-        setPassword(newPassword);
-    };
-    const inptId = React.useId();
+        setValue(newPassword);
+    }
+    function onFocus(e) {
+        if (e.target.classList.contains(style.input)) {
+            refInt.current.focus();
+        }
+    }
+    function onFocusInput() {
+        setIsFocus(true);
+    }
+    function onHandelChange() {
+        onChange(value);
+        setIsFocus(false);
+    }
+
     return (
-        <div className="form_row input">
-            <label htmlFor={inptId}>Пароль*</label>
+        <>
+            {label && (
+                <label htmlFor={inptId} className={style.label}>
+                    {label}
+                </label>
+            )}
             <div
-                className={`input_item input_item_btns ${focus ? "focus" : ""}`}
+                className={`${style.input} ${disabled ? style.disabled : ""} ${
+                    isFocus ? style.focus : ""
+                }`}
+                onClick={onFocus}
             >
                 <input
                     id={inptId}
-                    type={show || focus ? "text" : "password"}
-                    value={password}
+                    ref={refInt}
+                    className={style.inputItem}
+                    name={name}
+                    type={show ? "text" : "password"}
+                    value={value}
                     onInput={onInput}
                     required
-                    onFocus={() => setFocus(true)}
-                    onBlur={() => setFocus(false)}
+                    onFocus={onFocusInput}
+                    onBlur={onHandelChange}
                     placeholder={placeholder}
+                    disabled={disabled}
                 />
-                <p className="btns">
+                <p className={style.btns}>
                     <button
                         type="button"
-                        className="btn btn_svg"
+                        className={style.btn}
                         title="Сгенерировать пароль"
                         onClick={showGenerate}
                     >
@@ -86,7 +122,7 @@ export const InputPassword = ({
                     </button>
                     <button
                         type="button"
-                        className="btn btn_svg"
+                        className={style.btn}
                         title="Посмотреть пароль"
                         onMouseDown={onShow}
                         onMouseUp={onHide}
@@ -108,33 +144,61 @@ export const InputPassword = ({
                     пароли
                 </p>
             ) : null}
-        </div>
+        </>
     );
 };
 
-export const InputView = React.memo(function InputView({
-    label = "",
-    type = "text",
-    name = "",
-    defaultValue = "",
-    onInput = () => {},
-    required = true,
-    disabled = false,
-    classNames = "",
-    placeholder = "",
-    candidate = null, // кадитанты на автозаполнение {array}
-    children,
-}) {
-    const [value, setValue] = React.useState(defaultValue);
-    const inputEl = React.useRef(null);
+export const Textarea = React.memo(function Textarea(props) {
+    const { label, name, defaultValue, placeholder, disabled, onChange } =
+        props;
+
+    const inpId = React.useId();
+
+    function onHandelChange(e) {
+        onChange(e.target.value.trim());
+    }
+
+    return (
+        <>
+            {label && (
+                <label htmlFor={inpId} className={style.label}>
+                    {label}
+                </label>
+            )}
+            <p>
+                <textarea
+                    className={style.textarea}
+                    name={name}
+                    id={inpId}
+                    spellCheck={false}
+                    placeholder={placeholder}
+                    defaultValue={defaultValue}
+                    onBlur={onHandelChange}
+                    disabled={disabled}
+                />
+            </p>
+        </>
+    );
+});
+
+export const InputView = React.memo(function InputView(props) {
+    const { label, type, name, defaultValue, placeholder } = props;
+    const { onChange, required, disabled, datalist, inputProps } = props;
+   
+    const refInt = React.useRef();
+    const inpId = React.useId();
+
+    const [isFocus, setIsFocus] = React.useState(false);
+    const [value, setValue] = React.useState("");
 
     React.useEffect(() => {
-        if (value != defaultValue) {
-            setValue(defaultValue);
-        }
+        setValue(defaultValue);
     }, [defaultValue]);
 
-    function handelChange(e) {
+    function onHandelChange(e) {
+        onChange(e.target.value.trim());
+    };
+    function onHandelInput(e) {
         const searchType = ["url"];
         const searchName = ["login"];
         const search = [...searchType, ...searchName];
@@ -146,115 +210,139 @@ export const InputView = React.memo(function InputView({
         }
 
         setValue(e.target.value.replace(/\s+/g, regS));
-    }
-    function sendValue() {
-        if (!disabled) {
-            onInput(value.trim());
-        }
-    }
-
-    const inpId = React.useId();
-
-    const option = React.useMemo(() => {
-        if (candidate && candidate?.array.length && value.length) {
-            for (let item of candidate.array) {
-                const text = item[name].substr(0, value.length);
-                if (text.toLowerCase() === value.toLowerCase()) {
-                    return item[name];
-                }
-            }
-            return false;
-        }
-        return false;
-    }, [candidate, value]);
-
-    const keys = ["Tab", "Enter"];
-
-    const onKeyDown = (e) => {
-        if (keys.includes(e.key) && option && value != option) {
-            e.preventDefault();
-            setValue(option);
-        }
     };
+
+    const options = React.useMemo(() => {
+        if (datalist?.length) {
+            // ищу похожие значения
+            let array = datalist.filter((item) => {
+                if (item[name] && value.length) {
+                    const text = item[name].substr(0, value.length);
+                    return (
+                        text.toLowerCase() === value.toLowerCase() &&
+                        item[name].toLowerCase() != value.toLowerCase()
+                    );
+                }
+                return false;
+            });
+            // доставю только нужное значение
+            array = array.map((item) => item[name]);
+            // только уникальные значения
+            return Array.from(new Set(array));
+        }
+        return [];
+    }, [datalist, value]);
+
     return (
-        <div className={`input ${classNames}`}>
-            {label.length ? (
-                <label htmlFor={inpId}>
+        <div onFocus={()=>{setIsFocus(true)}} onBlur={()=>{setIsFocus(false)}}>
+            {label && (
+                <label htmlFor={inpId} className={style.label}>
                     {label}
-                    {required ? "*" : ""}
                 </label>
-            ) : null}
-            <p className="input_item">
+            )}
+
+            <div style={{position:"relative"}} >
                 <input
                     id={inpId}
-                    ref={inputEl}
+                    className={style.input}
+                    ref={refInt}
                     type={type}
                     name={name}
                     value={value}
-                    onInput={handelChange}
-                    onBlur={sendValue}
+                    placeholder={placeholder}
+                    disabled={disabled}
                     required={required}
-                    disabled={disabled}
-                    placeholder={placeholder}
+                    onInput={onHandelInput}
+                    onBlur={onHandelChange}
                     spellCheck={false}
-                    onKeyDown={onKeyDown}
+                    {...inputProps}
                 />
-                {option && option != value ? (
-                    <span className="input_placeholder">{option}</span>
-                ) : null}
-            </p>
-            {children}
+             {isFocus && <DataList array={options} onChange={setValue} /> }
+            </div>
         </div>
     );
 });
 
-export const Textarea = React.memo(function Textarea({
-    label = "",
-    name = "",
-    defaultValue = "",
-    onInput = () => {},
-    required = true,
-    disabled = false,
-    placeholder = "",
-}) {
-    const [value, setValue] = React.useState(defaultValue);
-
-    React.useEffect(() => {
-        if (value != defaultValue) {
-            setValue(defaultValue);
-        }
-    }, [defaultValue]);
-
-    function handelChange(e) {
-        setValue(e.target.value);
-    }
-
-    function sendValue() {
-        if (!disabled) {
-            onInput(value.trim());
-        }
-    }
-    const inpId = React.useId();
+const DataList = React.memo(function DataList({ array, onChange }) {
     return (
-        <div className="form_row input">
-            {label.length ? (
-                <label htmlFor={inpId}>
-                    {label}
-                    {required ? "*" : ""}
-                </label>
-            ) : null}
-            <p className="input_item">
-                <textarea
-                    name={name}
-                    id={inpId}
-                    spellCheck={false}
-                    placeholder={placeholder}
-                    value={value}
-                    onInput={handelChange}
-                    onBlur={sendValue}
-                    disabled={disabled}
-                />
-            </p>
-        </div>
+        <p className={`${style.datalist} scroll`}>
+            {array.map((item, ind) => {
+                return (
+                    <button type="button" className={style.item} value={item} key={ind} onMouseDown={()=>{
+                        onChange(item)
+                    }}>
+                        {item}
+                    </button>
+                );
+            })}
+        </p>
     );
 });
+
+// значение по умолчанию
+InputPassword.defaultProps = {
+    label: false,
+    onChange: () => {},
+    name:"",
+    id: false,
+    placeholder: "",
+    disabled: false,
+    defaultValue: "",
+};
+Textarea.defaultProps = {
+    name: "",
+    label: false,
+    defaultValue: "",
+    placeholder: "",
+    disabled: false,
+    onChange: () => {},
+};
+InputView.defaultProps = {
+    label: false,
+    defaultValue: "",
+    type: "text",
+    name: "",
+    placeholder: "",
+    inputProps: {},
+    disabled: false,
+    required: false,
+    onChange: () => {},
+    datalist: false,
+};
+// типизация
+InputPassword.propTypes = {
+    id: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.string,
+        PropTypes.bool,
+    ]),
+    name:PropTypes.string.isRequired,
+    label: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+    defaultValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    onChange: PropTypes.func.isRequired,
+    placeholder: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    disabled: PropTypes.bool,
+};
+Textarea.propTypes = {
+    label: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+    name: PropTypes.string.isRequired,
+    defaultValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    placeholder: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    disabled: PropTypes.bool,
+    onChange: PropTypes.func.isRequired,
+};
+InputView.propTypes = {
+    label: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+    type: PropTypes.oneOf(["text", "url"]),
+    name: PropTypes.string.isRequired,
+    defaultValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    placeholder: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    inputProps: PropTypes.exact({
+        maxLength: PropTypes.number,
+        minLength: PropTypes.number,
+    }),
+    disabled: PropTypes.bool,
+    required: PropTypes.bool,
+    onChange: PropTypes.func.isRequired,
+    datalist: PropTypes.oneOfType([PropTypes.bool, PropTypes.array]),
+};

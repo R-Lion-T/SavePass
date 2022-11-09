@@ -95,6 +95,7 @@ function checked(title, key) {
 export const List = React.memo(function List() {
     const { list } = useSelector((state) => state.data);
     const [search, setSearch] = React.useState("");
+
     const dispatch = useDispatch();
 
     const filterData = React.useMemo(() => {

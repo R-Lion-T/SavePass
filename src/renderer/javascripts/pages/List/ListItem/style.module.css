@@ -1,0 +1,78 @@
+.item {
+    flex-shrink: 0;
+    background: var(--container);
+    border-radius: 10px;
+    padding: 20px;
+    transition: background 0.2s linear, color 0.2s linear;
+    overflow: hidden
+}
+.item.active,
+.item:focus,
+.item:hover {
+    background: var(--text);
+    color: var(--bg);
+}
+
+.item>*:first-child {
+    margin-bottom: 10px;
+}
+
+.head{
+    display: flex;
+    align-items: baseline;
+    gap: var(--gap);
+}
+.title {
+    font-size: 26px;
+    font-weight: 600;
+}
+.title:first-letter {
+    text-transform: uppercase;
+}
+.icon {
+    font-size: 20px;
+    width: 1em;
+    flex-shrink: 0;
+}
+
+.text {
+    overflow: hidden;
+    text-overflow: clip;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    gap: var(--gap);
+}
+
+.btns {
+    display: flex;
+    align-items: center;
+    gap: var(--gap);
+}
+
+.btn {
+    color: inherit;
+    opacity: 0.5;
+    transition: opacity 0.1s linear;
+    line-height: 0;
+}
+.btn:focus,
+.btn:hover {
+    opacity: 1;
+}
+.btn:disabled {
+    opacity: 0;
+    pointer-events: none;
+}
+.btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.hidePassword {
+    -webkit-text-security: disc;
+}

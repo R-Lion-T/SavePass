@@ -4,6 +4,7 @@ import { HashRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 
 import "./../stylesheets/theme.scss";
+import "./../stylesheets/fonts.css";
 import "./../stylesheets/style.scss";
 
 import store from "./redux/store";

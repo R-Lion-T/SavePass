@@ -74,7 +74,9 @@ export default class MainApp {
             const file = process.argv[1];
             if (file && this.checkFileExistsSync(file) && isDev == false) {
                 this.file = file;
-                this.win.webContents.send("OPEN_PAGE_CHECKED_PASSWORD");
+                this.win.webContents.send("GO_OVER_PAGE",{
+                    page:"/checkedPassword"
+                });
             }
             this.win.show();
         });
@@ -332,7 +334,7 @@ export default class MainApp {
             return false;
         }
     }
-    // добавить данные файл
+    // добавить данные в файл
     addDataFile(item) {
         try {
             const obj = this.getFileData();
@@ -347,15 +349,18 @@ export default class MainApp {
             return false;
         }
     }
-    // обновить данные в файл
-    updateDataFile(item) {
+    // обновить данные в файле
+    updateDataFile(update) {
         try {
             const obj = this.getFileData();
-            const newDataArray = obj.result.map((data) => {
-                if (Number(data.id) === Number(item.id)) {
-                    return item;
+            const newDataArray = obj.result.map((item) => {
+                if (Number(item.id) === Number(update.id)) {
+                    return {
+                        ...item,
+                        ...update
+                    };
                 }
-                return data;
+                return item;
             });
             this.updateFile(newDataArray);
             return true;

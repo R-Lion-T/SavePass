@@ -1,0 +1,111 @@
+.relative{
+    position: relative;
+}
+
+.label{
+    font-size: 14px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: 600;
+}
+.textarea,
+.input{
+    display: flex;
+    align-items: stretch;
+    font-size: 16px;
+    width: 100%;
+    padding: 0 0.875em;
+    height: 2.75em;
+    border-radius:var(--btn-radius);
+    background: var(--input-bg);
+    border: 2px solid var(--input-border-color);
+    cursor: text;
+    overflow: hidden;
+}
+
+div.input >*{
+    align-self: center;
+    height: inherit;
+}
+
+.textarea:not(:disabled):hover,
+.textarea:not(:disabled):focus,
+.input:not(.disabled):hover,
+.input:not(.disabled).focus{
+    color: var(--input-color-hover);
+    border-color: var(--input-border-color-hover);
+}
+.textarea:disabled,
+.input.disabled{
+    opacity: 0.5;
+}
+input.input,
+.inputItem{
+    flex-grow: 1;
+    font-size: 1em;
+    color: var(--input-color);
+}
+
+.textarea{
+    max-width: 100% !important;
+    min-width: 100%;
+    min-height: 150px;
+    height: 150px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 1em;
+    color: var(--input-color);
+}
+
+.btns{
+    display: flex;
+    align-items: stretch;
+    margin-right: -0.875em;
+    font-size: 1em;
+}
+.btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1em;
+    width: 2.75em;
+}
+
+.btn svg {
+    font-size: 1.562em;
+}
+
+.btn svg path {
+    fill: var(--btn-primary-bg);
+}
+
+.btn:focus svg path,
+.btn:hover svg path {
+    fill: var(--btn-primary-bg-hover);
+}
+
+.datalist{
+    position: absolute;
+    left: 0;
+    right: 0;
+    font-size: 14px;
+    background: #111;
+    color: #fff;
+    z-index: 1;
+    border-radius: var(--btn-radius);
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
+    overflow: auto;
+    max-height: 120px;
+    display: flex;
+    flex-direction: column;
+}
+.datalist .item{
+    padding: 1em;
+    cursor: pointer;
+    color: inherit;
+    text-align: left;
+}
+.datalist .item:hover{
+    background: #222;
+}

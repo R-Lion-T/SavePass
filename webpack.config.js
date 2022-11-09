@@ -1,3 +1,4 @@
+const path = require("path");
 module.exports = {
     renderer: {
         entry: {
@@ -34,6 +35,7 @@ module.exports = {
                 {
                     test: /\.(ttf)$/,
                     loader: "file-loader",
+                    include: [path.resolve(__dirname, "app")],
                     options: {
                         name: "[path][name].[hash].[ext]",
                     },

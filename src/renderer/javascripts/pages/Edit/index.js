@@ -5,38 +5,30 @@ import { useSelector, useDispatch } from "react-redux";
 import { isValidUrl } from "../../function";
 
 import { ac_delete_data, ac_update_data } from "../../redux/actions/ac_state";
-import { ac_hide_load, ac_show_load } from '../../redux/actions/ac_alert';
-import { InputPassword, InputView, Textarea } from './../../components/Input';
-import { Button, Buttons } from './../../components/Buttons';
+import { ac_hide_load, ac_show_load } from "../../redux/actions/ac_alert";
+import { InputPassword, InputView, Textarea } from "./../../components/Input";
+import { Button, Buttons } from "./../../components/Buttons";
 
 import { AiFillDelete, AiFillSave } from "react-icons/ai";
-import { BiLeftArrowAlt } from 'react-icons/bi';
-
+import { BiLeftArrowAlt } from "react-icons/bi";
+import { Form, FormRow } from "./../../components/Form/index";
 
 export const Edit = React.memo(function Edit() {
     let { id } = useParams();
-
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
     const { list } = useSelector((state) => state.data);
-    const [login, setLogin] = React.useState("");
-    const [password, setPassword] = React.useState("");
-    const [title, setTitle] = React.useState("");
-    const [href, setHref] = React.useState("");
-    const [comment, setCommetn] = React.useState("");
+    const [card, setCard] = React.useState(null);
+
     React.useEffect(() => {
-        if(id){
-            const item = list.filter((item) => Number(item.id) === Number(id))[0];
+        if (id) {
+            const item = list.filter(
+                (item) => Number(item.id) === Number(id)
+            )[0];
             if (item) {
-                setLogin(item.login);
-                setTitle(item.title);
-                setPassword(item.password);
-                setHref(item.href);
-                setCommetn(item.comment)
+                setCard(item)
             }
-        }
-         else {
+        } else {
             // не найден
             window.app.showMessageWindow(
                 "Возникла ошибка: карточка для редактирования не найдена.\nПожалуйста попробуйте еще раз или обратитесь к разработчику"
@@ -46,92 +38,112 @@ export const Edit = React.memo(function Edit() {
     }, [id]);
 
     const onDelete = () => {
-        dispatch(ac_show_load())
-
-        window.app.deleteDataFile({
-                id,
-                title,
+        dispatch(ac_show_load());
+        window.app
+            .deleteDataFile({
+                id:card.id,
+                title:card.title,
             })
-            .finally(()=>{
-                dispatch(ac_hide_load())
-            }).then((res) => {
+            .then((res) => {
                 if (res) {
-                    dispatch(ac_delete_data(id));
+                    dispatch(ac_delete_data(card.id));
                     navigate(-1);
                 }
             })
+            .finally(() => {
+                dispatch(ac_hide_load());
+            })
     };
-    const onSave = (event) => {
-        event.preventDefault();
+    const handelSubmit = (data) => {
         const body = {
-            id,
-            title,
-            login,
-            href: isValidUrl(href),
-            password,
-            comment,
-            lastChange:new Date().getTime(),
+            id:id,
+            ...data,
+            href: isValidUrl(data.href),
+            lastChange: new Date().getTime(),
         };
-        dispatch(ac_show_load())
+        dispatch(ac_show_load());
         window.app.updateDataFile(body).then((res) => {
             if (res) {
                 dispatch(ac_update_data(body));
-                dispatch(ac_hide_load())
+                dispatch(ac_hide_load());
                 navigate(-1);
             }
         });
     };
 
-    return (
-        <form className="form scroll" onSubmit={onSave}>
-            <div className="wrapper">
-                <p className="title">Редактирование</p>
+    const isDisabled = React.useMemo(()=>{
+        return !Boolean(card)
+    },[card])
 
+    return (
+        <Form title="Редактирование" onSubmit={handelSubmit}>
+            <FormRow>
                 <InputView
-                    classNames="form_row"
                     label="Название"
                     name="title"
-                    defaultValue={title}
-                    onInput={setTitle}
+                    defaultValue={card?.title}
+                    placeholder="Мой сайт"
+                    required
                 />
-
+            </FormRow>
+            <FormRow>
                 <InputView
-                    classNames="form_row"
                     label="Логин"
                     name="login"
-                    defaultValue={login}
-                    onInput={setLogin}
+                    defaultValue={card?.login}
+                    placeholder="login@mail.ru"
+                    required
                 />
-
-                <InputPassword password={password} setPassword={setPassword} id={id} />
-
+            </FormRow>
+            <FormRow>
+                <InputPassword
+                    label="Пароль"
+                    name="password"
+                    defaultValue={card?.password}
+                    id={id}
+                    required
+                />
+            </FormRow>
+            <FormRow>
                 <InputView
-                    classNames="form_row"
-                    type="url"
                     label="Ссылка"
+                    type="url"
                     name="href"
-                    required={false}
-                    defaultValue={href}
-                    onInput={setHref}
+                    defaultValue={card?.href}
                     placeholder="https://site.ru/"
                 />
-
+            </FormRow>
+            <FormRow>
                 <Textarea
-                    onInput={setCommetn}
                     label="Коментарий"
-                    name="commets"
-                    required={false}
-                    defaultValue={comment}
+                    name="comment"
+                    defaultValue={card?.comment}
                 />
-
-
+            </FormRow>
+            <FormRow>
                 <Buttons>
-                    <Button color="secondary" startIcon={<BiLeftArrowAlt/>} onClick={()=>{navigate(-1)}}> Отмена </Button>
-                    <Button color="danger"  startIcon={<AiFillDelete/>} onClick={onDelete}> Удалить </Button>
-                    <Button type="submit" endIcon={<AiFillSave/>}> Сохранить </Button>
+                    <Button
+                        color="secondary"
+                        startIcon={<BiLeftArrowAlt />}
+                        onClick={() => {
+                            navigate(-1);
+                        }}
+                    >
+                        Отмена
+                    </Button>
+                    <Button
+                        color="danger"
+                        startIcon={<AiFillDelete />}
+                        onClick={onDelete}
+                        disabled={isDisabled}
+                    >
+                        Удалить
+                    </Button>
+                    <Button type="submit" endIcon={<AiFillSave />} disabled={isDisabled}>
+                        Сохранить
+                    </Button>
                 </Buttons>
-            </div>
-
-        </form>
+            </FormRow>
+        </Form>
     );
 });

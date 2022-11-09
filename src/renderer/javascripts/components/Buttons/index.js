@@ -64,7 +64,7 @@ Button.propTypes = {
     children: PropTypes.string,
     variant: PropTypes.oneOf(['text', 'contained','outlined']),
     color: PropTypes.oneOf(['primary', 'secondary','danger']),
-    type: PropTypes.oneOf(['button', 'submit']).isRequired,
+    type: PropTypes.oneOf(['button', 'submit','reset']).isRequired,
     href:PropTypes.oneOfType([
         PropTypes.bool,
         PropTypes.string
