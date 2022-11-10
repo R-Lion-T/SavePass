@@ -15,6 +15,7 @@ import CheckedPassword from "./pages/CheckedPassword";
 import { Loading } from "./components/Alert";
 import Security from './pages/Security';
 import Comment from './pages/List/Comment';
+import NotFound from './pages/NotFound/index';
 
 
 export const App = () => {
@@ -34,6 +35,7 @@ export const App = () => {
 
     React.useEffect(() => {
         if(!auth) return  navigate("/");
+        // else return  navigate("/list");
     }, [auth]);
 
     return (
@@ -50,6 +52,7 @@ export const App = () => {
                     </Route>
                     <Route path="/add" element={<Add />} />
                     <Route path="/edit/:id" element={<Edit />} />
+                    <Route path='*' element={<NotFound />} />
                 </Routes>
             </div>
             <Footer />

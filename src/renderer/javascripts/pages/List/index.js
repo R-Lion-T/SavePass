@@ -5,12 +5,15 @@ import { useSelector, useDispatch } from "react-redux";
 import "./style.scss";
 
 import { GrAdd } from "react-icons/gr";
-
+import { BsSortAlphaDown, BsSortAlphaUp } from "react-icons/bs";
 import { dis_add_alert } from "../../redux/reducer/alert";
 
 import { Alert } from "../../components/Alert";
 import Search from "./Search";
 import ListItem from "./ListItem";
+import { AiOutlineReload } from 'react-icons/ai';
+import { IconButton } from "../../components/Buttons";
+import { isMatch,sortAscending } from "../../function";
 
 const simbol = {
     ru: {
@@ -78,39 +81,15 @@ const simbol = {
     },
 };
 
-function checked(title, key) {
-    // проверка на совпадение текста
-    if (title.includes(key)) return true;
-
-    // проверка количество совадений букв в тексте
-    let assecc = 0,
-        bad = 0;
-
-    for (let i = 0; i < key.length; i++) {
-        key[i] == title[i] ? assecc++ : bad++;
-    }
-    return assecc > bad && bad < 4;
-}
-
 export const List = React.memo(function List() {
     const { list } = useSelector((state) => state.data);
     const [search, setSearch] = React.useState("");
-
+    const [sort, setSort] = React.useState(0);
+    React.useEffect(()=>{
+        const s = window.localStorage.getItem("sort");
+        if(s) setSort(Number(s))
+    },[]);
     const dispatch = useDispatch();
-
-    const filterData = React.useMemo(() => {
-        const key = search.toLowerCase().replace(/\s/g, "");
-        const cyrillic = /[а-я]/i.test(key) ? "ru" : "en";
-        const key2 = key
-            .split("")
-            .map((s) => simbol[cyrillic]?.[s] || s)
-            .join("");
-
-        return list.filter((item) => {
-            const title = item.title.toLowerCase().replace(/\s/g, "");
-            return checked(title, key) || checked(title, key2);
-        });
-    }, [search, list]);
 
     const onCopyText = (text, alertText) => {
         if (window.app.onCopy(text)) {
@@ -129,6 +108,51 @@ export const List = React.memo(function List() {
             window.app.onCopy(login);
         };
     };
+    const onToggleSort = ()=>{
+        const count = (sort + 1 <= 2)? sort+1 : 0;
+        window.localStorage.setItem("sort", count);
+        setSort(count);
+    };
+    // поиск
+    const searchData = React.useMemo(() => {
+        const key = search.toLowerCase().replace(/\s/g, "");
+        const cyrillic = /[а-я]/i.test(key) ? "ru" : "en";
+        const key2 = key
+            .split("")
+            .map((s) => simbol[cyrillic]?.[s] || s)
+            .join("");
+
+        return list.filter((item) => {
+            const title = item.title.toLowerCase().replace(/\s/g, "");
+            return isMatch(title, key) || isMatch(title, key2);
+        });
+    }, [search, list]);
+    // сортировка
+    const sortData = React.useMemo(()=>{
+        const array = [...searchData];
+        if(sort) {
+            array.sort(sortAscending)
+            if(sort==2) {
+                array.reverse();
+            }
+        }
+        return array
+    },[sort, searchData]);
+    // иконка для сортировки текущей
+    let sortIcon = <AiOutlineReload/>;
+    let sortTitle = "Сброс сортировки";
+    switch(sort){
+        case 0:{
+            sortIcon = <BsSortAlphaDown/>;
+            sortTitle = "Cортировать по возростанию";
+            break
+        }
+        case 1:{
+            sortIcon = <BsSortAlphaUp/>;
+            sortTitle = "Cортировать по убыванию";
+            break
+        }
+    }
     return (
         <>
             <div className="panel">
@@ -144,9 +168,12 @@ export const List = React.memo(function List() {
                 </Link>
 
                 <Search value={search} setSearch={setSearch} />
+                <IconButton color="secondary" className="sort" onClick={onToggleSort} title={sortTitle}>
+                    {sortIcon}
+                </IconButton>
             </div>
             <div className="list scroll">
-                {filterData.map((item) => (
+                {sortData.map((item) => (
                     <ListItem
                         key={item.id}
                         {...item}

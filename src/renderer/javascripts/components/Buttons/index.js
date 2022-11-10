@@ -48,6 +48,26 @@ export const Button = React.memo(function Button(props) {
     );
 });
 
+export const IconButton = React.memo(function IconButton(props){
+    const {variant, color, href, type, children, title, disabled, onClick} = props;
+    const navigate = useNavigate()
+    const onHandelClick = (e) => {
+        if(href) {
+            e.preventDefault();
+            return navigate(href)
+        }
+        if (type == "button") {
+            e.preventDefault();
+            onClick();
+            return
+        }
+    };
+    return(
+        <button type={type} className={`${style.btn} ${style[variant]} ${style[color]}` } title={title} onClick={onHandelClick} disabled={disabled}>
+            {children}
+        </button>
+    )
+})
 // параметры по умолчанию
 Button.defaultProps = {
     variant: "contained",
@@ -59,6 +79,16 @@ Button.defaultProps = {
     endIcon: null,
     onClick: () => {},
 };
+IconButton.defaultProps={
+    variant: "contained",
+    color: "primary",
+    href: false,
+    disabled: false,
+    title:"",
+    children:null,
+    type:"button",
+    onClick:()=>{}
+}
 // типизация
 Button.propTypes = {
     children: PropTypes.string,
@@ -74,3 +104,16 @@ Button.propTypes = {
     endIcon: PropTypes.element,
     onClick: PropTypes.func.isRequired,
 };
+IconButton.propTypes={
+    children: PropTypes.element,
+    type: PropTypes.oneOf(['button', 'submit','reset']).isRequired,
+    variant: PropTypes.oneOf(['text', 'contained','outlined']),
+    color: PropTypes.oneOf(['primary', 'secondary','danger']),
+    href:PropTypes.oneOfType([
+        PropTypes.bool,
+        PropTypes.string
+    ]),
+    disabled: PropTypes.bool.isRequired,
+    title:PropTypes.string,
+    onClick:PropTypes.func,
+}
