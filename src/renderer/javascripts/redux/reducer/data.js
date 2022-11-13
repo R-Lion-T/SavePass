@@ -64,7 +64,7 @@ const developerState = {
             "comment": "Моя учетная запись на YouTybe канал",
             "created": 1668030591940,
             "lastChange": 1668030591940
-        }
+        },
     ],
 }
 export const dis_data = (state = initialState, action) => {
