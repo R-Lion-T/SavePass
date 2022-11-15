@@ -4,4 +4,4 @@ builds
 packages
 bower_components
 private
-*.docx
+.docx
