@@ -4,14 +4,14 @@ import { useSelector } from "react-redux";
 
 import { BiHide, BiShow } from "react-icons/bi";
 import { BsFillKeyFill } from "react-icons/bs";
-import { IoIosWarning } from "react-icons/io";
+import { IoIosArrowDown, IoIosArrowUp, IoIosWarning } from "react-icons/io";
 
 import "./style.scss";
 import style from "./input.module.css";
 
-
 export const InputPassword = (props) => {
-    const { label,  id, name, defaultValue, placeholder, disabled,  onChange} = props;
+    const { label, id, name, defaultValue, placeholder, disabled, onChange } =
+        props;
 
     const inptId = React.useId();
     const refInt = React.useRef();
@@ -184,7 +184,7 @@ export const Textarea = React.memo(function Textarea(props) {
 export const InputView = React.memo(function InputView(props) {
     const { label, type, name, defaultValue, placeholder } = props;
     const { onChange, required, disabled, datalist, inputProps } = props;
-   
+
     const refInt = React.useRef();
     const inpId = React.useId();
 
@@ -197,7 +197,7 @@ export const InputView = React.memo(function InputView(props) {
 
     function onHandelChange(e) {
         onChange(e.target.value.trim());
-    };
+    }
     function onHandelInput(e) {
         const searchType = ["url"];
         const searchName = ["login"];
@@ -210,7 +210,7 @@ export const InputView = React.memo(function InputView(props) {
         }
 
         setValue(e.target.value.replace(/\s+/g, regS));
-    };
+    }
 
     const options = React.useMemo(() => {
         if (datalist?.length) {
@@ -234,14 +234,21 @@ export const InputView = React.memo(function InputView(props) {
     }, [datalist, value]);
 
     return (
-        <div onFocus={()=>{setIsFocus(true)}} onBlur={()=>{setIsFocus(false)}}>
+        <div
+            onFocus={() => {
+                setIsFocus(true);
+            }}
+            onBlur={() => {
+                setIsFocus(false);
+            }}
+        >
             {label && (
                 <label htmlFor={inpId} className={style.label}>
                     {label}
                 </label>
             )}
 
-            <div style={{position:"relative"}} >
+            <div style={{ position: "relative" }}>
                 <input
                     id={inpId}
                     className={style.input}
@@ -254,23 +261,150 @@ export const InputView = React.memo(function InputView(props) {
                     required={required}
                     onInput={onHandelInput}
                     onBlur={onHandelChange}
+                    onFocus={() => setIsFocus(true)}
                     spellCheck={false}
                     {...inputProps}
                 />
-             {isFocus && <DataList array={options} onChange={setValue} /> }
+                {isFocus && <DataList array={options} onChange={setValue} />}
             </div>
         </div>
     );
 });
 
+export const InputRadion = React.memo(function InputRadion(props) {
+    const { label, name, checked, inputs, onChange } = props;
+
+    return (
+        <div>
+            {label && <label className={style.label}>{label}</label>}
+            <div className={style.row}>
+                {inputs.map((item) => {
+                    const inpId = React.useId();
+                    return (
+                        <p key={`label_${inpId}`}>
+                            <input
+                                className="hidden"
+                                id={inpId}
+                                name={name}
+                                type="radio"
+                                defaultChecked={checked == item.value}
+                                value={item.value}
+                                onChange={() => onChange(item.value)}
+                            />
+                            <label className={style.radio} htmlFor={inpId}>
+                                {item.label}
+                            </label>
+                        </p>
+                    );
+                })}
+            </div>
+        </div>
+    );
+});
+
+export const Select = React.memo(function Select(props) {
+    const {ignoreId, label, list, name, defaultValue, onInput} = props;
+    const [value, setValue] = React.useState("0");
+    const [text, setText] = React.useState("");
+    const [show, setShow] = React.useState(false);
+    const inpId = React.useId();
+
+    React.useEffect(() => {
+        setValue(defaultValue);
+        const item = list.filter(item=>item.id==defaultValue);
+        if(item[0]){
+            setText(item[0].title)
+        }
+    }, [defaultValue]);
+
+
+    const closeOptions = React.useCallback(()=>{
+        setShow(false) 
+    },[])
+
+    const listenerClick = ()=>{
+        window.addEventListener("click",closeOptions)
+    }
+    const removeListenerClick = ()=>{
+        window.removeEventListener("click",closeOptions)
+    }
+
+    const onCloseSelect = ()=>{
+        setShow(false)
+    }
+
+    const onHandelChange = (option)=>{
+        setValue(option.id);
+        setText(option.title);
+        onInput(option.id);
+        onCloseSelect();
+    }
+
+    const options = React.useMemo(()=>{
+        return list.filter(item=>{
+            if(item.binding || item.id==ignoreId){
+                return false
+            }
+            return true
+        })
+    },[list]);
+
+    return (
+        <div
+            className={style.relative}
+            onMouseLeave={listenerClick}
+            onMouseEnter={removeListenerClick}
+        >
+            {label && (
+                <label htmlFor={inpId} className={style.label}>
+                    {label}
+                </label>
+            )}
+            <div
+                className={` ${style.input} ${show ? style.focus : ""}`}
+                style={{cursor:"pointer"}}
+                onClick={()=>{
+                    setShow(!show)
+                }}
+            >
+                <span className={style.inputItem}> {value && text ? text : "Не выбранно"} </span>
+                <input
+                    className="hidden"
+                    type="text"
+                    name={name}
+                    value={value}
+                    onChange={()=>{}}
+                />
+                <p className={style.btns}>
+                    <button
+                        type="button"
+                        className={style.btn}
+                        title="Посмотреть пароль"
+                    >
+                        {show ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                    </button>
+                </p>
+            </div>
+            {show && <SelectList array={options} defaultChecked={value} onChange={onHandelChange} /> }
+        </div>
+    );
+});
+
+// Выподашки
 const DataList = React.memo(function DataList({ array, onChange }) {
     return (
         <p className={`${style.datalist} scroll`}>
             {array.map((item, ind) => {
                 return (
-                    <button type="button" className={style.item} value={item} key={ind} onMouseDown={()=>{
-                        onChange(item)
-                    }}>
+                    <button
+                        type="button"
+                        className={style.item}
+                        value={item}
+                        key={ind}
+                        onMouseDown={() => {
+                            onChange(item);
+                        }}
+                    >
                         {item}
                     </button>
                 );
@@ -279,11 +413,28 @@ const DataList = React.memo(function DataList({ array, onChange }) {
     );
 });
 
+const SelectList = (props)=>{
+    const { array, defaultChecked=0, onChange} = props;
+    return(
+        <p className={`${style.select} scroll`}>
+            <button type="button" key={`option_${0}`} className={`${style.option} ${defaultChecked==0? style.checked:""}`} onClick={()=>onChange({id:0,title:"Не выбранно"})}>
+               Не выбранно
+            </button>
+            {array.map(item=>{
+                return (
+                    <button type="button" key={`option_${item.id}`} className={`${style.option} ${defaultChecked==item.id? style.checked:""}`}   onClick={()=>onChange(item)}>
+                        {item.title} <span>{item.login}</span>
+                    </button>
+                )
+            })}
+        </p>
+    )
+}
 // значение по умолчанию
 InputPassword.defaultProps = {
     label: false,
     onChange: () => {},
-    name:"",
+    name: "",
     id: false,
     placeholder: "",
     disabled: false,
@@ -309,6 +460,14 @@ InputView.defaultProps = {
     onChange: () => {},
     datalist: false,
 };
+Select.defaultProps ={
+    ignoreId:false,
+    label:"",
+    list:[],
+    name:"",
+    defaultValue:"0",
+    onInput:()=>{}
+};
 // типизация
 InputPassword.propTypes = {
     id: PropTypes.oneOfType([
@@ -316,7 +475,7 @@ InputPassword.propTypes = {
         PropTypes.string,
         PropTypes.bool,
     ]),
-    name:PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
     label: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
     defaultValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     onChange: PropTypes.func.isRequired,
@@ -345,4 +504,12 @@ InputView.propTypes = {
     required: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
     datalist: PropTypes.oneOfType([PropTypes.bool, PropTypes.array]),
+};
+Select.propTypes ={
+    ignoreId:PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.bool]),
+    label: PropTypes.string,
+    list:PropTypes.array,
+    name:PropTypes.string,
+    defaultValue:PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    onInput:PropTypes.func
 };

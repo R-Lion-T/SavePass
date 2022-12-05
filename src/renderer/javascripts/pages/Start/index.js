@@ -18,9 +18,7 @@ const Start = React.memo(function Start() {
         });
     }
     function createFile() {
-        window.app.createPathFile().then((url) => {
-            if (url) navigate("/createPassword");
-        });
+        navigate("/createPassword");
     }
     return (
         <div className="start">

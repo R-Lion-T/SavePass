@@ -6,7 +6,7 @@ import { isValidUrl } from "../../function";
 
 import { ac_delete_data, ac_update_data } from "../../redux/actions/ac_state";
 import { ac_hide_load, ac_show_load } from "../../redux/actions/ac_alert";
-import { InputPassword, InputView, Textarea } from "./../../components/Input";
+import { InputPassword, InputView, Textarea ,Select} from "./../../components/Input";
 import { Button, Buttons } from "./../../components/Buttons";
 
 import { AiFillDelete, AiFillSave } from "react-icons/ai";
@@ -19,14 +19,15 @@ export const Edit = React.memo(function Edit() {
     const navigate = useNavigate();
     const { list } = useSelector((state) => state.data);
     const [card, setCard] = React.useState(null);
-
+    const [isBinding, setIsBinding] = React.useState(0);
     React.useEffect(() => {
         if (id) {
             const item = list.filter(
                 (item) => Number(item.id) === Number(id)
             )[0];
             if (item) {
-                setCard(item)
+                setCard(item);
+                setIsBinding(item?.binding?item?.binding:0)
             }
         } else {
             // не найден
@@ -41,8 +42,8 @@ export const Edit = React.memo(function Edit() {
         dispatch(ac_show_load());
         window.app
             .deleteDataFile({
-                id:card.id,
-                title:card.title,
+                id: card.id,
+                title: card.title,
             })
             .then((res) => {
                 if (res) {
@@ -52,16 +53,23 @@ export const Edit = React.memo(function Edit() {
             })
             .finally(() => {
                 dispatch(ac_hide_load());
-            })
+            });
     };
     const handelSubmit = (data) => {
         const body = {
-            id:id,
+            id: id,
             ...data,
+            binding:(data.binding=="0")?"":data.binding,
             href: isValidUrl(data.href),
             lastChange: new Date().getTime(),
         };
+        if(body.binding){
+            body["login"] = "";
+            body["password"] = "";
+        }
+
         dispatch(ac_show_load());
+    
         window.app.updateDataFile(body).then((res) => {
             if (res) {
                 dispatch(ac_update_data(body));
@@ -71,9 +79,9 @@ export const Edit = React.memo(function Edit() {
         });
     };
 
-    const isDisabled = React.useMemo(()=>{
-        return !Boolean(card)
-    },[card])
+    const isDisabled = React.useMemo(() => {
+        return !Boolean(card);
+    }, [card]);
 
     return (
         <Form title="Редактирование" onSubmit={handelSubmit}>
@@ -86,24 +94,43 @@ export const Edit = React.memo(function Edit() {
                     required
                 />
             </FormRow>
+
             <FormRow>
-                <InputView
-                    label="Логин"
-                    name="login"
-                    defaultValue={card?.login}
-                    placeholder="login@mail.ru"
-                    required
+                <Select
+                    ignoreId={id}
+                    label="Привязка"
+                    name="binding"
+                    defaultValue={isBinding}
+                    placeholder="Выберите запись"
+                    list={list}
+                    onInput={setIsBinding}
                 />
             </FormRow>
-            <FormRow>
-                <InputPassword
-                    label="Пароль"
-                    name="password"
-                    defaultValue={card?.password}
-                    id={id}
-                    required
-                />
-            </FormRow>
+
+            {!isBinding ?  (
+                <>
+                    <FormRow>
+                        <InputView
+                            label="Логин"
+                            name="login"
+                            defaultValue={card?.login}
+                            placeholder="login@mail.ru"
+                            required
+                        />
+                    </FormRow>
+                    <FormRow>
+                        <InputPassword
+                            id={id}
+                            label="Пароль"
+                            name="password"
+                            defaultValue={card?.password}
+                            placeholder="********"
+                            required
+                        />
+                    </FormRow>
+                </>
+            ):null}
+
             <FormRow>
                 <InputView
                     label="Ссылка"
@@ -113,6 +140,7 @@ export const Edit = React.memo(function Edit() {
                     placeholder="https://site.ru/"
                 />
             </FormRow>
+
             <FormRow>
                 <Textarea
                     label="Коментарий"
@@ -120,6 +148,7 @@ export const Edit = React.memo(function Edit() {
                     defaultValue={card?.comment}
                 />
             </FormRow>
+
             <FormRow>
                 <Buttons>
                     <Button
@@ -139,7 +168,11 @@ export const Edit = React.memo(function Edit() {
                     >
                         Удалить
                     </Button>
-                    <Button type="submit" endIcon={<AiFillSave />} disabled={isDisabled}>
+                    <Button
+                        type="submit"
+                        endIcon={<AiFillSave />}
+                        disabled={isDisabled}
+                    >
                         Сохранить
                     </Button>
                 </Buttons>

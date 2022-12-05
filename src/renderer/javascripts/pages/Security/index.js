@@ -46,13 +46,13 @@ const SecurityWelcome = React.memo(function SecurityWelcome({
         flushSync(()=>{
             dispatch(ac_show_load());
         })
-       
 
         const array = [];
 
         list.forEach((item) => {
+            // если есть привязка не проверять запись
+            if(item.binding) return
             const errors = [];
-
             // Проверка сложности пароля
             const level = window.password.passwordCheck(item.password);
             if(level <= 1){

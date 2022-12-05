@@ -6,7 +6,12 @@ import { isValidUrl } from "../../function";
 
 import { ac_add_data } from "../../redux/actions/ac_state";
 import { ac_hide_load, ac_show_load } from "../../redux/actions/ac_alert";
-import { InputPassword, InputView, Textarea } from "./../../components/Input";
+import {
+    Select,
+    InputPassword,
+    InputView,
+    Textarea,
+} from "./../../components/Input";
 import { Buttons, Button } from "./../../components/Buttons";
 
 import { AiFillSave } from "react-icons/ai";
@@ -23,6 +28,7 @@ export const Add = React.memo(function Add() {
         const body = {
             id: id,
             ...data,
+            binding: data.binding=="0"? "": data.binding,
             href: isValidUrl(data.href),
             created: id,
             lastChange: id,
@@ -36,7 +42,7 @@ export const Add = React.memo(function Add() {
             }
         });
     };
-
+    const [isBinding, setIsBinding] = React.useState(0);
     return (
         <Form title="Создать" onSubmit={handelSubmit}>
             <FormRow>
@@ -50,22 +56,38 @@ export const Add = React.memo(function Add() {
             </FormRow>
 
             <FormRow>
-                <InputView
-                    label="Логин"
-                    name="login"
-                    placeholder="login@mail.ru"
-                    datalist={list}
-                    required
+                <Select
+                    label="Привязка"
+                    name="binding"
+                    defaultValue={isBinding}
+                    placeholder="Выберите запись"
+                    list={list}
+                    onInput={setIsBinding}
                 />
             </FormRow>
 
-            <FormRow>
-                <InputPassword
-                    name="password"
-                    label="Пароль"
-                    placeholder="********"
-                />
-            </FormRow>
+            { !isBinding ?
+                <>
+                    <FormRow>
+                        <InputView
+                            label="Логин"
+                            name="login"
+                            placeholder="login@mail.ru"
+                            datalist={list}
+                            required
+                        />
+                    </FormRow>
+
+                    <FormRow>
+                        <InputPassword
+                            name="password"
+                            label="Пароль"
+                            placeholder="********"
+                            required
+                        />
+                    </FormRow>
+                </> : null
+            }
 
             <FormRow>
                 <InputView
@@ -77,10 +99,7 @@ export const Add = React.memo(function Add() {
             </FormRow>
 
             <FormRow>
-                <Textarea
-                    label="Заметки"
-                    name="comment"
-                />
+                <Textarea label="Заметки" name="comment" />
             </FormRow>
 
             <FormRow>
@@ -102,3 +121,5 @@ export const Add = React.memo(function Add() {
         </Form>
     );
 });
+
+

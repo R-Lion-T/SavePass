@@ -116,9 +116,6 @@ export default class MainApp {
         ipcMain.handle("SHOW_MESSAGE_WINDOW", (_, args) => {
             return this.showMessageWindow(args);
         });
-        ipcMain.handle("CREATE_PATH_FILE", () => {
-            return this.createPathFile();
-        });
         ipcMain.handle("CREATE_FILE", (_, args) => {
             return this.createFile(args);
         });
@@ -256,7 +253,7 @@ export default class MainApp {
         });
     }
     // создать путь для сохранения файла
-    createPathFile() {
+    createPathFile(fileName) {
         var url = dialog.showOpenDialogSync(this.win, {
             title: "Выберите место для хранения данных",
             defaultPath: app.getPath("desktop"),
@@ -264,17 +261,16 @@ export default class MainApp {
             buttonLabel: "Создать",
         });
         if (url) {
-            if (!this.checkFileExistsSync(path.join(url[0], "database.svps"))) {
-                console.log("Файла нет");
-                this.path = url[0];
-                return true;
+            if (!this.checkFileExistsSync(path.join(url[0], `${fileName}.svps`))) {
+                console.log("Not Found");
+                return url[0];
             } else {
                 this.showErrorMessage(
-                    `Файл уже существует в этой директории ${url[0]}`
+                    `Файл с именем "${fileName}" уже существует в этой директории ${url[0]}`
                 );
+                return this.createPathFile(fileName);
             }
         }
-        this.path = null;
         return false;
     }
     //
@@ -289,17 +285,26 @@ export default class MainApp {
         return flag;
     }
     // создать файл
-    createFile(password) {
+    createFile(data) {
+        const {password,fileName} = data;
         try {
-            this.password = password;
-            const result = this.encrypted([]);
-            fs.writeFileSync(path.join(this.path, "database.svps"), result);
-            this.file = path.join(this.path, "database.svps");
-            return [];
+            const newPath = this.createPathFile(fileName);
+            if(newPath){
+                this.path = newPath;
+                this.password = password;
+                this.file = path.join(newPath, `${fileName}.svps`);
+
+                const result = this.encrypted([]);
+                fs.writeFileSync(path.join(newPath, `${fileName}.svps`), result);
+
+                return [];
+            }
         } catch (e) {
             this.showErrorMessage(
                 "Не удалось создать файл повторите еще раз или обратитесь к разработчику"
             );
+            this.path = null;
+            this.file = null,
             this.password = null;
             return false;
         }

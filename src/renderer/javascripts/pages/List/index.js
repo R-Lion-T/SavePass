@@ -173,14 +173,31 @@ export const List = React.memo(function List() {
                 </IconButton>
             </div>
             <div className="list scroll">
-                {sortData.map((item) => (
-                    <ListItem
+                {sortData.map((item) => {
+                    let {binding} = item;
+                    let props = {
+                        ...item
+                    }
+                    if(binding){
+                        let parent = list.filter(el=>el.id==binding)[0];
+                        if(parent){
+                            props = {
+                                ...item,
+                                parent:parent.title,
+                                login:parent.login,
+                                password:parent.password,
+                            }
+                        }
+                    }
+                    return (
+                        <ListItem
                         key={item.id}
-                        {...item}
+                        {...props}
                         onCopyText={onCopyText}
                         onHref={onHref}
                     />
-                ))}
+                    )
+                })}
             </div>
             <Outlet context={list} />
             <Alert />

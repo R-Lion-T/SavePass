@@ -35,7 +35,7 @@ export const App = () => {
 
     React.useEffect(() => {
         if(!auth) return  navigate("/");
-        // else return  navigate("/list");
+        else return  navigate("/list");
     }, [auth]);
 
     return (

@@ -15,7 +15,8 @@ const developerState = {
             "password": "Lm4-$Fb-3!E-b",
             "comment": "",
             "created": 1667871174503,
-            "lastChange": 1667871174503
+            "lastChange": 1667871174503,
+            "binding":"",
         },
         {
             "id": 1667871245212,
@@ -25,7 +26,8 @@ const developerState = {
             "password": "Sz1-*Eb-6&V-g",
             "comment": "",
             "created": 1667871245212,
-            "lastChange": 1667871245212
+            "lastChange": 1667871245212,
+            "binding":"",
         },
         {
             "id": "1667955892035",
@@ -33,8 +35,9 @@ const developerState = {
             "login": "udemy@gmail.com",
             "href": "https://www.udemy.com/",
             "password": "Dl1-*Qs-6#I",
-            "comment": "Школа програмирование",
-            "lastChange": 1667955928348
+            "comment": "Привет мир \nodfokodfkgofgfogofgkodfgkfkgdfkgofkgofgfkgo654654-6546-45654oggfplgrtrorotrt \nкак дела?",
+            "lastChange": 1667955928348,
+            "binding":"",
         },
         {
             "id": "1667956128158",
@@ -43,31 +46,45 @@ const developerState = {
             "href": "https://irr.ru",
             "password": "Ek0-*Vn-6%U-u",
             "comment": "Площядка для продаж",
-            "lastChange": 1667961618448
+            "lastChange": 1667961618448,
+            "binding":"",
         },
         {
             "id": 1668030394840,
             "title": "Вконтакте",
             "login": "vk@list.ru",
-            "password": "Hg6-@Di-1$C-u",
+            "password": "Ve1-%Be-8@U-j",
             "href": "https://vk.com/",
             "comment": "Моя соновая страница",
             "created": 1668030394840,
-            "lastChange": 1668030394840
+            "lastChange": 1668030394840,
+            "binding":"",
         },
         {
             "id": 1668030591940,
-            "title": "YouTube",
-            "login": "youtube@gmail.com",
+            "title": "Google",
+            "login": "Google@gmail.com",
             "password": "Ve1-%Be-8@U-j",
-            "href": "https://www.youtube.com/",
+            "href": "https://www.google.ru/",
             "comment": "Моя учетная запись на YouTybe канал",
             "created": 1668030591940,
-            "lastChange": 1668030591940
+            "lastChange": 1668030591940,
+            "binding":"",
+        },
+        {
+            "id": 1668030591941,
+            "title": "YouTube",
+            "href": "https://www.youtube.com/",
+            "comment": "Моя учетная запись на YouTybe канал",
+            "login": "",
+            "password": "",
+            "created": 1668030591940,
+            "lastChange": 1668030591940,
+            "binding":1668030591940,
         },
     ],
 }
-export const dis_data = (state = initialState, action) => {
+export const dis_data = (state = developerState, action) => {
     switch (action.type) {
         case "LOAD_DATA": {
             return {

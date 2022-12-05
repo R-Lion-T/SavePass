@@ -259,6 +259,9 @@ class PasswordRandom {
     }
 }
 
+let timerBuffer; //таймер для очистки буфера
+const timeTimerBuffer = 30000; // Время очистки буффера
+
 contextBridge.exposeInMainWorld("app", {
     getVersionApp: () => {
         return new Promise((resolve) => {
@@ -269,7 +272,12 @@ contextBridge.exposeInMainWorld("app", {
     },
     onCopy: (text)=>{
         if(clipboard.readText() != text){
-            clipboard.writeText(text)
+            if(timerBuffer) timerBuffer = clearTimeout(timerBuffer);
+            clipboard.writeText(text);
+            timerBuffer = setTimeout(()=>{
+                clipboard.clear();
+                timerBuffer = clearTimeout(timerBuffer);
+            },timeTimerBuffer);
             return true
         }
         return false
@@ -300,16 +308,9 @@ contextBridge.exposeInMainWorld("app", {
             });
         });
     },
-    createPathFile: () => {
+    createFile: (data) => {
         return new Promise((resolve) => {
-            ipcRenderer.invoke("CREATE_PATH_FILE").then((props) => {
-                resolve(props);
-            });
-        });
-    },
-    createFile: (password) => {
-        return new Promise((resolve) => {
-            ipcRenderer.invoke("CREATE_FILE", password).then((props) => {
+            ipcRenderer.invoke("CREATE_FILE", data).then((props) => {
                 resolve(props);
             });
         });
@@ -405,7 +406,7 @@ contextBridge.exposeInMainWorld("password", {
     },
     isUnique :({password="", list=[], id=null})=>{
         return Boolean(list.filter(item=>{
-             return Number(item?.id)!==Number(id) && item?.password===password
+             return password && Number(item?.id)!==Number(id) && item?.password===password
         }).length)
     }
 });

@@ -1,16 +1,31 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link, useNavigate, useParams } from "react-router-dom";
-
-import { AiFillEdit, AiFillCopy, AiFillPlayCircle } from "react-icons/ai";
+import { HashLink } from "react-router-hash-link";
+import {
+    AiFillEdit,
+    AiFillCopy,
+    AiFillPlayCircle,
+    AiOutlineLink,
+} from "react-icons/ai";
 import { BiShow, BiHide, BiCommentDetail } from "react-icons/bi";
 import imgError from "./../../../../images/errorImg.ico";
 
 import style from "./style.module.css";
 
 const ListItem = React.memo(function ListItem(props) {
-    const { id, title, href, login, password, comment, onCopyText, onHref} = props
-
+    const {
+        id,
+        title,
+        href,
+        login,
+        password,
+        comment,
+        parent,
+        binding,
+        onCopyText,
+        onHref,
+    } = props;
     const params = useParams();
     const navigate = useNavigate();
 
@@ -38,8 +53,11 @@ const ListItem = React.memo(function ListItem(props) {
     return (
         <>
             <div
-                className={`${style.item} ${params.id == id ? style.active : ""}`}
+                className={`${style.item} ${
+                    params.id == id ? style.active : ""
+                }`}
                 tabIndex="0"
+                id={id}
             >
                 <div className={style.row}>
                     <div className={`${style.text} ${style.head}`}>
@@ -53,11 +71,19 @@ const ListItem = React.memo(function ListItem(props) {
                         <span className={style.title}>{title}</span>
                     </div>
                     <div className={style.btns}>
+                        {binding && (
+                        <HashLink to={`#${binding}`} className={style.btn} title={`${title} привязан к ${parent}`}>
+                            <AiOutlineLink />
+                        </HashLink>
+                        )}
+
                         <button
                             className={style.btn}
                             disabled={!comment}
                             title="Комментарий"
-                            onClick={()=>{navigate("/list/comment/"+id)}}
+                            onClick={() => {
+                                navigate("/list/comment/" + id);
+                            }}
                         >
                             <BiCommentDetail />
                         </button>
@@ -87,7 +113,9 @@ const ListItem = React.memo(function ListItem(props) {
 
                         <button
                             className={style.btn}
-                            onClick={()=>onCopyText(login, "Логин скопирован")}
+                            onClick={() =>
+                                onCopyText(login, "Логин скопирован")
+                            }
                             title="Скопировать логин"
                         >
                             <AiFillCopy />
@@ -98,7 +126,9 @@ const ListItem = React.memo(function ListItem(props) {
                 <div className={style.row}>
                     <p className={style.text}>
                         Пароль:{" "}
-                        <span className={hidePassword ? style.hidePassword : ""}>
+                        <span
+                            className={hidePassword ? style.hidePassword : ""}
+                        >
                             {password}
                         </span>
                     </p>
@@ -114,7 +144,9 @@ const ListItem = React.memo(function ListItem(props) {
                         </button>
                         <button
                             className={style.btn}
-                            onClick={()=>onCopyText(password, "Пароль скопирован")}
+                            onClick={() =>
+                                onCopyText(password, "Пароль скопирован")
+                            }
                             title="Скопировать пароль"
                         >
                             <AiFillCopy />
@@ -127,22 +159,26 @@ const ListItem = React.memo(function ListItem(props) {
 });
 
 //  значение по умолчанию
-// ListItem.defaultProps = {
-
-// }
+ListItem.defaultProps = {
+    parent:null,
+    binding: false,
+};
 //  типизация
 ListItem.propTypes = {
-    id:PropTypes.oneOfType([
+    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+    title: PropTypes.string.isRequired,
+    href: PropTypes.string.isRequired,
+    login: PropTypes.string,
+    password: PropTypes.string,
+    comment: PropTypes.string,
+    parent:PropTypes.string,
+    binding: PropTypes.oneOfType([
+        PropTypes.bool,
+        PropTypes.string,
         PropTypes.number,
-        PropTypes.string
     ]).isRequired,
-    title:PropTypes.string.isRequired,
-    href:PropTypes.string.isRequired,
-    login:PropTypes.string.isRequired,
-    password:PropTypes.string.isRequired,
-    comment:PropTypes.string,
-    onCopyText:PropTypes.func.isRequired,
-    onHref:PropTypes.func.isRequired
-}
+    onCopyText: PropTypes.func.isRequired,
+    onHref: PropTypes.func.isRequired,
+};
 
 export default ListItem;

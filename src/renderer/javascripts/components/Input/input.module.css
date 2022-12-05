@@ -1,7 +1,11 @@
 .relative{
     position: relative;
 }
-
+.row{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
 .label{
     font-size: 14px;
     margin-bottom: 10px;
@@ -32,16 +36,20 @@ div.input >*{
 .textarea:not(:disabled):hover,
 .textarea:not(:disabled):focus,
 .input:not(.disabled):hover,
+.input:not(.disabled):focus,
 .input:not(.disabled).focus{
     color: var(--input-color-hover);
     border-color: var(--input-border-color-hover);
 }
+
 .textarea:disabled,
 .input.disabled{
     opacity: 0.5;
 }
 input.input,
 .inputItem{
+    display: inline-flex;
+    align-items: center;
     flex-grow: 1;
     font-size: 1em;
     color: var(--input-color);
@@ -71,20 +79,18 @@ input.input,
     font-size: 1em;
     width: 2.75em;
 }
-
 .btn svg {
     font-size: 1.562em;
 }
-
 .btn svg path {
     fill: var(--btn-primary-bg);
 }
-
 .btn:focus svg path,
 .btn:hover svg path {
     fill: var(--btn-primary-bg-hover);
 }
 
+.select,
 .datalist{
     position: absolute;
     left: 0;
@@ -100,12 +106,54 @@ input.input,
     display: flex;
     flex-direction: column;
 }
+.select .option,
 .datalist .item{
     padding: 1em;
     cursor: pointer;
     color: inherit;
     text-align: left;
 }
+.select .option.checked,
+.select .option:hover,
 .datalist .item:hover{
     background: #222;
 }
+.select .option span{
+    font-size: 12px;
+    opacity: 0.5;
+}
+
+
+.radio{
+    display: flex;
+    align-items: center;
+    gap: var(--gap);
+    cursor: pointer;
+    position: relative;
+}
+.radio::after{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;
+    content: "";
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid var(--input-border-color);
+    background: var(--input-bg);
+    font-size: 18px;
+}
+input:checked + .radio::before{
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translate(-43%, -50%);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--text);
+
+}
+

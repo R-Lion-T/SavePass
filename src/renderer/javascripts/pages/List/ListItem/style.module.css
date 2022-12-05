@@ -65,8 +65,8 @@
     opacity: 1;
 }
 .btn:disabled {
-    opacity: 0;
     pointer-events: none;
+    display: none;
 }
 .btn svg {
     width: 20px;
