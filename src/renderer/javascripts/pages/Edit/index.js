@@ -19,7 +19,7 @@ export const Edit = React.memo(function Edit() {
     const navigate = useNavigate();
     const { list } = useSelector((state) => state.data);
     const [card, setCard] = React.useState(null);
-    const [isBinding, setIsBinding] = React.useState(0);
+    // const [isBinding, setIsBinding] = React.useState(0);
     React.useEffect(() => {
         if (id) {
             const item = list.filter(
@@ -27,7 +27,7 @@ export const Edit = React.memo(function Edit() {
             )[0];
             if (item) {
                 setCard(item);
-                setIsBinding(item?.binding?item?.binding:0)
+                // setIsBinding(item?.binding?item?.binding:0)
             }
         } else {
             // не найден
@@ -59,14 +59,14 @@ export const Edit = React.memo(function Edit() {
         const body = {
             id: id,
             ...data,
-            binding:(data.binding=="0")?"":data.binding,
+            // binding:(data.binding=="0")?"":data.binding,
             href: isValidUrl(data.href),
             lastChange: new Date().getTime(),
         };
-        if(body.binding){
-            body["login"] = "";
-            body["password"] = "";
-        }
+        // if(body.binding){
+        //     body["login"] = "";
+        //     body["password"] = "";
+        // }
 
         dispatch(ac_show_load());
     
@@ -95,7 +95,7 @@ export const Edit = React.memo(function Edit() {
                 />
             </FormRow>
 
-            <FormRow>
+            {/* <FormRow>
                 <Select
                     ignoreId={id}
                     label="Привязка"
@@ -105,31 +105,31 @@ export const Edit = React.memo(function Edit() {
                     list={list}
                     onInput={setIsBinding}
                 />
-            </FormRow>
+            </FormRow> */}
 
-            {!isBinding ?  (
-                <>
-                    <FormRow>
-                        <InputView
-                            label="Логин"
-                            name="login"
-                            defaultValue={card?.login}
-                            placeholder="login@mail.ru"
-                            required
-                        />
-                    </FormRow>
-                    <FormRow>
-                        <InputPassword
-                            id={id}
-                            label="Пароль"
-                            name="password"
-                            defaultValue={card?.password}
-                            placeholder="********"
-                            required
-                        />
-                    </FormRow>
-                </>
-            ):null}
+            {/* {!isBinding ?  ( <>*/}
+                
+            <FormRow>
+                <InputView
+                    label="Логин"
+                    name="login"
+                    defaultValue={card?.login}
+                    placeholder="login@mail.ru"
+                    required
+                />
+            </FormRow>
+            <FormRow>
+                <InputPassword
+                    id={id}
+                    label="Пароль"
+                    name="password"
+                    defaultValue={card?.password}
+                    placeholder="********"
+                    required
+                />
+            </FormRow>
+                
+            {/* </>):null} */}
 
             <FormRow>
                 <InputView

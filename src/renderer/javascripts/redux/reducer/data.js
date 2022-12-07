@@ -84,7 +84,7 @@ const developerState = {
         },
     ],
 }
-export const dis_data = (state = developerState, action) => {
+export const dis_data = (state = initialState, action) => {
     switch (action.type) {
         case "LOAD_DATA": {
             return {

@@ -71,11 +71,11 @@ const ListItem = React.memo(function ListItem(props) {
                         <span className={style.title}>{title}</span>
                     </div>
                     <div className={style.btns}>
-                        {binding && (
+                        {/* {binding && (
                         <HashLink to={`#${binding}`} className={style.btn} title={`${title} привязан к ${parent}`}>
                             <AiOutlineLink />
                         </HashLink>
-                        )}
+                        )} */}
 
                         <button
                             className={style.btn}

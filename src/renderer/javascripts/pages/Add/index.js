@@ -28,7 +28,7 @@ export const Add = React.memo(function Add() {
         const body = {
             id: id,
             ...data,
-            binding: data.binding=="0"? "": data.binding,
+            // binding: data.binding=="0"? "": data.binding,
             href: isValidUrl(data.href),
             created: id,
             lastChange: id,
@@ -55,7 +55,7 @@ export const Add = React.memo(function Add() {
                 />
             </FormRow>
 
-            <FormRow>
+            {/* <FormRow>
                 <Select
                     label="Привязка"
                     name="binding"
@@ -64,7 +64,7 @@ export const Add = React.memo(function Add() {
                     list={list}
                     onInput={setIsBinding}
                 />
-            </FormRow>
+            </FormRow> */}
 
             { !isBinding ?
                 <>
