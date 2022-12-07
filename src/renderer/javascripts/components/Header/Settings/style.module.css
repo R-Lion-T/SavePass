@@ -1,0 +1,51 @@
+.settings {
+    position: relative;
+    font-size: 14px;
+}
+.row{
+
+}
+.list {
+    min-width: 180px;
+    position: absolute;
+    top: 35px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 4px;
+    padding: 5px 0;
+    color: var(--text);
+    background: #111;
+    z-index: 1;
+    box-shadow: 0 2px 10px var(--menu-shadows);
+}
+
+.btn {
+    font-weight: 600;
+    padding: 7.5px 10px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    line-height: 100%;
+}
+
+.btn svg {
+    margin-right: 5px;
+    width: 20px;
+    height: inherit;
+    line-height: 0;
+}
+
+.btn:focus:not(:disabled),
+.btn:hover:not(:disabled) {
+    background: #222;
+    cursor: pointer;
+}
+
+.btn:disabled {
+    pointer-events: none;
+    opacity: 0.2;
+}
+
+.settings button {
+    color: inherit;
+}

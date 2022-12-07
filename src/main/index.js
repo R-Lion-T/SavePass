@@ -16,5 +16,5 @@ if (!lock) {
             main.win.focus()
         }
     })
-    setTimeout(checkForUpdates, 2000)
+    setTimeout(()=>checkForUpdates(main.win), 2000)
 }

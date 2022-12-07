@@ -122,3 +122,79 @@
 }
 
 /* end styles btn */
+
+/* window btn */
+.header {
+    background: var(--header-bg);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.header_logo {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    gap: var(--gap);
+}
+
+.header_logo img {
+    width: 25px;
+    height: 25px;
+}
+
+.header_logo span {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+@media screen and (max-width: 340px) {
+    .header_logo span {
+        display: none;
+        margin-left: 0;
+    }
+}
+
+.header_drag {
+    flex-grow: 1;
+    align-self: normal;
+    -webkit-app-region: drag;
+}
+
+
+
+.winBtn {
+    font-size: 18px;
+    line-height: 0;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.winBtn svg {
+    line-height: 0;
+}
+
+.winBtn svg path {
+    margin: 0;
+    padding: 0;
+    line-height: 0;
+    fill: var(--btn-win-color);
+    stroke: var(--btn-win-color);
+}
+
+.winBtn:focus,
+.winBtn.active,
+.winBtn:hover {
+    background: var(--btn-win-bg-hover);
+}
+
+.winBtn.close:focus,
+.winBtn.close:hover {
+    background: var(--bth-win-close-bg-hover);
+}
+.winBtn:disabled{
+    display: none;
+    pointer-events: none;
+    opacity: 0;
+
+}

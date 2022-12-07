@@ -1,5 +1,6 @@
 import React from "react"
-import "./style.scss"
+import style from "./style.module.css";
+
 const Footer = React.memo(
     function Footer(){
         const [ver,setVer] = React.useState("")
@@ -10,11 +11,11 @@ const Footer = React.memo(
                 })
         },[])
         return(
-            <div className="footer">
-                <div className="footer_left">
+            <div className={style.footer}>
+                <div className={style.author}>
                     <p>Автор: Роман Тамазян</p>
                 </div>
-                <div className="footer_rigth">
+                <div className={style.version}>
                     <p>v{ver}</p>
                 </div>
             </div>

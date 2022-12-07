@@ -68,6 +68,15 @@ export const IconButton = React.memo(function IconButton(props){
         </button>
     )
 })
+
+export const WinButton =  React.memo(function WinButton(props){
+    const {disabled, role, isActive, type, children, title, onClick} = props;
+    return(
+        <button type={type} className={`${style.winBtn} ${role? style[role]:""} ${isActive? style.winBtnAcitve:""}`}  title={title}onClick={onClick} disabled={disabled}>
+            {children}
+        </button>
+    )
+})
 // параметры по умолчанию
 Button.defaultProps = {
     variant: "contained",
@@ -88,6 +97,14 @@ IconButton.defaultProps={
     children:null,
     type:"button",
     onClick:()=>{}
+}
+WinButton.defaultProps={
+    disabled:false,
+    role:null,
+    isActive:false,
+    type:"button",
+    title:"",
+    onClick:()=>{},
 }
 // типизация
 Button.propTypes = {
@@ -116,4 +133,12 @@ IconButton.propTypes={
     disabled: PropTypes.bool.isRequired,
     title:PropTypes.string,
     onClick:PropTypes.func,
+}
+WinButton.propTypes={
+    disabled:PropTypes.bool.isRequired,
+    role: PropTypes.oneOf(['close']),
+    isActive: PropTypes.bool.isRequired,
+    children: PropTypes.element.isRequired,
+    type: PropTypes.oneOf(['button', 'submit','reset']).isRequired,
+    title: PropTypes.string.isRequired,
 }

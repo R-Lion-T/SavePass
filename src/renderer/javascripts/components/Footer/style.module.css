@@ -9,11 +9,15 @@
     padding: 10px 20px;
 }
 
-.footer_left {
+.author{
     opacity: 0.5;
 }
 
-.footer_rigth {
+.version {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     margin-left: auto;
     opacity: 0.5;
 }
+

@@ -6,12 +6,15 @@ import {
     screen,
     Tray,
     Menu,
+    Notification 
 } from "electron";
 import fs from "fs";
 import path from "path";
 import CryptoJS from "crypto-js";
 import isDev from "electron-is-dev";
 
+
+ 
 export default class MainApp {
     constructor() {
         this.win = null;
@@ -450,6 +453,14 @@ export default class MainApp {
 
     openModalGenerate(event, props) {
         this.isGenerate = new WinGenerate(this.win, event, props);
+    }
+
+    showNotification({title,body}){
+        new Notification({
+            icon: "resources/icon.ico",
+            title,
+            body,
+        }).show()
     }
 }
 

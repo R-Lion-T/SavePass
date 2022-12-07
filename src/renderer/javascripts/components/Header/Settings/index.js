@@ -2,12 +2,16 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { ac_logout } from "../../redux/actions/ac_state";
+import style from "./style.module.css";
+
+import { ac_logout } from "../../../redux/actions/ac_state";
 
 import { AiFillSecurityScan } from "react-icons/ai";
 import { RiLogoutBoxFill } from "react-icons/ri";
 import { MdPassword } from 'react-icons/md';
 import { FiMenu } from 'react-icons/fi';
+import { WinButton } from "../../Buttons";
+
 
 const Settings = React.memo(function Settings() {
     const dispath = useDispatch();
@@ -69,16 +73,14 @@ const Settings = React.memo(function Settings() {
     };
     return (
         <div
-            className="settings"
+            className={style.settings}
             onMouseLeave={onMouseLeave}
             onMouseEnter={onMouseEnter}
         >
-            <button
-                className={`window_btn ${show ? "active" : ""}`}
-                onClick={onToggleSettins}
-            >
+            <WinButton onClick={onToggleSettins} isActive={show}>
                 <FiMenu />
-            </button>
+            </WinButton>
+            
             {show && (
                 <ListSetting list={list} onCloseSetting={onHideSettings} />
             )}
@@ -88,7 +90,7 @@ const Settings = React.memo(function Settings() {
 
 function ListSetting({ list = [], onCloseSetting = () => {} }) {
     return (
-        <div className="settings_list">
+        <div className={style.list}>
             {list.map((item) => {
                 switch (item.type) {
                     case "SELECT": {
@@ -113,7 +115,7 @@ function ListSetting({ list = [], onCloseSetting = () => {} }) {
 };
 
 function Select({ id, label, icon }) {
-    return <div className="settings_row">{label}</div>;
+    return <div className={style.row}>{label}</div>;
 };
 
 function Button({
@@ -129,9 +131,9 @@ function Button({
         onClick();
     };
     return (
-        <div className="settings_row">
+        <div className={style.row}>
             <button
-                className="settings_btn"
+                className={style.btn}
                 onClick={onHndelClick}
                 disabled={disabled}
             >
