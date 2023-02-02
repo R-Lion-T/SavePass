@@ -1,12 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { HashLink } from "react-router-hash-link";
 import {
     AiFillEdit,
     AiFillCopy,
     AiFillPlayCircle,
-    AiOutlineLink,
 } from "react-icons/ai";
 import { BiShow, BiHide, BiCommentDetail } from "react-icons/bi";
 import imgError from "./../../../../images/errorImg.ico";
@@ -21,8 +19,6 @@ const ListItem = React.memo(function ListItem(props) {
         login,
         password,
         comment,
-        parent,
-        binding,
         onCopyText,
         onHref,
     } = props;
@@ -71,12 +67,6 @@ const ListItem = React.memo(function ListItem(props) {
                         <span className={style.title}>{title}</span>
                     </div>
                     <div className={style.btns}>
-                        {/* {binding && (
-                        <HashLink to={`#${binding}`} className={style.btn} title={`${title} привязан к ${parent}`}>
-                            <AiOutlineLink />
-                        </HashLink>
-                        )} */}
-
                         <button
                             className={style.btn}
                             disabled={!comment}

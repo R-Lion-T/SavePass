@@ -92,15 +92,17 @@ export const List = React.memo(function List() {
     const dispatch = useDispatch();
 
     const onCopyText = (text, alertText) => {
-        if (window.app.onCopy(text)) {
-            dispatch(
-                dis_add_alert({
-                    id: new Date().getTime(),
-                    type: "info",
-                    text: alertText,
-                })
-            );
-        }
+        window.app.onCopy(text).then(res=>{
+            if(res){
+                dispatch(
+                    dis_add_alert({
+                        id: new Date().getTime(),
+                        type: "info",
+                        text: alertText,
+                    })
+                );
+            }
+        })
     };
     const onHref = (href, login) => {
         return () => {

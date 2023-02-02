@@ -1,4 +1,4 @@
-import { clipboard, contextBridge, ipcRenderer, shell } from "electron";
+import { contextBridge, ipcRenderer } from "electron";
 import zxcvbn from "zxcvbn";
 
 const pass = [
@@ -259,8 +259,7 @@ class PasswordRandom {
     }
 }
 
-let timerBuffer; //таймер для очистки буфера
-const timeTimerBuffer = 30000; // Время очистки буффера
+
 
 contextBridge.exposeInMainWorld("app", {
     getVersionApp: () => {
@@ -271,18 +270,13 @@ contextBridge.exposeInMainWorld("app", {
         });
     },
     onCopy: (text)=>{
-        if(clipboard.readText() != text){
-            if(timerBuffer) timerBuffer = clearTimeout(timerBuffer);
-            clipboard.writeText(text);
-            timerBuffer = setTimeout(()=>{
-                clipboard.clear();
-                timerBuffer = clearTimeout(timerBuffer);
-            },timeTimerBuffer);
-            return true
-        }
-        return false
+        return new Promise((res)=>{
+            ipcRenderer.invoke("COPY_TEXT",text).then(data=>{
+                res(data)
+            })
+        })
     },
-    openHref: shell.openExternal,
+    openHref: (props)=>ipcRenderer.send("OPEN_HREF",props),
     hide: () => ipcRenderer.send("APP_HIDE"),
     exit: () => ipcRenderer.send("APP_EXIT"),
     resize: () => ipcRenderer.send("APP_RESIZE_WINDOW"),

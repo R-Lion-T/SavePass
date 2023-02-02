@@ -6,7 +6,9 @@ import {
     screen,
     Tray,
     Menu,
-    Notification 
+    Notification,
+    shell,
+    clipboard
 } from "electron";
 import fs from "fs";
 import path from "path";
@@ -23,6 +25,8 @@ export default class MainApp {
         this.file = null;
         this.tray = null;
         this.isGenerate = false;
+        this.timerBuffer; //таймер для очистки буфера
+        this.timeTimerBuffer = 30000; // Время очистки буффера
         this.subscribeForAppEvents();
     }
 
@@ -96,11 +100,26 @@ export default class MainApp {
             if (this.win.isMaximized()) this.win.unmaximize();
             else this.win.maximize();
         });
+        ipcMain.on("OPEN_HREF", (_,props) => {
+            shell.openExternal(props)
+        });
 
         ipcMain.handle("GET_STATUS_WINDOW", () => {
             return {
                 resize: this.win.isMaximized(),
             };
+        });
+        ipcMain.handle("COPY_TEXT", (_, text) => {
+            if(clipboard.readText() != text){
+                if(this.timerBuffer) this.timerBuffer = clearTimeout(this.timerBuffer);
+                clipboard.writeText(text);
+                this.timerBuffer = setTimeout(()=>{
+                    clipboard.clear();
+                    this.timerBuffer = clearTimeout(this.timerBuffer);
+                },this.timeTimerBuffer);
+                return true
+            }
+            return false
         });
 
         this.win.on("resize", () => {
